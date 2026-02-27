@@ -114,17 +114,23 @@ SLIDE TEACHER NOTES TEMPLATE (apply to every slide):
 ──────────────────────────────────────────────────────
 
 SAY:
-"[Scripted teacher talk in quotation marks. This is the actual words the teacher
-speaks aloud to the class. Write in natural, conversational Australian English —
-the way a confident teacher actually talks to students. Include questioning
-sequences with expected student responses in brackets where relevant.
-For example: 'Who can tell me what this word means? [Take 2-3 responses.]
-Good. Now watch how I...' The SAY section should be the longest section.
-It should walk the teacher through the entire instructional move for this slide,
-including transitions, questioning, and think-alouds. Where the slide involves
-modelling (I Do), include the full think-aloud script. Where the slide involves
-guided practice (We Do), include the prompts and checking questions. Where the
-slide involves independent practice (You Do), include the launch instructions.]"
+• [Key talking point that accompanies or expands on what is shown on the slide.
+  Each dot point is a separate idea the teacher communicates — not a word-for-word
+  script. The teacher uses their own words and professional judgement to deliver
+  these points naturally. Keep each point concise — one idea per dot point.]
+• [Where the slide content needs to be read aloud (e.g., a quote, a definition,
+  a key instruction), indicate this: "Read from slide: ..." so the teacher knows
+  to read it directly rather than paraphrase.]
+• [Include key questions the teacher should ask, with expected/ideal student
+  responses in square brackets. E.g.: "Ask: What operation do we do first?
+  [Multiplication — because of BODMAS.]"]
+• [Where the slide involves modelling (I Do), list the key thinking moves to
+  make visible — not a full think-aloud script, but the essential reasoning
+  steps the teacher should voice.]
+• [Where the slide involves guided practice (We Do), list the checking prompts.
+  Where it involves independent practice (You Do), list the launch points.]
+• [No filler — no "all right everyone, pens down, eyes up" or "let's get
+  started." Only substantive content the teacher needs to deliver.]
 
 DO:
 • [Physical action the teacher takes — e.g., "Point to the worked example on screen"]
@@ -163,16 +169,18 @@ END OF SLIDE TEACHER NOTES TEMPLATE
 
 CRITICAL RULES FOR SLIDE TEACHER NOTES:
 
-1. SAY always comes first. It is always in quotation marks. It is always written
-   as natural spoken language, not written-English formality. Teachers read this
-   and speak it aloud. It must sound like a real person talking to real students.
+1. SAY always comes first. It is always dot-pointed — each point is a separate
+   key idea the teacher needs to communicate. These are talking points, not a
+   script. The teacher brings their own voice and delivery. No filler phrases,
+   no classroom management cues (e.g., "pens down, eyes up"), no robotic
+   openings. Only substantive content that accompanies or expands on the slide.
 
-2. SAY must include questioning sequences where the slide involves CFU. Write
-   the questions AND the expected/ideal student responses in square brackets.
-   Include follow-up probes. E.g.:
-   "What operation do we do first? [Multiplication.] Good. And why do we do
-   multiplication before addition? [Because of order of operations / BODMAS.]
-   Exactly. Now watch what happens when I..."
+2. SAY must include key questions where the slide involves CFU. Write the
+   question as a dot point with expected/ideal student responses in square
+   brackets. E.g.:
+   • Ask: What operation do we do first? [Multiplication — because of BODMAS.]
+   Where the slide content should be read directly, indicate this explicitly:
+   • Read from slide: "[exact text]"
 
 3. DO is always dot-pointed. Short, physical, concrete actions. No pedagogy
    theory here — just what to physically do. Think stage directions for a teacher.
@@ -678,7 +686,9 @@ Visual Content: [What appears on the slide face — the student-facing content]
 Presenter Notes:
 ─────────────────────────────
 SAY:
-"[Full scripted teacher talk]"
+• [Key talking point 1 — accompanies what's on the slide]
+• [Key talking point 2]
+• [Key question to ask + expected response]
 
 DO:
 • [Action 1]

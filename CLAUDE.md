@@ -134,8 +134,27 @@ Choose colours that match your topic — don't default to generic blue. Use thes
 - **Don't style one slide and leave the rest plain** — commit fully or keep it simple throughout
 - **Don't create text-only slides** — add images, icons, charts, or visual elements; avoid plain title + bullets
 - **Don't forget text box padding** — when aligning lines or shapes with text edges, set `margin: 0` on the text box or offset the shape to account for padding
-- **Don't use low-contrast elements** — icons AND text need strong contrast against the background
+- **Don't use low-contrast elements** — icons AND text need strong contrast against the background. **Never use the same palette colour for both text and its background fill** (e.g., gold text on gold pill, olive text on olive banner). Use white text on coloured fills, dark text on light fills.
 - **NEVER use accent lines under titles** — these are a hallmark of AI-generated slides; use whitespace or background colour instead
+
+### Layout Safety (16:9 slides — 10" x 5.625")
+
+**These are hard limits. Violating them causes elements to collide or overflow off-screen.**
+
+| Zone | Y range | Purpose |
+|------|---------|---------|
+| Top bar | 0 – 0.06" | Coloured accent bar |
+| Badge + title | 0.2 – 1.2" | Stage badge and slide title |
+| Content area | 1.3 – 5.1" | Cards, text, icons, all content |
+| Footer | 5.3 – 5.5" | Lesson/week label |
+
+- **SAFE_BOTTOM = 5.1"** — no content element should extend below this y coordinate
+- **Footer lives at y = 5.3"** — the 0.2" gap between content and footer is non-negotiable
+- **When placing bottom elements** (tip bars, celebration banners, connection prompts), calculate: `element_y + element_h <= 5.1`
+- **For dynamic content** (bullet lists, grids with variable item counts), calculate total height first and clamp or shrink per-item spacing to stay within the safe zone
+- **Icons on coloured backgrounds must have strong contrast** — use white icons on dark circles (`C.OLIVE`, `C.GOLD`, `C.BURGUNDY`), not dark icons on dark backgrounds. If the icon colour matches the background, it will be invisible.
+- **Text colour must NEVER match or be close to its background fill** — this is the #1 readability failure. Before writing any `addText` call, check what's behind it (shape fill, card fill, slide background). If the text colour and background colour are from the same palette entry (e.g., `C.GOLD` text on a `C.GOLD` fill, even with transparency), the text will be invisible. **Rule: on coloured fills, use `C.WHITE` for text. On light fills (`C.WHITE`, `C.IVORY`, `C.WARM`, `C.CREAM_DARK`), use `C.CHARCOAL`, `C.OLIVE`, or another dark colour for text.** This applies to pill badges, banners, cards, and any shape with overlaid text.
+- **Pill badges / tag grids**: When laying out multiple pill shapes in a grid, test with the widest expected text. Use consistent pill widths or calculate: `pillX + pillW <= 9.5` (right margin). For grids, use `Math.floor((availableWidth) / (pillW + gap))` to determine columns dynamically.
 
 ---
 
