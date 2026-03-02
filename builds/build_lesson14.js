@@ -7,7 +7,7 @@ const {
   iconToBase64Png,
   addTopBar, addBadge, addTitle, addCard, addFooter,
   titleSlide, liSlide, pausePointSlide, closingSlide,
-} = require("./wh_helpers");
+} = require("../themes/wh_helpers");
 const {
   FaBookOpen, FaPen, FaChalkboardTeacher, FaUsers,
   FaSearch, FaEdit, FaPencilAlt, FaHorse,

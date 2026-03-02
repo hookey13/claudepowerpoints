@@ -9,8 +9,8 @@ Use this guide any time a .pptx file is involved — creating, reading, editing,
 | Task | Method |
 |------|--------|
 | Read/analyse content | `python -m markitdown presentation.pptx` |
-| Edit or create from template | See [Editing Presentations](#editing-presentations) |
 | Create from scratch | See [PptxGenJS Tutorial](#pptxgenjs-tutorial) |
+| Generate companion PDFs | See [Resource System](#resource-system) |
 
 ---
 
@@ -19,33 +19,340 @@ Use this guide any time a .pptx file is involved — creating, reading, editing,
 ```
 project/
 ├── CLAUDE.md                  # This file
-├── build_presentation.js      # Generation script (one per presentation)
-├── scripts/
-│   └── pptx_to_images.py     # PPTX → slide images for QA
-├── output/                    # Finished .pptx files go here
-│   └── Presentation.pptx
+├── megapromptlean.md          # Pedagogical framework (DECIDE, VTLM 2.0)
+├── themes/                    # Colour palettes & slide builder helpers
+│   ├── pv_palette.js          # Place Value colours/fonts
+│   ├── pv_helpers.js          # Place Value slide builders & layout helpers
+│   ├── wh_palette.js          # War Horse colours/fonts
+│   ├── wh_helpers.js          # War Horse slide builders & layout helpers
+│   ├── skellig_palette.js     # Skellig Novel Study colours/fonts
+│   ├── skellig_helpers.js     # Skellig slide builders & layout helpers
+│   ├── pdf_helpers.js         # PDF resource generation utilities (pdfkit)
+│   └── theme.js               # Legacy generic theme (not used by current builds)
+├── builds/                    # One build script per lesson
+│   ├── build_pv_lesson*.js    # PV unit (lessons 1–5)
+│   ├── build_skellig_*.js     # Skellig Novel Study (lessons 1–5)
+│   └── build_lesson1*.js      # War Horse (lessons 12–15)
+├── scripts/                   # Utility scripts
+│   ├── pptx_to_images.py      # PPTX → slide images for QA
+│   └── merge_lessons.py       # Merge multiple PPTX files into one
+├── output/                    # Generated lesson folders
+│   ├── Lesson_PV1_Proportional_Materials/
+│   │   ├── Lesson_PV1_Proportional_Materials.pptx
+│   │   ├── SR3_Place_Value_Worksheet.pdf
+│   │   └── SR4_Example_Answer.pdf
+│   └── ...
 └── slidetemp/                 # Temporary QA images (auto-cleaned)
-    ├── slide-01.jpg
-    └── slide-02.jpg
 ```
 
-- **`output/`** — all generated .pptx files. Created automatically by build scripts.
+- **`output/`** — each lesson gets its own subfolder containing the PPTX and any companion PDF resources. Lessons without resources may still use flat output.
 - **`slidetemp/`** — temporary slide images for visual QA. **Always delete after QA** via `python scripts/pptx_to_images.py --clean`. Never commit this folder.
+
+### Output Convention
+
+Build scripts live in `builds/` and write to per-lesson folders in `output/` (paths resolve relative to CWD, which is always the project root):
+
+```bash
+node builds/build_pv_lesson1.js
+```
+
+```javascript
+const OUT_DIR = "output/Lesson_PV1_Proportional_Materials";
+if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
+await pres.writeFile({ fileName: OUT_DIR + "/Lesson_PV1_Proportional_Materials.pptx" });
+// + companion PDFs generated into the same folder
+```
+
+Each lesson folder contains the PPTX and all companion PDF resources. Teachers receive the entire folder. See [Resource System](#resource-system) for how PDFs are generated and linked.
 
 ---
 
 ## Reading Content
 
 ```bash
-# Text extraction
 python -m markitdown presentation.pptx
-
-# Visual overview (thumbnail grid)
-python scripts/thumbnail.py presentation.pptx
-
-# Raw XML inspection
-python scripts/office/unpack.py presentation.pptx unpacked/
 ```
+
+---
+
+## Theme System
+
+Each lesson unit gets its own palette + helpers pair. Build scripts import from the helpers file only — helpers re-export most palette exports (low-level utilities like `hexToRgb`, `luminance`, `contrastRatio` are palette-only).
+
+### Existing Themes
+
+| Unit | Palette | Helpers | Fonts |
+|------|---------|---------|-------|
+| Place Value (Maths) | `themes/pv_palette.js` | `themes/pv_helpers.js` | Arial Black / Calibri |
+| War Horse (Narrative) | `themes/wh_palette.js` | `themes/wh_helpers.js` | Georgia / Calibri |
+
+### Palette Exports
+
+Every palette file exports:
+- `C` — colour constants object (e.g., `C.NAVY`, `C.TEAL`, `C.WHITE`)
+- `FONT_H` — header font name
+- `FONT_B` — body font name
+- `makeShadow()` — factory for card shadows (returns fresh object each call)
+- `makeCardShadow()` — factory for subtle card shadows
+
+PV palette additionally exports: `STAGE_COLORS`, `validateContrast`, `getContrastColor`, `contrastRatio`.
+
+### Helpers Exports
+
+Every helpers file re-exports most palette exports plus:
+
+**Layout constants:** `SAFE_BOTTOM` (5.1), `CONTENT_TOP` (1.3), `SLIDE_W` (10), `SAFE_RIGHT` (9.5)
+
+**Element helpers:** `iconToBase64Png`, `addTopBar`, `addBadge`, `addStageBadge`, `addTitle`, `addCard`, `addFooter`
+
+**Click-to-reveal:** `withReveal(buildFn, revealFn)` — creates a duplicate slide pair for teacher-controlled answer reveals (see [Click-to-Reveal](#click-to-reveal-withreveal))
+
+**Full slide builders** (the primary API — every build script uses these):
+
+| Function | Purpose |
+|----------|---------|
+| `titleSlide(pres, title, subtitle, meta, notes)` | Dark background title slide |
+| `liSlide(pres, liItems, scItems, notes, footer)` | Learning intention + success criteria (title hardcoded) |
+| `contentSlide(pres, stageNum, stageLabel, title, bullets, notes, footer, drawRight)` | Content slide; pass `drawRight` callback for right-side visuals |
+| `workedExSlide(pres, stageNum, stageLabel, title, steps, notes, footer, drawRight)` | Worked example slide |
+| `cfuSlide(pres, stageNum, stageLabel, title, technique, question, notes, footer)` | Check for understanding |
+| `exitTicketSlide(pres, questions, notes, footer)` | Exit ticket / assessment (title hardcoded) |
+| `closingSlide(pres, prompt, keyPoints, notes)` | Closing slide with Turn & Talk prompt |
+
+PV helpers additionally export maths-specific helpers: `addPlaceValueChart`, `addTenthsStrip`, `addAreaModel`, `addNumberLine`, `addDecimalDot`, `addTextOnShape`, `validateBounds`.
+
+### Import Pattern
+
+```javascript
+const { C, FONT_H, FONT_B, SAFE_BOTTOM, CONTENT_TOP,
+        withReveal,
+        titleSlide, liSlide, contentSlide, workedExSlide,
+        cfuSlide, exitTicketSlide, closingSlide,
+        addCard, addTopBar, addBadge, addStageBadge, addTitle, addFooter,
+        iconToBase64Png, addPlaceValueChart, addNumberLine,
+        addTextOnShape, validateContrast, getContrastColor,
+        makeShadow, makeCardShadow } = require("../themes/pv_helpers");
+```
+
+### Creating a New Theme
+
+When starting a new lesson unit:
+1. Create `themes/<prefix>_palette.js` — define colours, fonts, shadow factories
+2. Create `themes/<prefix>_helpers.js` — re-export palette, add element helpers and full slide builders
+3. Follow the existing pattern in `themes/pv_palette.js` / `themes/pv_helpers.js`
+4. Build scripts go in `builds/` and import with `require("../themes/<prefix>_helpers")`
+
+---
+
+## Click-to-Reveal (`withReveal`)
+
+Teachers often need to hide answers until after students have responded (CFU checks, problem pairs, worked example solutions). Since PptxGenJS has no animation API, we use **duplicate slides**: slide 1 shows the question, slide 2 shows question + answer. Clicking "next" in PowerPoint reveals the answer. The teacher experience is identical to a click-to-reveal animation.
+
+### API
+
+```javascript
+withReveal(buildFn, revealFn)
+```
+
+- **`buildFn`** — zero-arg function that calls a slide builder and returns the slide. Called twice internally (once for the question slide, once for the answer slide).
+- **`revealFn`** — `callback(slide)` that adds the answer/reveal content to the second slide.
+- **Returns** the answer slide (the second slide).
+
+### Usage
+
+```javascript
+// CFU slide with hidden answer
+withReveal(
+  () => cfuSlide(pres, 2, "Check", "Quick Check", "Show Me Boards",
+                 "What is 3 × 4?", notes, footer),
+  (slide) => {
+    addTextOnShape(slide, "Answer: 12", {
+      x: 3.5, y: 4.2, w: 3, h: 0.6, rectRadius: 0.08,
+      fill: { color: C.TEAL },
+    }, { fontSize: 22, fontFace: FONT_H, color: C.WHITE, bold: true });
+  }
+);
+// Creates 2 slides: question-only → question + answer
+
+// Content slide with hidden definition
+withReveal(
+  () => contentSlide(pres, 1, "Vocabulary", "Key Term: Equivalent",
+                     ["What does 'equivalent' mean in maths?"], notes, footer),
+  (slide) => {
+    addCard(slide, 0.5, 3.0, 9, 1.5, { strip: C.TEAL });
+    slide.addText("Equivalent means equal in value, even if represented differently.\ne.g. 3/6 = 1/2", {
+      x: 0.75, y: 3.15, w: 8.5, h: 1.2,
+      fontSize: 16, fontFace: FONT_B, color: C.CHARCOAL, margin: 0,
+    });
+  }
+);
+```
+
+### When to Use
+
+The megaprompt guides the agent to use `withReveal` agentic-ally based on slide type:
+
+| Slide Type | Reveal Content | Use `withReveal`? |
+|------------|---------------|-------------------|
+| CFU slides | Expected student response / answer | **Yes** |
+| Problem pairs (We Do) | The solution | **Yes** |
+| Hinge questions | Answer + explanation | **Yes** |
+| Worked example (I Do) | Typically NO — teacher narrates live | Usually no |
+| Exit ticket (You Do) | Students work independently | No |
+| Title / LI / Closing | No hidden content | No |
+
+### Notes
+
+- Both slides share the same teacher notes (the `notes` param is applied to both).
+- The question slide and answer slide are consecutive — no other slides should be inserted between them.
+- The `revealFn` callback receives the full PptxGenJS slide object — you can add any element (text, shapes, images, charts).
+- Available in all three themes: `pv_helpers`, `skellig_helpers`, `wh_helpers`.
+
+---
+
+## Resource System
+
+Lessons reference printable student resources (worksheets, graphic organisers, scaffold cards, answer keys) that teachers must print before the lesson. These are generated as **companion PDF files** alongside the PPTX, bundled in a per-lesson output folder.
+
+### How It Works
+
+1. **Build script generates PDFs** using `themes/pdf_helpers.js` (pdfkit-based)
+2. **PDFs go in the same folder** as the PPTX (e.g., `output/Lesson_PV1/`)
+3. **A "Resources" slide** at the end of the PPTX lists all companion files with clickable hyperlinks
+4. **Teacher clicks a link** → PDF opens in default viewer → teacher prints it
+
+### pdf_helpers.js Exports
+
+`themes/pdf_helpers.js` is theme-agnostic — pass colours as 6-char hex strings. Uses built-in Helvetica fonts (no font files needed).
+
+**Document lifecycle:**
+
+| Function | Purpose |
+|----------|---------|
+| `createPdf(opts)` | Create a new A4 PDF document (`{ title, author, margin }`) |
+| `writePdf(doc, filePath)` | Write PDF to file (creates parent dirs). Returns a promise. |
+
+**Page elements:**
+
+| Function | Purpose |
+|----------|---------|
+| `addPdfHeader(doc, title, opts)` | Coloured title bar + subtitle + Name/Date fields. Returns y. |
+| `addSectionHeading(doc, text, y, opts)` | Section heading with left accent bar. Returns y. |
+| `addBodyText(doc, text, y, opts)` | Body paragraph. Returns y. |
+| `addPvChartPdf(doc, y, headers, opts)` | Place value chart (empty or pre-filled). Returns `{ y, bottomY }`. |
+| `addWriteLine(doc, label, y, opts)` | Labelled write-on line (e.g., "Numeral: ____"). Returns y. |
+| `addProblem(doc, num, prompt, y, opts)` | Numbered problem with optional chart + write lines. Auto-paginates. Returns y. |
+| `addStepInstructions(doc, steps, y, opts)` | "First… Next… Then…" instruction block. Returns y. |
+| `addTipBox(doc, text, y, opts)` | Light-background tip/reminder box. Returns y. |
+| `addPdfFooter(doc, text, opts)` | Page footer (lesson info). |
+| `addLinedArea(doc, y, lineCount, opts)` | Blank lined writing area. Returns y. |
+| `addTwoColumnOrganiser(doc, leftHeader, rightHeader, y, opts)` | Two-column graphic organiser. Returns y. |
+
+**PPTX integration:**
+
+| Function | Purpose |
+|----------|---------|
+| `addResourceSlide(pres, resources, theme, footer, notes)` | Add a "Teacher Resources" slide to the PPTX with clickable PDF links. |
+
+### Resource Slide
+
+Every lesson with companion PDFs should include a resource slide. Add it **after the last content slide** (before or after the closing slide — your choice):
+
+```javascript
+const { addResourceSlide } = require("../themes/pdf_helpers");
+
+addResourceSlide(
+  pres,
+  [
+    {
+      name: "SR3 — Place Value Worksheet",
+      fileName: "SR3_Place_Value_Worksheet.pdf",  // relative to PPTX location
+      description: "Independent practice — 8 problems.",
+    },
+    {
+      name: "SR4 — Example Answer",
+      fileName: "SR4_Example_Answer.pdf",
+      description: "Answer key for enabling students.",
+    },
+  ],
+  { C, FONT_H, FONT_B },  // pass your theme colours
+  FOOTER,
+  NOTES_RESOURCES
+);
+```
+
+### Generating a PDF Resource
+
+```javascript
+const {
+  createPdf, writePdf, addPdfHeader, addSectionHeading,
+  addProblem, addTipBox, addPdfFooter,
+} = require("../themes/pdf_helpers");
+
+async function generateWorksheet() {
+  const doc = createPdf({ title: "My Worksheet" });
+
+  let y = addPdfHeader(doc, "Worksheet Title", {
+    subtitle: "Supporting Resource 1",
+    color: C.NAVY,       // 6-char hex, no #
+    lessonInfo: "Lesson 1 of 10 | Unit Name | Grade X",
+  });
+
+  y = addTipBox(doc, "Remember: key instruction here.", y, { color: C.TEAL });
+
+  y = addSectionHeading(doc, "Section A: Practice Problems", y, { color: C.NAVY });
+
+  y = addProblem(doc, 1, "Problem prompt text", y, {
+    headers: ["TTh", "Th", "H", "T", "O"],  // optional PV chart
+    writeLines: [{ label: "Answer:" }],       // optional write lines
+    color: C.NAVY,
+  });
+
+  // For answer keys, add chartValues and answer text:
+  y = addProblem(doc, 1, "Same prompt", y, {
+    headers: ["TTh", "Th", "H", "T", "O"],
+    chartValues: [2, 4, 3, 5, 6],            // pre-filled chart
+    writeLines: [{ label: "Answer:", answer: "24 356" }],  // answer shown
+    color: C.NAVY,
+  });
+
+  addPdfFooter(doc, "Lesson info footer");
+  await writePdf(doc, OUT_DIR + "/SR1_Worksheet.pdf");
+}
+```
+
+### What Resources to Generate
+
+The megaprompt (`#RESOURCE_GENERATION` section) instructs the agent to generate resources based on what the lesson references. Common types:
+
+| Resource Type | When to Generate |
+|---------------|-----------------|
+| **Practice worksheet** | Every You Do stage that references "SR" or a worksheet |
+| **Answer key / scaffold** | When enabling students need a worked reference |
+| **Graphic organiser** | When teacher notes mention a template, frame, or organiser |
+| **Exit ticket** (printable) | When the exit ticket should be done on paper, not in workbooks |
+| **Vocabulary cards** | When key terms need to be cut out or displayed |
+| **Teacher resource checklist** | Optional — one-page list of everything to prepare |
+
+### Naming Convention
+
+| Pattern | Example |
+|---------|---------|
+| Worksheet | `SR3_Place_Value_Worksheet.pdf` |
+| Answer key | `SR4_Example_Answer.pdf` |
+| Graphic organiser | `GO1_Character_Profile.pdf` |
+| Exit ticket | `ET_Lesson5_Exit_Ticket.pdf` |
+| Teacher checklist | `Teacher_Resource_Checklist.pdf` |
+
+### Hyperlinks
+
+PptxGenJS hyperlinks use relative paths. When the PPTX and PDFs are in the same folder, use just the filename:
+
+```javascript
+hyperlink: { url: "SR3_Worksheet.pdf", tooltip: "Open worksheet" }
+```
+
+This works when the teacher opens the PPTX from the lesson folder. The link opens the PDF in the default viewer.
 
 ---
 
@@ -152,8 +459,8 @@ Choose colours that match your topic — don't default to generic blue. Use thes
 - **Footer lives at y = 5.3"** — the 0.2" gap between content and footer is non-negotiable
 - **When placing bottom elements** (tip bars, celebration banners, connection prompts), calculate: `element_y + element_h <= 5.1`
 - **For dynamic content** (bullet lists, grids with variable item counts), calculate total height first and clamp or shrink per-item spacing to stay within the safe zone
-- **Icons on coloured backgrounds must have strong contrast** — use white icons on dark circles (`C.OLIVE`, `C.GOLD`, `C.BURGUNDY`), not dark icons on dark backgrounds. If the icon colour matches the background, it will be invisible.
-- **Text colour must NEVER match or be close to its background fill** — this is the #1 readability failure. Before writing any `addText` call, check what's behind it (shape fill, card fill, slide background). If the text colour and background colour are from the same palette entry (e.g., `C.GOLD` text on a `C.GOLD` fill, even with transparency), the text will be invisible. **Rule: on coloured fills, use `C.WHITE` for text. On light fills (`C.WHITE`, `C.IVORY`, `C.WARM`, `C.CREAM_DARK`), use `C.CHARCOAL`, `C.OLIVE`, or another dark colour for text.** This applies to pill badges, banners, cards, and any shape with overlaid text.
+- **Icons on coloured backgrounds must have strong contrast** — use white icons on dark circles (e.g., `C.NAVY`, `C.TEAL`, `C.CORAL`), not dark icons on dark backgrounds. If the icon colour matches the background, it will be invisible.
+- **Text colour must NEVER match or be close to its background fill** — this is the #1 readability failure. Before writing any `addText` call, check what's behind it (shape fill, card fill, slide background). If the text colour and background colour are from the same palette entry, the text will be invisible. **Rule: on coloured fills, use `C.WHITE` for text. On light fills (`C.WHITE`, `C.CREAM`, `C.LIGHT`), use `C.CHARCOAL` or another dark colour for text.** This applies to pill badges, banners, cards, and any shape with overlaid text.
 - **Pill badges / tag grids**: When laying out multiple pill shapes in a grid, test with the widest expected text. Use consistent pill widths or calculate: `pillX + pillW <= 9.5` (right margin). For grids, use `Math.floor((availableWidth) / (pillW + gap))` to determine columns dynamically.
 
 ---
@@ -167,16 +474,10 @@ Your first render is almost never correct. Approach QA as a bug hunt, not a conf
 ### Content QA
 
 ```bash
-python -m markitdown output/Presentation.pptx
+python -m markitdown output/<filename>.pptx
 ```
 
 Check for missing content, typos, wrong order.
-
-**When using templates, check for leftover placeholder text:**
-
-```bash
-python -m markitdown output/Presentation.pptx | grep -iE "xxxx|lorem|ipsum|this.*(page|slide).*layout"
-```
 
 ### Visual QA
 
@@ -186,7 +487,7 @@ Convert slides to images, then inspect:
 
 ```bash
 # Convert PPTX to individual JPGs in slidetemp/ (LibreOffice + PyMuPDF, no Poppler needed)
-python scripts/pptx_to_images.py output/Presentation.pptx [--prefix slide] [--dpi 150]
+python scripts/pptx_to_images.py output/<filename>.pptx [--prefix slide] [--dpi 150]
 ```
 
 This creates `slidetemp/slide-01.jpg`, `slidetemp/slide-02.jpg`, etc.
@@ -215,7 +516,7 @@ For each slide, list issues or areas of concern, even if minor.
 
 ### Verification Loop
 
-1. Generate slides to `output/` → Convert to images in `slidetemp/` → Inspect
+1. Generate slides → Convert to images in `slidetemp/` → Inspect
 2. **List issues found** (if none found, look again more critically)
 3. Fix issues
 4. **Re-verify affected slides** — one fix often creates another problem
@@ -230,135 +531,15 @@ For each slide, list issues or areas of concern, even if minor.
 ## Dependencies
 
 ```bash
-# Python
+# Python (for content extraction and visual QA)
 pip install "markitdown[pptx]" Pillow pymupdf
 
-# Node
-npm install -g pptxgenjs
-
-# For icons (optional)
-npm install -g react-icons react react-dom sharp
+# Node (installed locally via package.json)
+npm install    # pptxgenjs, pdfkit, react, react-dom, react-icons, sharp
 
 # System (for visual QA)
 # LibreOffice (soffice) must be installed — Poppler/pdftoppm is NOT needed
 ```
-
----
-
-## Editing Presentations
-
-### Template-Based Workflow
-
-When using an existing presentation as a template:
-
-1. **Analyse existing slides**:
-   ```bash
-   python scripts/thumbnail.py template.pptx
-   python -m markitdown template.pptx
-   ```
-   Review `thumbnails.jpg` to see layouts, and markitdown output to see placeholder text.
-
-2. **Plan slide mapping**: For each content section, choose a template slide.
-
-   **USE VARIED LAYOUTS** — monotonous presentations are a common failure mode. Don't default to basic title + bullet slides. Actively seek out: multi-column layouts, image + text combos, full-bleed images with text overlay, quote/callout slides, section dividers, stat/number callouts, icon grids.
-
-   Match content type to layout style (e.g., key points → bullet slide, team info → multi-column, testimonials → quote slide).
-
-3. **Unpack**: `python scripts/office/unpack.py template.pptx unpacked/`
-
-4. **Build presentation** (do this yourself, not with subagents):
-   - Delete unwanted slides (remove from `<p:sldIdLst>`)
-   - Duplicate slides you want to reuse (`add_slide.py`)
-   - Reorder slides in `<p:sldIdLst>`
-   - **Complete all structural changes before step 5**
-
-5. **Edit content**: Update text in each `slide{N}.xml`.
-   **Use subagents here if available** — slides are separate XML files, so subagents can edit in parallel.
-
-6. **Clean**: `python scripts/clean.py unpacked/`
-
-7. **Pack**: `python scripts/office/pack.py unpacked/ output.pptx --original template.pptx`
-
-### Scripts
-
-| Script | Purpose |
-|--------|---------|
-| `unpack.py` | Extract and pretty-print PPTX |
-| `add_slide.py` | Duplicate slide or create from layout |
-| `clean.py` | Remove orphaned files |
-| `pack.py` | Repack with validation |
-| `thumbnail.py` | Create visual grid of slides |
-
-```bash
-# Unpack
-python scripts/office/unpack.py input.pptx unpacked/
-
-# Add slide (duplicate existing)
-python scripts/add_slide.py unpacked/ slide2.xml
-
-# Add slide (from layout)
-python scripts/add_slide.py unpacked/ slideLayout2.xml
-
-# Clean orphaned files
-python scripts/clean.py unpacked/
-
-# Pack
-python scripts/office/pack.py unpacked/ output.pptx --original input.pptx
-
-# Thumbnails
-python scripts/thumbnail.py input.pptx [output_prefix] [--cols N]
-```
-
-### Slide Operations
-
-Slide order is in `ppt/presentation.xml` → `<p:sldIdLst>`.
-
-- **Reorder**: Rearrange `<p:sldId>` elements.
-- **Delete**: Remove `<p:sldId>`, then run `clean.py`.
-- **Add**: Use `add_slide.py`. Never manually copy slide files.
-
-### Editing Content
-
-For each slide:
-1. Read the slide's XML
-2. Identify ALL placeholder content — text, images, charts, icons, captions
-3. Replace each placeholder with final content
-
-**Use the Edit tool, not sed or Python scripts.** The Edit tool forces specificity.
-
-### Formatting Rules
-
-- **Bold all headers, subheadings, and inline labels**: Use `b="1"` on `<a:rPr>`.
-- **Never use unicode bullets (•)**: Use proper list formatting with `<a:buChar>` or `<a:buAutoNum>`.
-- **Bullet consistency**: Let bullets inherit from the layout. Only specify `<a:buChar>` or `<a:buNone>`.
-
-### Template Pitfalls
-
-**When source content has fewer items than the template:**
-- **Remove excess elements entirely** (images, shapes, text boxes), don't just clear text.
-- Check for orphaned visuals after clearing text content.
-
-**When replacing text with different-length content:**
-- Shorter replacements: usually safe.
-- Longer replacements: may overflow or wrap unexpectedly.
-- Test with visual QA after text changes.
-
-**Multi-item content:** If source has multiple items (numbered lists, multiple sections), create separate `<a:p>` elements for each — **never concatenate into one string**.
-
-**Smart quotes:** When adding new text with quotes in XML, use XML entities:
-```xml
-<a:t>the &#x201C;Agreement&#x201D;</a:t>
-```
-
-| Character | Unicode | XML Entity |
-|-----------|---------|------------|
-| " (left double) | U+201C | `&#x201C;` |
-| " (right double) | U+201D | `&#x201D;` |
-| ' (left single) | U+2018 | `&#x2018;` |
-| ' (right single) | U+2019 | `&#x2019;` |
-
-- **Whitespace**: Use `xml:space="preserve"` on `<a:t>` with leading/trailing spaces.
-- **XML parsing**: Use `defusedxml.minidom`, not `xml.etree.ElementTree` (corrupts namespaces).
 
 ---
 
@@ -370,7 +551,6 @@ For each slide:
 const pptxgen = require("pptxgenjs");
 const fs = require("fs");
 
-// Ensure output directory exists
 if (!fs.existsSync("output")) fs.mkdirSync("output");
 
 let pres = new pptxgen();
@@ -381,7 +561,7 @@ pres.title = 'Presentation Title';
 let slide = pres.addSlide();
 slide.addText("Hello World!", { x: 0.5, y: 0.5, fontSize: 36, color: "363636" });
 
-pres.writeFile({ fileName: "output/Presentation.pptx" });
+pres.writeFile({ fileName: "output/My_Presentation.pptx" });
 ```
 
 ### Layout Dimensions
@@ -670,3 +850,68 @@ titleSlide.addText("My Title", { placeholder: "title" });
 - **Alignment**: "left", "center", "right"
 - **Chart data labels**: "outEnd", "inEnd", "center"
 - **Supported image formats**: PNG, JPG, GIF (animated in M365), SVG (modern PowerPoint/M365)
+
+---
+
+## Defensive Layout Helpers (themes/pv_helpers.js)
+
+These helpers prevent common visual errors at build time. **Always use them** when building slides with the PV theme system.
+
+### Bounds Validation
+
+Every visual helper (`addCard`, `addPlaceValueChart`, `addNumberLine`, `addTenthsStrip`, `addAreaModel`) validates bounds automatically and prints console warnings during `node builds/build_*.js` if elements overflow.
+
+**Console warnings during build = layout bugs to fix.** Never ship a presentation with warnings.
+
+### Place Value Charts — Auto-Sizing
+
+`addPlaceValueChart` supports auto-sizing. Pass a total width and it calculates cell widths:
+
+```javascript
+// PREFERRED — chart fits within 4.2" total
+addPlaceValueChart(slide, x, y, headers, values, { totalW: 4.2 });
+
+// Also works — "w" is treated as totalW for backward compatibility
+addPlaceValueChart(slide, x, y, headers, values, { w: 4.2 });
+
+// Manual cell width — use only if you've calculated it fits
+addPlaceValueChart(slide, x, y, headers, values, { cellW: 0.84 });
+```
+
+**Returns geometry** for downstream positioning (decimal dots, labels):
+```javascript
+const geo = addPlaceValueChart(slide, x, y, headers, values, { totalW: 4.0 });
+// geo = { cellW, totalW, hdrH, valH, n, x, y }
+addDecimalDot(slide, geo, 0, { color: C.CORAL }); // dot after column 0
+```
+
+### Number Lines — Adaptive Labels
+
+`addNumberLine` auto-adjusts label width and font size when interval width drops below 0.5" (e.g., many labels on narrow widths). No configuration needed — it prevents label overlap automatically.
+
+### Text on Shapes — `addTextOnShape`
+
+**Always use this instead of separate addShape + addText calls.** It guarantees `valign:"middle"`, `align:"center"`, `margin:0` and validates contrast:
+
+```javascript
+addTextOnShape(slide, "24 812", {
+  x: 1, y: 2, w: 3, h: 0.5, rectRadius: 0.08,
+  fill: { color: C.NAVY },
+}, {
+  fontSize: 22, fontFace: FONT_H, color: C.WHITE, bold: true,
+});
+```
+
+### Contrast Validation
+
+Available from both `themes/pv_palette.js` and `themes/pv_helpers.js`:
+
+```javascript
+// Auto-pick WHITE or CHARCOAL for a given background
+const textColor = getContrastColor(C.AMBER);  // → C.CHARCOAL
+
+// Manual check — warns to console if contrast < 4.5:1 (WCAG AA)
+validateContrast(textColor, bgColor, "my label badge");
+```
+
+**`addTextOnShape` runs contrast validation automatically.** For manual `addText` calls on coloured backgrounds, call `validateContrast` yourself or use `getContrastColor` to pick the text colour.
