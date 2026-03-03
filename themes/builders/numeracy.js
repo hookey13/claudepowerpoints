@@ -1,0 +1,452 @@
+"use strict";
+
+const { SAFE_BOTTOM, CONTENT_TOP, SLIDE_W, validateBounds } = require("../core/layout");
+
+/**
+ * Factory that returns numeracy-specific slide builders and maths visual
+ * helpers bound to a given palette, fonts, and element helpers.
+ *
+ * @param {object} C       Semantic palette colours (PRIMARY, SECONDARY, ACCENT, ALERT, SUCCESS, ASSESS, BG_DARK, BG_LIGHT, BG_CARD, WHITE, CHARCOAL, MUTED, TEXT_ON_DARK, SUBTITLE, DECOR_1, DECOR_2)
+ * @param {string} FONT_H  Heading font name
+ * @param {string} FONT_B  Body font name
+ * @param {object} el       Bound element helpers: addTopBar, addBadge, addTitle, addCard, addFooter, addIconCircle, addTextOnShape
+ * @returns {object}        { STAGE_COLORS, addStageBadge, workedExSlide, exitTicketSlide, addPlaceValueChart, addTenthsStrip, addAreaModel, addNumberLine, addDecimalDot }
+ */
+function createNumeracyBuilders(C, FONT_H, FONT_B, el) {
+
+  /* ------------------------------------------------------------------ */
+  /*  STAGE_COLORS                                                       */
+  /* ------------------------------------------------------------------ */
+
+  const STAGE_COLORS = {
+    "1": C.ACCENT,                   // Activate Prior Knowledge
+    "2": C.PRIMARY,                  // Explicit Instruction (I Do)
+    "3": C.SECONDARY,               // Guided Practice (We Do)
+    "4": C.ALERT,                   // Independent Practice (You Do)
+    "5": C.ASSESS || C.ALERT,       // Exit Ticket
+  };
+
+  /* ------------------------------------------------------------------ */
+  /*  addStageBadge                                                      */
+  /* ------------------------------------------------------------------ */
+
+  /**
+   * Stage-coloured badge positioned at the top-left of the slide.
+   *
+   * @param {object} slide     PptxGenJS slide object
+   * @param {number} stageNum  Stage number (1-5)
+   * @param {string} label     Stage label text
+   */
+  function addStageBadge(slide, stageNum, label) {
+    const color = STAGE_COLORS[String(stageNum)] || C.PRIMARY;
+    const w = label.length > 20 ? 3.2 : 2.4;
+    slide.addShape("roundRect", {
+      x: 0.5, y: 0.2, w, h: 0.36, rectRadius: 0.08,
+      fill: { color },
+    });
+    slide.addText("Stage " + stageNum + "  |  " + label, {
+      x: 0.5, y: 0.2, w, h: 0.36,
+      fontSize: 10, fontFace: FONT_B, color: C.WHITE,
+      align: "center", valign: "middle", bold: true, margin: 0,
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  workedExSlide                                                      */
+  /* ------------------------------------------------------------------ */
+
+  /**
+   * Worked example slide with stage badge, steps on left card, and an
+   * optional right-side callback for visual content.
+   *
+   * @param {object}   pres        PptxGenJS presentation instance
+   * @param {number}   stageNum    Stage number (1-5)
+   * @param {string}   stageLabel  Stage label text
+   * @param {string}   title       Slide title
+   * @param {string[]} steps       Bullet-point steps for the worked example
+   * @param {string}   notes       Teacher notes
+   * @param {string}   footer      Footer text
+   * @param {Function} drawRight   Optional callback(slide) for right-column visuals
+   * @returns {object}             The slide object
+   */
+  function workedExSlide(pres, stageNum, stageLabel, title, steps, notes, footer, drawRight) {
+    const s = pres.addSlide();
+    const stageColor = STAGE_COLORS[String(stageNum)] || C.PRIMARY;
+    el.addTopBar(s, stageColor);
+    addStageBadge(s, stageNum, stageLabel);
+    el.addTitle(s, title, { y: 0.65, fontSize: 22, color: stageColor });
+
+    const cardW = drawRight ? 4.5 : 9;
+    el.addCard(s, 0.5, CONTENT_TOP, cardW, SAFE_BOTTOM - CONTENT_TOP, { strip: stageColor });
+
+    const stepTexts = steps.map((step, i) => ({
+      text: step,
+      options: { bullet: true, breakLine: i < steps.length - 1, fontSize: 13, color: C.CHARCOAL },
+    }));
+    s.addText(stepTexts, {
+      x: 0.75, y: CONTENT_TOP + 0.12, w: cardW - 0.4, h: SAFE_BOTTOM - CONTENT_TOP - 0.2,
+      fontFace: FONT_B, margin: 0, valign: "top",
+    });
+
+    if (drawRight) drawRight(s);
+    if (footer) el.addFooter(s, footer);
+    if (notes) s.addNotes(notes);
+    return s;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  exitTicketSlide                                                    */
+  /* ------------------------------------------------------------------ */
+
+  /**
+   * Assessment / exit ticket slide with question cards on a light background.
+   *
+   * @param {object}   pres       PptxGenJS presentation instance
+   * @param {string[]} questions  Array of question strings
+   * @param {string}   notes      Teacher notes
+   * @param {string}   footer     Footer text
+   * @returns {object}            The slide object
+   */
+  function exitTicketSlide(pres, questions, notes, footer) {
+    const s = pres.addSlide();
+    const assessColor = C.ASSESS || C.ALERT;
+
+    s.background = { color: C.BG_CARD };
+
+    // Top accent bar
+    s.addShape("rect", { x: 0, y: 0, w: 10, h: 0.06, fill: { color: assessColor } });
+
+    // Badge
+    s.addShape("roundRect", {
+      x: 0.5, y: 0.2, w: 1.8, h: 0.36, rectRadius: 0.08,
+      fill: { color: assessColor },
+    });
+    s.addText("Exit Ticket", {
+      x: 0.5, y: 0.2, w: 1.8, h: 0.36,
+      fontSize: 11, fontFace: FONT_B, color: C.WHITE,
+      align: "center", valign: "middle", bold: true, margin: 0,
+    });
+
+    // Title
+    s.addText("Stage 5  |  Show What You Know", {
+      x: 0.5, y: 0.65, w: 9, h: 0.52,
+      fontSize: 22, fontFace: FONT_H, color: assessColor, bold: true, margin: 0,
+    });
+
+    // Question cards
+    const perH = Math.min(1.2, (SAFE_BOTTOM - 1.3) / questions.length - 0.12);
+    questions.forEach((q, i) => {
+      const qY = 1.3 + i * (perH + 0.12);
+      el.addCard(s, 0.5, qY, 9, perH, { strip: assessColor });
+      s.addText((i + 1) + ".  " + q, {
+        x: 0.75, y: qY + 0.06, w: 8.5, h: perH - 0.08,
+        fontSize: 15, fontFace: FONT_B, color: C.CHARCOAL, margin: 0, valign: "middle",
+      });
+    });
+
+    if (footer) el.addFooter(s, footer);
+    if (notes) s.addNotes(notes);
+    return s;
+  }
+
+  /* ================================================================== */
+  /*  Maths Visual Helpers                                               */
+  /* ================================================================== */
+
+  /* ------------------------------------------------------------------ */
+  /*  addPlaceValueChart                                                 */
+  /* ------------------------------------------------------------------ */
+
+  /**
+   * Place value chart with auto-sizing. Draws header cells (filled with
+   * PRIMARY) and value cells (white with PRIMARY border). Auto-scales
+   * font sizes for narrow cells. Inserts a thousands-gap marker using
+   * ACCENT when ten-thousands header is present.
+   *
+   * @param {object}   slide    PptxGenJS slide object
+   * @param {number}   x        Left edge x (inches)
+   * @param {number}   y        Top edge y (inches)
+   * @param {string[]} headers  Column header labels
+   * @param {Array}    values   Values to display (may contain nulls for empty cells)
+   * @param {object}   opts     Options: totalW, w, cellW, hdrH, valH, headerColor
+   * @returns {object}          Geometry: { cellW, totalW, hdrH, valH, n, x, y }
+   */
+  function addPlaceValueChart(slide, x, y, headers, values, opts) {
+    const o = opts || {};
+    const n = headers.length;
+
+    if (n === 0) {
+      console.warn("[addPlaceValueChart] empty headers array — skipping");
+      return { cellW: 0, totalW: 0, hdrH: 0, valH: 0, n: 0, x, y };
+    }
+
+    let cellW;
+    if (o.totalW != null) { cellW = o.totalW / n; }
+    else if (o.w != null) { cellW = o.w / n; }
+    else { cellW = o.cellW || 1.2; }
+
+    const hdrH = o.hdrH || 0.52;
+    const valH = o.valH || 0.7;
+    const totalW = cellW * n;
+    const headerColor = o.headerColor || C.PRIMARY;
+
+    validateBounds("addPlaceValueChart", x, y, totalW, hdrH + valH);
+
+    const hasTenThousands = headers.some(h => h.toLowerCase().includes("ten thousand"));
+    const hdrFontSize = cellW < 0.7 ? 7 : cellW < 0.9 ? 8 : 9;
+    const valFontSize = cellW < 0.7 ? 18 : cellW < 0.9 ? 22 : 26;
+
+    headers.forEach((h, i) => {
+      const cx = x + i * cellW;
+
+      // Header cell
+      slide.addShape("rect", {
+        x: cx, y, w: cellW, h: hdrH,
+        fill: { color: headerColor },
+        line: { color: C.WHITE, width: 1 },
+      });
+      slide.addText(h, {
+        x: cx, y, w: cellW, h: hdrH,
+        fontSize: hdrFontSize, fontFace: FONT_B, color: C.WHITE,
+        align: "center", valign: "middle", bold: true, margin: 0,
+      });
+
+      // Value cell
+      slide.addShape("rect", {
+        x: cx, y: y + hdrH, w: cellW, h: valH,
+        fill: { color: C.WHITE },
+        line: { color: headerColor, width: 1 },
+      });
+
+      const val = values && values[i] != null ? String(values[i]) : "";
+      if (val !== "") {
+        slide.addText(val, {
+          x: cx, y: y + hdrH, w: cellW, h: valH,
+          fontSize: valFontSize, fontFace: FONT_H, color: C.CHARCOAL,
+          align: "center", valign: "middle", bold: true, margin: 0,
+        });
+      }
+    });
+
+    // Thousands gap marker
+    if (hasTenThousands && n >= 5) {
+      const gapX = x + 2 * cellW;
+      slide.addShape("rect", {
+        x: gapX - 0.03, y: y + hdrH, w: 0.06, h: valH,
+        fill: { color: C.ACCENT },
+      });
+    }
+
+    return { cellW, totalW, hdrH, valH, n, x, y };
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  addTenthsStrip                                                     */
+  /* ------------------------------------------------------------------ */
+
+  /**
+   * Horizontal strip of 10 equal segments representing tenths.
+   * Filled segments use SECONDARY, empty use WHITE, borders use PRIMARY.
+   *
+   * @param {object} slide   PptxGenJS slide object
+   * @param {number} x       Left edge x (inches)
+   * @param {number} y       Top edge y (inches)
+   * @param {number} w       Total strip width (inches)
+   * @param {number} filled  Number of filled segments (0-10)
+   * @param {object} opts    Options: h, fillColor, emptyColor
+   */
+  function addTenthsStrip(slide, x, y, w, filled, opts) {
+    const o = opts || {};
+    const h = o.h || 0.45;
+    const segW = w / 10;
+    const fillColor = o.fillColor || C.SECONDARY;
+    const emptyColor = o.emptyColor || C.WHITE;
+
+    validateBounds("addTenthsStrip", x, y, w + 0.6, h);
+
+    for (let i = 0; i < 10; i++) {
+      slide.addShape("rect", {
+        x: x + i * segW, y, w: segW, h,
+        fill: { color: i < filled ? fillColor : emptyColor },
+        line: { color: C.PRIMARY, width: 1 },
+      });
+    }
+
+    // Fraction label
+    slide.addText(filled + "/10", {
+      x: x + w + 0.1, y: y, w: 0.5, h,
+      fontSize: 13, fontFace: FONT_B, color: C.CHARCOAL,
+      align: "left", valign: "middle", margin: 0,
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  addAreaModel                                                       */
+  /* ------------------------------------------------------------------ */
+
+  /**
+   * 10x10 grid area model for representing decimals (tenths and hundredths).
+   * Full columns use SECONDARY fill, extra hundredths cells use SECONDARY,
+   * empty cells use WHITE. All borders use PRIMARY.
+   *
+   * @param {object} slide             PptxGenJS slide object
+   * @param {number} x                 Left edge x (inches)
+   * @param {number} y                 Top edge y (inches)
+   * @param {number} sizeIn            Side length of the grid (inches)
+   * @param {number} filledTenths      Number of fully filled columns (0-10)
+   * @param {number} extraHundredths   Extra cells in the next column (0-9)
+   * @param {object} opts              Options: fillColor, extraColor
+   */
+  function addAreaModel(slide, x, y, sizeIn, filledTenths, extraHundredths, opts) {
+    const o = opts || {};
+    const cellSize = sizeIn / 10;
+    const fillColor = o.fillColor || C.SECONDARY;
+    const extraColor = o.extraColor || C.SECONDARY;
+
+    validateBounds("addAreaModel", x, y, sizeIn, sizeIn);
+
+    for (let col = 0; col < 10; col++) {
+      for (let row = 0; row < 10; row++) {
+        const isFullCol = col < filledTenths;
+        const isExtraCell = col === filledTenths && row < extraHundredths;
+
+        slide.addShape("rect", {
+          x: x + col * cellSize,
+          y: y + row * cellSize,
+          w: cellSize, h: cellSize,
+          fill: { color: isFullCol ? fillColor : (isExtraCell ? extraColor : C.WHITE) },
+          line: { color: C.PRIMARY, width: 0.5 },
+        });
+      }
+    }
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  addNumberLine                                                      */
+  /* ------------------------------------------------------------------ */
+
+  /**
+   * Number line with adaptive label sizing. Auto-adjusts font size and
+   * label width when interval width drops below 0.5" to prevent overlap.
+   * Marked positions use ALERT-coloured dots.
+   *
+   * @param {object}   slide            PptxGenJS slide object
+   * @param {number}   x                Left edge x (inches)
+   * @param {number}   y                Baseline y (inches)
+   * @param {number}   w                Total line width (inches)
+   * @param {string[]} labels           Tick labels (use "" for unlabelled ticks)
+   * @param {number[]} markedPositions  Indices of labels to mark with dots
+   * @param {object}   opts             Options: tickH, labelFontSize
+   * @returns {object}                  Geometry: { x, y, w, n, intervalW, tickH, labelW, labelFontSize }
+   */
+  function addNumberLine(slide, x, y, w, labels, markedPositions, opts) {
+    const o = opts || {};
+    const tickH = o.tickH || 0.12;
+    const n = labels.length - 1;
+
+    if (n <= 0) {
+      console.warn("[addNumberLine] need at least 2 labels — skipping");
+      return { x, y, w, n: 0, intervalW: 0, tickH, labelW: 0, labelFontSize: 12 };
+    }
+
+    const intervalW = w / n;
+    const baseLabelW = 0.7;
+    const labelW = Math.min(baseLabelW, intervalW * 1.4);
+    const maxLabelLen = Math.max(...labels.filter(l => l !== "").map(l => l.length), 1);
+    const baseFontSize = o.labelFontSize || 12;
+    let labelFontSize = baseFontSize;
+    if (intervalW < 0.5 && maxLabelLen > 3) {
+      labelFontSize = Math.max(8, Math.round(baseFontSize * (intervalW / 0.5)));
+    }
+
+    validateBounds("addNumberLine", x - 0.15, y - tickH, w + 0.3, tickH + 0.4);
+
+    // Main line
+    slide.addShape("line", { x, y, w, h: 0, line: { color: C.CHARCOAL, width: 2.5 } });
+
+    // Arrow tips
+    slide.addShape("line", { x: x - 0.15, y: y - 0.1, w: 0.15, h: 0.1, line: { color: C.CHARCOAL, width: 2 } });
+    slide.addShape("line", { x: x + w, y: y - 0.1, w: 0.15, h: 0.1, line: { color: C.CHARCOAL, width: 2 } });
+
+    // Ticks and labels
+    labels.forEach((lbl, i) => {
+      const tx = x + i * intervalW;
+
+      // Tick mark
+      slide.addShape("line", { x: tx, y: y - tickH / 2, w: 0, h: tickH, line: { color: C.CHARCOAL, width: 2 } });
+
+      // Label
+      if (lbl !== "") {
+        slide.addText(lbl, {
+          x: tx - labelW / 2, y: y + tickH / 2 + 0.04, w: labelW, h: 0.28,
+          fontSize: labelFontSize, fontFace: FONT_B, color: C.CHARCOAL,
+          align: "center", margin: 0,
+        });
+      }
+    });
+
+    // Marked position dots
+    if (markedPositions) {
+      markedPositions.forEach((idx) => {
+        const mx = x + idx * intervalW;
+        slide.addShape("roundRect", {
+          x: mx - 0.07, y: y - 0.07, w: 0.14, h: 0.14, rectRadius: 0.07,
+          fill: { color: C.ALERT },
+        });
+      });
+    }
+
+    return { x, y, w, n, intervalW, tickH, labelW, labelFontSize };
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  addDecimalDot                                                      */
+  /* ------------------------------------------------------------------ */
+
+  /**
+   * Decimal dot positioned relative to place value chart geometry.
+   * Placed between two columns (after afterCol).
+   *
+   * @param {object} slide     PptxGenJS slide object
+   * @param {object} chartGeo  Geometry object returned by addPlaceValueChart
+   * @param {number} afterCol  Column index after which to place the dot (0-based)
+   * @param {object} opts      Options: dotSize, color, position ("baseline" | "center")
+   */
+  function addDecimalDot(slide, chartGeo, afterCol, opts) {
+    const o = opts || {};
+    const dotSize = o.dotSize || 0.14;
+    const color = o.color || C.ALERT;
+    const position = o.position || "baseline";
+
+    const dotX = chartGeo.x + (afterCol + 1) * chartGeo.cellW - dotSize / 2;
+    let dotY;
+    if (position === "center") {
+      dotY = chartGeo.y + chartGeo.hdrH + chartGeo.valH / 2 - dotSize / 2;
+    } else {
+      dotY = chartGeo.y + chartGeo.hdrH + chartGeo.valH * 0.75 - dotSize / 2;
+    }
+
+    slide.addShape("roundRect", {
+      x: dotX, y: dotY, w: dotSize, h: dotSize, rectRadius: dotSize / 2,
+      fill: { color },
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Return all builders and helpers                                    */
+  /* ------------------------------------------------------------------ */
+
+  return {
+    STAGE_COLORS,
+    addStageBadge,
+    workedExSlide,
+    exitTicketSlide,
+    addPlaceValueChart,
+    addTenthsStrip,
+    addAreaModel,
+    addNumberLine,
+    addDecimalDot,
+  };
+}
+
+module.exports = { createNumeracyBuilders };

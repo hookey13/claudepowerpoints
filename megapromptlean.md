@@ -1,4 +1,4 @@
-# Explicit Teaching Mega-Prompt v6.0
+# Explicit Teaching Mega-Prompt v7.0
 ## With Integrated Lesson Planning QA & Slide Teacher Notes System
 
 ---
@@ -140,6 +140,575 @@ decision point in the GRR cycle. The PROCEED path moves forward in the GRR. The
 PIVOT path cycles back. This is what makes explicit teaching non-linear and
 responsive — the teacher has a planned response for BOTH outcomes at every
 checkpoint.
+
+#FLUENCY:
+
+**Number Fluency — A Mandatory Phase in Every Maths Lesson:**
+
+Fluency is a dedicated, non-negotiable phase in every maths lesson. It sits
+BETWEEN the Daily Review and the LI/SC (which precedes I Do). It is NOT
+the same as Daily Review. They serve different purposes:
+
+| | Daily Review | Fluency |
+|---|---|---|
+| **Purpose** | Spaced retrieval of previously taught concepts | Building automaticity in number skills |
+| **Content source** | Prior weeks/topics from the Scope & Sequence | Number & Algebra strand — selected based on cohort needs |
+| **Nature** | Recall and apply prior learning | Skill-based practice — formulas, algorithms, tools, mental computation |
+| **Pacing** | Teacher-led with CFU | High-intensity, routine-based — students know the drill |
+
+**The maths lesson phase sequence is:**
+
+Daily Review → **Fluency** → LI/SC → I Do → We Do → You Do → Exit Ticket → Closing
+
+Fluency is NOT optional. It is NOT absorbed into the Daily Review. It is
+its own phase with its own slide(s).
+
+**What Fluency looks like:**
+
+- Focus is always on Number and Algebra
+- Activity is skill-based: formulas, algorithms, using tools, mental computation
+- Selected based on the cohort's current needs and learning goals
+- Built on established routines and expectations — students know what to do
+  without lengthy instructions
+
+**Activity types (select based on cohort needs):**
+
+- Four Process Drills (addition, subtraction, multiplication, division)
+- Mental Maths Activities
+- Repeated Practice (building speed and accuracy on known skills)
+- Flash Cards
+- Number Talks (structured mental computation discussions)
+- Counting Games (skip counting, counting on/back, place value counting)
+
+**On slides:**
+
+Fluency gets 1–2 slides (Stage 1, labelled "Fluency" not "Daily Review").
+The slide should present the activity clearly with:
+- What the activity is and how it works (brief — routines are established)
+- The specific problems, prompts, or stimulus for the session
+- Visual elements appropriate to the activity (number grids, flash card
+  displays, computation chains, etc.)
+
+Teacher notes should include:
+- SAY: Brief launch of the activity ("Let's get our fluency on...")
+- DO: How the activity runs (timing, student response mode, pacing)
+- TEACHER NOTES: Why this activity was selected for this cohort, connection
+  to current learning goals
+- WATCH FOR: Students who are not yet automatic — what to note for future
+  planning
+
+Fluency is about building automaticity, not teaching new content. The
+teacher is monitoring speed, accuracy, and confidence — not modelling or
+explaining. If a student cannot do the fluency task, that is diagnostic
+information for future planning, not a teaching moment in this phase.
+
+#LEARNING_INTENTION_AND_SUCCESS_CRITERIA:
+
+**HARD CONSTRAINT — LI AND SC LIMITS (NON-NEGOTIABLE):**
+- The Learning Intention is ONE single statement. Not a bulleted list. Not
+  multiple sentences. ONE statement that fits on one or two lines of a slide.
+  If you find yourself writing more than one LI item, you are listing lesson
+  activities or curriculum descriptors — stop and distil to a single
+  destination statement.
+- Success Criteria are a MAXIMUM of THREE "I can..." statements. Not four,
+  not five. Three is the ceiling, and two is often better. Each SC must be
+  observable and assessable. If you have written more than three, you have
+  either (a) listed lesson activities instead of outcomes, or (b) tried to
+  cover multiple lessons in one set of SC. Cut ruthlessly.
+- The LI array passed to liSlide() must contain exactly 1 item.
+- The SC array passed to liSlide() must contain 2–3 items.
+- Violating these limits is a build error. Check before generating.
+
+**Designing Learning Intentions and Success Criteria:**
+
+The Learning Intention (LI) and Success Criteria (SC) are the first design
+decision in a lesson — everything else flows from them. The worked examples
+demonstrate the SC. The CFU checks whether students are reaching them. The
+exit ticket assesses them. The enabling and extending prompts are anchored
+to them. If the LI and SC are vague, everything downstream is vague. If they
+are sharp, the lesson has a spine.
+
+**One Learning Intention — The Destination:**
+
+Every lesson has ONE learning intention statement. Not two, not a compound
+sentence with "and" joining two different ideas. One clear destination that
+tells students where they are going and why it matters.
+
+The LI answers: *What are we learning today, and why?*
+
+It must be written in student-friendly language. If a student cannot read the
+LI on the slide and explain to a peer what they are about to learn, the
+language is too abstract, too technical, or too teacher-facing. This does not
+mean dumbing it down — it means translating expert language into words the
+students in THIS year level actually use and understand.
+
+Design thinking for the LI:
+- **Start with the curriculum content descriptor**, but do not copy it. Content
+  descriptors are written for teachers and curriculum planners. Your job is to
+  translate the intent into language a student can own. "Represent and partition
+  whole numbers to at least tens of thousands using standard and non-standard
+  groupings" becomes "We are learning to break apart big numbers and show them
+  in different ways."
+- **Include the why where it is genuine.** "We are learning to... so that we
+  can..." gives students purpose. But only include it when the connection is
+  real and meaningful to the student, not a forced justification. "We are
+  learning to use commas in lists so that our writing is clear for the reader"
+  works. "We are learning column subtraction so that we can do maths" does not.
+- **Pitch the language to the year level.** A Foundation LI sounds different
+  from a Year 9 LI, even if the structure is the same. For younger students,
+  keep it concrete and action-oriented. For older students, you can reference
+  concepts and skills by name — they can handle the terminology if it has been
+  taught.
+- **The LI is NOT the activity.** "We are learning to complete a worksheet on
+  fractions" describes the task, not the learning. "We are learning to find
+  equivalent fractions using area models" describes what students will
+  understand and be able to do.
+
+**Maximum Three Success Criteria — The Evidence:**
+
+Every lesson has a maximum of three success criteria. These are the observable,
+assessable actions that tell the student (and the teacher) whether the learning
+intention has been achieved. They answer: *How will I know I've got it?*
+
+SC are written as "I can..." statements in student-friendly language. Each one
+describes something the student DOES — not something they understand, feel, or
+appreciate. Observable means the teacher can see it in student work or hear it
+in student responses. If you cannot check it, it is not a success criterion.
+
+**The three SC are ordered progressively:**
+
+**SC1 — The Foundation (every student achieves this):**
+This is the baseline success that every student in the room — including those
+working on enabling prompts — should reach by the end of the lesson. It targets
+the core prerequisite or the most fundamental aspect of the LI. It is not
+trivial, but it is achievable for all learners with the scaffolding provided.
+If a student achieves only SC1, they have still made meaningful progress and
+have a platform to build on in the next lesson.
+
+**SC2 — The Core Target (most students achieve this):**
+This is the main lesson goal — what the I Do, We Do, and You Do sequence is
+designed to get students to. It directly reflects the learning intention. Most
+students should achieve SC2 by the end of the lesson. The exit ticket should
+be designed to clearly assess whether SC2 has been met.
+
+**SC3 — The Depth (students working above the target achieve this):**
+This extends the learning — it asks students to apply, connect, justify, or
+transfer the concept in a way that goes beyond the core lesson. It maps
+naturally to the extending prompt. Not every student will reach SC3 in the
+lesson, and that is by design. It is there for students who are ready to go
+further, and it signals to all students what deeper mastery looks like.
+
+This progressive ordering is not about labelling students. It is about
+designing the lesson so that success is inclusive — every student leaves having
+achieved something real — while still challenging students who are ready for
+more. The three SC together create a progression within the single lesson that
+mirrors the enabling → core → extending differentiation structure.
+
+**Not every lesson needs three SC.** Some lessons — particularly early in a
+unit when the content is tightly focused on a single new skill — may only
+warrant two. One or two well-designed SC are better than three that have been
+padded out to hit a number. Use your judgement. But never exceed three — more
+than three overloads students with too many targets and dilutes focus.
+
+**Design Tests for SC Quality:**
+
+Before finalising the SC, apply these checks:
+
+1. **The Student Test:** *Can a student in this year level read this SC and
+   know exactly what they need to do to achieve it?* If it requires teacher
+   explanation to make sense, rewrite it in plainer language.
+
+2. **The Observable Test:** *Can the teacher see or hear evidence of this SC
+   in student work, whiteboard responses, or verbal answers?* "I can
+   understand place value" fails — understanding is invisible. "I can write a
+   4-digit number in expanded form" passes — the teacher can see it.
+
+3. **The Assessment Test:** *Can I design an exit ticket question that checks
+   this SC?* If the SC is too broad to assess in 1-2 questions, it is too
+   broad for a single lesson. Narrow it.
+
+4. **The Achievability Test:** *Can a student working on the enabling prompt
+   realistically achieve SC1 by the end of the lesson?* If not, SC1 is pitched
+   too high — lower it to the genuine foundation of today's learning.
+
+5. **The Progression Test:** *Do SC1 → SC2 → SC3 represent a genuine
+   progression in depth or complexity?* They should not be three unrelated
+   skills — they should build on each other so that achieving SC1 is a
+   stepping stone toward SC2, and SC2 toward SC3.
+
+**SC Connect to Everything Downstream:**
+
+The success criteria are not decoration on a slide — they are the design
+backbone of the lesson. When they are well-designed, the connections are
+automatic:
+- **Worked examples** demonstrate how to achieve SC2 (and by extension SC1)
+- **CFU checks** test whether students are on track toward the SC
+- **The exit ticket** assesses SC1 and SC2 directly (and may touch SC3)
+- **Enabling prompts** target the prerequisite knowledge needed for SC1
+- **Extending prompts** target the depth described in SC3
+- **The closing review** asks students to self-assess against the SC (see #CLOSING_SLIDE)
+
+If you design the SC well, the rest of the lesson has a clear through-line.
+If the SC are vague, every other design decision is a guess.
+
+#WORKED_EXAMPLE_DESIGN:
+
+**Design Thinking for Worked Examples and Problem Pairs:**
+
+Worked examples are the engine of explicit teaching — they are how the invisible
+becomes visible. But not all worked examples are equal. A poorly designed worked
+example can overload working memory just as badly as no example at all. This
+section equips you to make design decisions about worked examples agentically,
+based on the content, the students, and the moment in the learning sequence.
+
+**Grain Size — How Fine to Decompose:**
+
+The single most important design decision in a worked example is grain size: how
+small should each step be? This is not a fixed number — it depends entirely on
+the students' prior knowledge relative to the content.
+
+Ask: *If I were watching a novice attempt this for the first time, where would
+they get stuck?* Every sticking point is a step boundary. If students have no
+prior knowledge of the concept, grain size must be very fine — each step is one
+cognitive move. If students have partial knowledge (e.g., they've seen a simpler
+version), grain size can be coarser — multiple moves can be combined into a
+single step because the sub-steps are already automated.
+
+This means the SAME mathematical procedure might be a 6-step worked example for
+a Year 3 class encountering it fresh, and a 3-step worked example for a Year 5
+class who learned the prerequisite last term. Grain size is a prior-knowledge
+decision, not a content decision.
+
+As the unit progresses and students build proficiency, the grain size of your
+worked examples should naturally coarsen. Lesson 1 of a unit breaks the
+procedure into its finest components. By Lesson 5, students have automated the
+early steps and the worked example focuses only on the new complexity being
+added. If you find yourself using the same grain size in Lesson 8 as Lesson 1,
+the students have either not progressed (a teaching problem) or you are
+over-scaffolding (an Expertise Reversal problem).
+
+**Designing Problem Pairs — What Changes, What Stays:**
+
+A problem pair is a worked example followed immediately by a structurally
+identical problem for students to solve. The power of the pair lies in what
+is held constant and what is varied.
+
+The deep structure stays the same — the mathematical relationships, the
+reasoning pathway, the procedure, the type of problem. The surface features
+change — the numbers, the context, the names, the visual arrangement. This is
+critical: if the deep structure changes, it is not a problem pair — it is a
+new concept, and the student has no worked example to draw from.
+
+Ask: *Could a student solve this problem by following the exact same reasoning
+pathway as the worked example, just with different values?* If yes, it is a
+valid pair. If solving it requires a reasoning move that was not demonstrated
+in the worked example, it is not a pair — it is a trap.
+
+As the lesson progresses and students demonstrate understanding through CFU,
+you can introduce variation problems that shift surface features more
+dramatically (different contexts, different visual representations) while
+maintaining the same deep structure. This builds transfer — students learn
+to recognise the deep structure beneath varied surfaces. But this comes AFTER
+the initial pair, not instead of it.
+
+**When Worked Examples Have Done Their Job:**
+
+Worked examples are most powerful when students are novices relative to the
+content. As students acquire knowledge and automate procedures, the benefit
+of further worked examples diminishes and eventually reverses — this is the
+Expertise Reversal Effect. Continuing to provide worked examples to students
+who no longer need them wastes cognitive resources on processing redundant
+information.
+
+The signal is in the CFU data. When ≥80% of students are solving problem
+pairs correctly and quickly — without referring back to the worked example —
+the worked example has done its job. The next move is not another worked
+example; it is increased practice with fading support (see #FADING_DECISIONS).
+
+This also shifts across a unit. In the early lessons of a unit, worked
+examples dominate I Do and early We Do. By the later lessons of the same unit,
+students have built proficiency and the balance should shift toward practice,
+application, and transfer tasks. A lesson near the end of a unit that is still
+heavy on worked examples may be holding students back rather than pushing them
+forward. Read the room — if students are succeeding easily, they need challenge,
+not more scaffolding.
+
+#FADING_DECISIONS:
+
+**Fading as a Decision Framework:**
+
+Fading is the bridge between worked examples and independent problem-solving.
+It is the mechanism by which the GRR literally releases responsibility — one
+step at a time. Three fading strategies exist, and each has a logic. The
+choice between them is an agentic decision based on the content and where the
+difficulty lives in the procedure.
+
+**Backward Fading — Remove the Last Step First:**
+
+The student sees a worked example with the final step omitted. They complete
+only that last step. Next iteration: the last TWO steps are omitted. And so on,
+until the student completes the full problem from scratch.
+
+When to use it: When the final step is the most straightforward or when you want
+students to experience the satisfaction of reaching the answer early. Backward
+fading builds confidence because the student always finishes the problem —
+they see the complete solution emerging from their own work. It is particularly
+effective when the opening steps are the hardest (e.g., setting up an equation,
+choosing the operation) and you want to keep those scaffolded longest.
+
+**Forward Fading — Remove the First Step First:**
+
+The student sees a worked example with the first step omitted. They must
+initiate the problem themselves, then follow the remaining worked steps. Next
+iteration: the first TWO steps are omitted.
+
+When to use it: When the critical decision point is at the START of the
+problem — choosing the right operation, identifying what the question is
+asking, setting up the representation. Forward fading forces students to
+practise the hardest part (getting started) while the rest of the procedure
+is still scaffolded. This is often the right choice in maths where "knowing
+what to do first" is the threshold skill.
+
+**Contour Fading — Remove the Easiest Steps First (Regardless of Position):**
+
+Steps are omitted based on difficulty, not position. The easiest steps
+disappear first; the most conceptually challenging steps remain scaffolded
+longest.
+
+When to use it: When the difficulty is not sequential — when there are hard
+steps in the middle surrounded by easier steps on either side. Contour fading
+is the most flexible and the most context-dependent. It requires you to
+identify WHICH steps carry the highest cognitive load and keep those visible
+while removing the routine steps that students can already do.
+
+**The Decision:**
+
+Ask: *Where does the cognitive load peak in this procedure?* If it peaks at
+the beginning → use forward fading (keep the start scaffolded longest). If it
+peaks at the end → use backward fading (keep the end scaffolded longest). If
+it peaks in the middle or is distributed unevenly → use contour fading (keep
+the hard steps scaffolded longest, regardless of position).
+
+You do not need to announce the fading type to the teacher. Simply design the
+faded examples so that the scaffolding is removed in the right order for the
+content. The teacher experiences a natural progression from heavy support to
+independence — the design thinking is yours, the teaching experience is theirs.
+
+#HINGE_QUESTION_DESIGN:
+
+**Hinge Question Quality Thinking:**
+
+A hinge question is the diagnostic instrument that determines whether students
+are ready to move forward in the GRR. It is called a "hinge" because the
+lesson literally hinges on the result — the teacher either proceeds or pivots
+based on what they see. A weak hinge question produces ambiguous data and the
+teacher makes a blind decision. A strong hinge question sorts students cleanly
+and the teacher knows exactly what to do next.
+
+**What Makes a Hinge Question Diagnostic (Not Just a Quiz Question):**
+
+1. **Threshold targeting:** The question tests the ONE concept that, if
+   understood, means the student is ready for the next phase. Not everything
+   taught so far — just the gate. Ask: *What is the single understanding that
+   separates a student who is ready to move on from one who is not?* That is
+   your hinge point.
+
+2. **Interpretable distractors:** Every wrong answer must map to a specific,
+   identifiable misconception. If a student selects option B, the teacher
+   should know EXACTLY what that student is thinking wrong — not just "they
+   got it wrong" but "they are applying whole-number thinking to decimals" or
+   "they are adding before multiplying because they read left-to-right."
+   Random wrong answers provide no diagnostic information. Each distractor is
+   a window into a particular error pattern.
+
+3. **Rapid teacher interpretation:** The teacher must be able to scan 25
+   responses (whiteboards, fingers, cards) in under 30 seconds and determine
+   the class-level outcome: proceed or pivot. If interpreting the responses
+   requires analysis, marking, or extended reading, it is not a hinge
+   question — it is an assessment task. Design for the teacher's cognitive
+   load as well as the student's.
+
+4. **Every student responds:** A hinge question where only volunteers answer
+   is not a hinge question — it is a biased sample. The CFU technique
+   paired with the hinge question must ensure universal response (Show Me
+   Boards, finger voting, response cards). This is why the CFU CHECKPOINT
+   in teacher notes scripts the technique precisely — the mechanism of
+   response collection is as important as the question itself.
+
+5. **Quick student response time:** Students should be able to answer within
+   one to two minutes. If the question requires extended working, it has
+   moved beyond a hinge check and into assessment territory. The hinge
+   question tests understanding, not performance. If they understand the
+   concept, the answer should come quickly.
+
+**Designing Distractors — The Diagnostic Power:**
+
+The quality of a hinge question lives in its distractors. For each wrong
+option, ask: *What would a student have to believe or misunderstand to choose
+this answer?* If you cannot name a specific misconception for a distractor,
+replace it with one you can.
+
+Common distractor design patterns:
+- **The overgeneralisation trap:** An answer that would be correct if a simpler
+  rule applied (e.g., "0.45 is bigger than 0.6 because 45 > 6" — whole-number
+  thinking applied to decimals)
+- **The procedural slip:** An answer that results from applying the right
+  procedure in the wrong order or missing a step
+- **The surface-feature match:** An answer that looks right because it matches
+  a visible feature of the problem rather than the underlying structure
+- **The partial understanding:** An answer that is correct for PART of the
+  concept but breaks down at the threshold point being tested
+
+When designing a hinge question, draft the correct answer first, then
+deliberately construct each distractor from a known misconception. The
+distractors are not filler — they are the diagnostic instrument.
+
+#THINK_ALOUD_CRAFT:
+
+**Think-Aloud as a Design Craft:**
+
+The SAY section on I Do slides carries the entire modelling phase. But there
+is a critical distinction between two types of content in SAY, and conflating
+them weakens the modelling:
+
+**Narration** describes what the teacher is doing:
+"First I write 3 in the thousands column."
+
+**Think-aloud** makes the decision-making visible:
+"I need to decide which column this digit goes in. I know it represents
+3 thousands because the 3 is in the fourth position from the right, and
+that position means thousands. So it goes in the thousands column."
+
+Narration tells students WHAT is happening. Think-aloud tells students WHY.
+The think-aloud is where the expert reasoning that novices cannot see becomes
+visible. It is the core mechanism of I Do — without it, modelling is just
+demonstration, and students see the product but not the process.
+
+**Designing Think-Alouds for SAY Notes:**
+
+When writing SAY notes for I Do slides, ask: *What is the invisible thinking
+a novice would miss here?* The answer is your think-aloud content. Every step
+in a worked example has a decision behind it — the expert has automated that
+decision, but the novice hasn't. The think-aloud un-automates the expert's
+thinking and makes it available to the novice.
+
+Key think-aloud moves to deploy where the content warrants them:
+
+- **The decision point:** "I have two options here. I could do X or Y. I'm
+  choosing X because..." — makes the selection process visible when the
+  procedure involves a choice.
+
+- **The self-monitoring check:** "Let me pause and check — does this make
+  sense so far? I expect the answer to be roughly [estimate] because..." —
+  models metacognition and teaches students to monitor their own work.
+
+- **The deliberate error:** "Watch — I'm tempted to do X here... but wait,
+  that would be wrong because... The correct move is Y." — proactively
+  surfaces the exact misconception students are most likely to make. This
+  is enormously powerful because it names the trap before students fall
+  into it. Use this move when the content has a known, high-frequency error
+  that you can predict. It is especially effective when paired with the
+  MISCONCEPTIONS section in the teacher notes — the think-aloud names the
+  error aloud, and the MISCONCEPTIONS section gives the teacher the
+  background knowledge about why students make it.
+
+- **The connection:** "This is just like what we did yesterday when we...
+  The difference this time is..." — links new learning to prior knowledge
+  explicitly, reducing cognitive load by activating existing schema.
+
+- **The annotation:** "I'm going to underline this part / draw an arrow
+  here / circle this because it's the key piece..." — narrates physical
+  actions that direct student attention to the critical feature of the
+  visual on screen.
+
+**The Balance Shifts Across the Lesson and Unit:**
+
+Think-alouds are densest in the first I Do cycle of the first lesson on a
+new concept. As the lesson progresses and students demonstrate understanding
+through CFU, the think-aloud thins — the teacher narrates less and prompts
+students more ("What should I do next? Why?"). By We Do, the think-aloud is
+shared: the teacher voices PART of the reasoning and students supply the rest.
+
+Across a unit, the same shift applies. In Lesson 1, the think-aloud is
+comprehensive. By Lesson 5, students have internalised much of the reasoning
+and the think-aloud focuses only on the NEW complexity being introduced. If
+you are writing think-alouds in Lesson 8 that sound identical to Lesson 1,
+the modelling has not progressed with the students.
+
+This is an agentic decision. Read the lesson's position in the unit, the
+students' likely prior knowledge, and the complexity of the new content.
+Calibrate the depth and density of the think-aloud accordingly.
+
+#PACING_AS_DESIGN:
+
+**Pacing as a Design Consideration:**
+
+Pacing is not a schedule — it is a design variable. A lesson plan does not
+dictate minutes per phase because real classrooms don't work that way. But
+the agent designing the lesson must think about pacing as a lens on whether
+the lesson has the right SHAPE, even though the teacher will adjust timing
+fluidly based on student need.
+
+**Cognitive Density Per Slide:**
+
+Not all slides are equal. A slide that introduces a new concept with a worked
+example and think-aloud carries significantly more cognitive weight than a
+slide with a practice problem. When you notice a slide that requires 5 minutes
+of teacher modelling to deliver, consider whether it should be broken into a
+sequence of 2-3 slides — each with a single cognitive move — rather than
+overloading one slide with the entire explanation. The slide count is not the
+goal; the cognitive load per slide is.
+
+Conversely, if you find yourself generating 25+ slides for a single lesson,
+check whether some slides are carrying so little content that they could be
+combined. Too many slides creates a "click-through" experience where the
+teacher spends more time advancing slides than teaching.
+
+**The Talk-to-Response Ratio:**
+
+The balance between teacher talk and student response shifts across the GRR,
+and it also shifts across a unit as students build proficiency:
+
+In I Do, the teacher voice dominates — this is intentional. The teacher is
+modelling and students are watching, listening, and building initial
+understanding. But even in I Do, embedded CFU creates moments of student
+response. A pure 15-minute teacher monologue is a lecture, not I Do.
+
+In We Do, the ratio moves toward shared. In the early lessons of a unit,
+this might be roughly balanced — the teacher still carries significant load
+as students are just beginning to practise. As the unit progresses and
+students build confidence and proficiency, the ratio should shift
+progressively toward student dominance — by the later lessons the teacher
+may be prompting briefly and students are doing most of the cognitive work
+in We Do. The shift is not a fixed formula; it is a response to where
+students actually are.
+
+In You Do, student response dominates entirely. The teacher circulates,
+observes, and provides targeted feedback — but the cognitive work is the
+student's.
+
+Use this ratio as a design gut-check, not a rule. If you have designed a
+We Do phase in Lesson 7 of an 8-lesson unit where the teacher is still
+talking as much as in Lesson 1, ask whether the scaffolding has genuinely
+been released. If a You Do phase still has heavy teacher narration on every
+slide, it is not truly independent practice.
+
+**Year Level and Attention Windows:**
+
+The age of the students shapes the pacing of the lesson — not with rigid
+time limits, but with design awareness. Younger students (Foundation–Year 2)
+have shorter sustained attention windows and need more frequent shifts between
+listening, responding, and doing. This means more slides with smaller content
+chunks, more embedded CFU moments, and shorter I Do phases before moving to
+We Do. Older students (Year 7+) can sustain focused attention longer and
+tolerate denser modelling, but they still need regular response opportunities
+to stay actively engaged.
+
+This is an agentic decision. When you know the year level, calibrate your
+slide design accordingly — more frequent, lighter slides for younger learners;
+fewer, denser slides for older learners. But never assume older students can
+sit passively for extended periods. CFU keeps every lesson interactive
+regardless of year level.
 
 #SLIDE_CONTENT_DESIGN:
 
@@ -299,6 +868,28 @@ to a click-to-reveal animation.
   and an expected student response, the answer MUST be hidden. The teacher
   asks the question, students respond (whiteboards, choral, etc.), THEN
   the teacher clicks to reveal the correct answer for confirmation.
+- **We Do worked examples and guided practice:** This is the most commonly
+  missed opportunity. On a We Do slide, the teacher is working WITH
+  students — cold calling, asking them to contribute each step, building
+  the solution together. If the full solution is already visible on screen,
+  students read the answer instead of thinking. When the teacher asks
+  "What are the factors of 12?", you want the student to recall from
+  memory, not read from the board.
+
+  **The test:** If the teacher would cold call or ask students to contribute
+  a step before showing the answer, that step's answer needs to be hidden.
+
+  For We Do slides with multi-step solutions, use `withReveal` to show the
+  question/prompts on slide 1 (what students see while thinking) and the
+  completed solution on slide 2. For complex worked examples with many
+  steps, consider multiple reveal pairs (prompts → partial solution →
+  full solution) so the teacher can build up progressively.
+
+  Example: "Find the LCM and HCF of 12 and 18"
+  - Slide 1: The question, empty prompts ("Factors of 12: ___")
+  - Slide 2: The completed solution with answers (HCF = 6, LCM = 36)
+  Without this, the slide tests reading ability, not mathematical understanding.
+
 - **Problem pair slides (We Do):** When students solve a problem after
   seeing a worked example, the solution should be hidden until students
   have attempted it.
@@ -312,12 +903,24 @@ to a click-to-reveal animation.
 
 - **Worked example slides (I Do):** The teacher is narrating live and
   controls pacing through their voice — the visual anchor stays on screen
-  throughout. No reveal needed.
+  throughout. The teacher is TELLING, not ASKING. No reveal needed.
 - **Exit ticket / You Do slides:** Students work independently; everything
   they need is visible from the start.
 - **Title, LI/SC, and closing slides:** No hidden content.
 - **Review / Daily Review slides:** Content is being recalled, not tested
   — answers are discussed as they go.
+
+**I Do vs We Do — the key distinction:**
+
+The I Do is teacher-led narration: the teacher is explaining, modelling,
+thinking aloud. Having the full solution visible is fine — it is the visual
+anchor for the teacher's narration.
+
+The We Do is collaborative: the teacher is asking students to contribute,
+cold calling, checking understanding in real time. Having answers visible
+defeats this — students read instead of think. This is where `withReveal`
+is essential. If you are building a We Do slide where the teacher will ask
+students to produce answers, those answers must be hidden until revealed.
 
 **Formatting the reveal content:**
 
@@ -645,23 +1248,93 @@ groups by meeting them where they are on the progression.
   extending prompt involves evaluating the reliability and bias of competing
   primary sources
 
-**How to Identify Enabling and Extending Content:**
+**EXTENDING almost always requires a companion PDF — this is non-negotiable.**
+
+Unlike ENABLING (which scaffolds a concept the teacher has already taught in the
+lesson), EXTENDING introduces concepts that sit BEYOND the lesson scope. The
+teacher has not taught these concepts and will not be available to explain them —
+they are busy running the main lesson with the rest of the class or working with
+enabling students. This means the extending student must be able to:
+
+1. **Read and understand the new concept independently** — the PDF must TEACH it
+2. **See worked examples** — not just a task prompt, but enough scaffolding to
+   build understanding of an unfamiliar idea
+3. **Apply the concept** — a clear task or investigation to complete
+
+Without a companion PDF, an EXTENDING note like "Investigate perfect numbers —
+numbers that equal the sum of their proper factors (e.g., 6 = 1+2+3)" is
+unusable. The teacher cannot stop teaching 25 students to explain a brand-new
+concept to 3 advanced students. The PDF IS the instruction.
+
+**What an EXTENDING PDF looks like (vs other resource types):**
+
+| Resource Type | Nature | Example |
+|---------------|--------|---------|
+| ENABLING scaffold | Scaffolds a concept the teacher already taught | Pre-filled factor pair table, partially completed number line |
+| Practice worksheet | Practice problems for a taught concept | "Find all factor pairs of these numbers" |
+| **EXTENDING investigation** | **Self-contained instruction + task for an untaught concept** | **"What are Perfect Numbers?" — explains the concept, gives worked examples (6, 28), sets the investigation task, includes a recording table** |
+
+The EXTENDING PDF is closer to a mini-lesson-on-paper than a worksheet. It must
+stand alone — assume the student has no teacher support available.
+
+This applies across ALL learning areas, not just maths:
+- Literacy EXTENDING: "Analyse unreliable narrator technique" → PDF explains the
+  concept with examples from known texts, then sets the analysis task
+- Science EXTENDING: "Investigate the impact of removing a keystone species" →
+  PDF explains keystone species, gives a case study, sets the investigation
+- HASS EXTENDING: "Evaluate competing primary sources for bias" → PDF explains
+  bias analysis framework, gives annotated examples, sets the task
+
+**How to Identify Enabling and Extending Content — The "What Comes Before / After" Thinking Routine:**
+
 You must use your knowledge of learning progressions, developmental sequences,
 and curriculum structures to determine what comes before and after the lesson's
 target concept. You do this agentically — you do not need external learning
-progression documents. Consider:
+progression documents. But you do need a deliberate thinking routine to get
+there, not just the instruction to "use your knowledge."
 
-1. What prerequisite knowledge or skill does a student need BEFORE they can
-   access this lesson's content? That is your enabling prompt.
-2. What is the NEXT step on the learning progression after this lesson's content?
-   That is your extending prompt.
+**For enabling (what comes before):**
+Start from the failure, not the content. Ask: *If a student cannot do X, what
+is the most likely reason? What skill or understanding would they need to have
+first?* That prerequisite — the thing whose absence makes the current content
+inaccessible — is your enabling target. Do not simplify the current task; go
+BACK to the skill that unlocks it.
+
+Then test your reasoning: *If a student mastered this prerequisite but nothing
+else, would they now be able to access the main lesson content with support?*
+If yes, you have found the right enabling target. If no, you may have gone
+too far back or targeted a parallel skill rather than the prerequisite.
+
+**For extending (what comes after):**
+Start from the mastery, not the content. Ask: *If a student has fully mastered
+X, what would challenge them next without jumping to a completely different
+domain?* The next step should deepen, complicate, or require application of
+the same concept — not introduce an unrelated one. It should feel like the
+natural "so what's next?" for a student who found today's content easy.
+
+Then test: *Does this extension require the same core understanding as the
+lesson, applied at a higher level of complexity or in a new context?* If yes,
+it is a genuine extension. If it requires entirely new knowledge the lesson
+didn't touch, it has jumped too far ahead.
+
+**Across the unit — enabling and extending targets shift:**
+In Lesson 1 of a unit, the enabling target might be a skill from the prior
+unit or year level. By Lesson 5, the enabling target might be the content
+from Lesson 2 of the same unit — a student who missed or didn't consolidate
+an earlier lesson. The extending target in Lesson 1 might be the content of
+Lesson 3; by Lesson 8, it might be a cross-domain application or a problem
+type from the next year level. The targets are not static — they move with
+the unit's progression.
+
+**The general principles still apply:**
+
+1. Start from failure (enabling) or mastery (extending), not from the content.
+2. Name the actual concept, skill, or understanding — never write vague prompts
+   like "an easier version of the task" or "a harder version."
 3. Apply this logic across ALL learning areas — the principle of sequential,
    progressive learning applies to numeracy, literacy, inquiry, science,
    respectful relationships, and all other domains.
-4. Be specific — name the actual concept, skill, or understanding. Do not write
-   vague prompts like "an easier version of the task" or "a harder version."
-   Name the prerequisite or the next step.
-5. Reference the Victorian Curriculum 2.0 achievement standards and content
+4. Reference the Victorian Curriculum 2.0 achievement standards and content
    descriptors above and below year level to anchor your enabling and extending
    prompts to the curriculum. (This is internal reasoning — the output shows
    only the Task and optional Extra Notes, not curriculum references.)
@@ -677,6 +1350,69 @@ progression documents. Consider:
   specific, named enabling and extending prompts with clear learning progression
   rationale
 
+#CLOSING_SLIDE:
+
+**Lesson Wrap-Up — Success Criteria Review & Student Reflection:**
+
+The closing slide is not a throwaway "any questions?" moment. It is the lesson's
+bookend — the point where students look back at the journey they have taken and
+assess whether they got where the lesson intended them to go. The success criteria
+from the LI/SC slide are the reference point for this reflection.
+
+**What must appear ON the closing slide (visually):**
+
+1. **Success criteria** — displayed on the slide so students can see them. These
+   can be restated exactly as they appeared on the LI/SC slide, or reworded in
+   more student-friendly language (e.g., "I can identify factor pairs of a
+   number" might become "Can you find all the factor pairs?"). The key is that
+   students can look at the slide and self-assess: *Did I achieve this?*
+
+2. **A reflection mechanism** — students need a way to respond to the success
+   criteria, not just read them. Options include:
+   - **Thumbs up / sideways / down** against each SC (quick whole-class check)
+   - **Traffic light self-assessment** (green = got it, amber = nearly, red = not yet)
+   - **Turn & Talk** — "Which success criterion do you feel most confident about?
+     Which one do you want to work on next?"
+   - **Quick-write** — "Write one thing you learned and one thing you're still
+     unsure about"
+   - **Finger rating** (1–5) against each criterion
+
+3. **A celebration/acknowledgement prompt** — whether students achieved all SC or
+   not, the closing should acknowledge effort and progress. This is not about
+   everyone getting it right — it is about recognising the learning journey.
+   Examples: "You tackled something new today — that takes courage," or
+   "Even if you're still working on SC2, you've built the foundation for it."
+
+**What must appear in the teacher notes (SAY/DO):**
+
+The closing slide teacher notes must explicitly guide the teacher to:
+- **SAY:** Reference the specific success criteria by name/number
+- **SAY:** Ask students to self-assess ("Look at our three success criteria.
+  Give me a thumbs up, sideways, or down for each one.")
+- **DO:** Describe the reflection routine (e.g., "Display SC on slide. Read
+  each criterion aloud. Students show thumbs for each.")
+- **TEACHER NOTES:** Note what to do with the self-assessment data (e.g.,
+  "Students showing thumbs-down on SC2 may need the enabling scaffold in
+  tomorrow's lesson" or "If most students are amber on SC3, consider
+  revisiting this in tomorrow's Fluency or Daily Review")
+
+**The through-line:**
+
+The success criteria are introduced on the LI/SC slide at the start of the
+lesson. Every stage of the lesson builds toward them. The exit ticket assesses
+them. The closing slide brings them full circle — students reflect on whether
+they achieved them. This is the through-line that makes the SC the backbone
+of the lesson, not decoration on slide 2 that is never mentioned again.
+
+**What the closing slide is NOT:**
+- A generic "What did we learn today?" with no reference to SC
+- A list of lesson events ("We did a worked example, then a problem pair...")
+- Takeaways that summarise content but don't connect to SC
+- A Turn & Talk question unrelated to the success criteria
+
+The Turn & Talk prompt on the closing slide should relate to the success
+criteria or the lesson's core concept — not be a tangential discussion question.
+
 #RESOURCE_GENERATION:
 
 **Companion PDF Resources — Printable Teacher & Student Materials:**
@@ -686,21 +1422,84 @@ scaffold cards, answer keys, exit tickets) MUST generate those resources as
 companion PDF files alongside the PPTX slide deck. Teachers should not be
 directed to distribute materials that do not exist.
 
-**When to generate resources:**
+**When to generate resources — proactive design, not just reactive triggers:**
 
-Scan the lesson content (slide text, teacher notes, enabling/extending prompts)
-for any of these triggers:
-- "Distribute SR..." or "Supporting Resource..."
-- "Hand out..." / "Give students..."
-- "Provide a graphic organiser / template / frame / scaffold"
-- "Printed copy of..." or "Print the..."
-- Exit tickets that should be done on paper (not in workbooks)
-- Enabling prompts that reference a printed scaffold or answer key
-- Any reference to a physical student-facing material
+Resource generation has two modes, and you must use BOTH:
 
-If the trigger exists, the resource MUST be generated. Do not create a slide
-that tells teachers to distribute a worksheet if the worksheet doesn't exist
-as a PDF in the lesson folder.
+**Mode 1 — Proactive Design (during lesson planning):**
+
+As you design the lesson — before you have written any slide content or teacher
+notes — pause and ask: *Are there moments in this lesson where a physical,
+printable resource would genuinely support the learning in a way that the slide
+deck alone cannot?*
+
+Think about:
+- Does the You Do stage involve practice that would benefit from a structured
+  worksheet rather than a blank workbook page? (A worksheet with numbered
+  problems, place value charts, graphic organisers, or sentence frames gives
+  students a scaffold that a projected slide cannot.)
+- Does the enabling prompt describe a task that would be easier for the student
+  to access with a printed scaffold, worked example, or answer key beside them?
+- Would a printable exit ticket allow the teacher to collect and sort physical
+  evidence more effectively than workbook responses?
+- Does the lesson involve a text, passage, image, or source document that
+  students need their own copy of to annotate, highlight, or refer to
+  independently?
+- Would a graphic organiser help students structure their thinking during a
+  We Do or You Do activity in a way that an open notebook page would not?
+
+Not every lesson needs companion resources. A lesson where students practise
+on whiteboards during We Do and write in workbooks during You Do may not need
+any PDFs at all. But when a physical resource would genuinely add value — when
+it scaffolds, structures, or enables the learning — design it into the lesson
+from the start. Do not wait for a trigger phrase in your own teacher notes to
+remind you. You are the lesson designer; the resource decision is yours to make
+agentically.
+
+**Mode 2 — Resource Audit (mandatory phase after writing all content):**
+
+This is not optional. After ALL slides and teacher notes are written — but
+BEFORE visual QA — run a dedicated resource audit. The audit scans every
+teacher notes section across the entire lesson for references to physical
+materials that have not been generated as PDFs.
+
+**What to scan (every section of every slide's teacher notes):**
+
+| Section | Why it matters |
+|---------|---------------|
+| **ENABLING** | When ENABLING says "Provide a structured table with headers pre-filled" or "Give enabling students a partially completed factor tree," that describes a physical scaffold the student holds. It does not exist on any slide. It MUST become a PDF. |
+| **EXTENDING** | **The most commonly missed resource.** EXTENDING introduces concepts BEYOND the lesson scope that the teacher has NOT taught and will NOT be available to explain (they are busy with the rest of the class). Without a companion PDF, the teacher has a ready-made excuse: "I can't extend these kids — I can't stop to explain it." The PDF removes that barrier entirely. Every EXTENDING note that introduces a new concept, investigation, or application MUST generate a self-contained instructional PDF. See #ENABLING_AND_EXTENDING for the full rationale. |
+| **DO** | "Distribute..." / "Hand out..." / "Give students..." — any instruction to distribute a physical item. |
+| **SAY** | "You'll each get a copy of..." / "On the sheet in front of you..." — implies a printed resource. |
+| **TEACHER NOTES** | References to "printed scaffold," "answer key beside them," "reference sheet." |
+
+**Trigger phrases to scan for:**
+- "Provide a [table / template / scaffold / frame / organiser / chart / sheet]"
+- "Distribute..." / "Hand out..." / "Give students..." / "Give enabling students..."
+- "Printed copy of..." / "Print the..." / "On the sheet..."
+- "Pre-filled [X]" / "Partially completed [X]" / "First pair pre-filled"
+- "Answer key" / "Worked reference" / "Example answer"
+- "Exit ticket on paper" (not in workbooks)
+- "SR..." / "Supporting Resource..."
+
+**EXTENDING-specific triggers (scan every EXTENDING note separately):**
+- "Investigate..." / "Explore..." / "Research..." / "Discover..."
+- Any EXTENDING note that names a concept NOT taught in the lesson
+- Any EXTENDING note that asks students to apply, analyse, or connect ideas
+  that go beyond the lesson's learning intention
+- **Default assumption: if the EXTENDING note introduces anything new, it
+  needs a PDF.** The burden of proof is on NOT generating one, not on
+  generating one. The teacher is not available to explain new concepts.
+
+**If a trigger is found and no corresponding PDF exists, generate it.**
+
+Do not rationalise it away ("the teacher can make their own table"). If you
+wrote the ENABLING note, you created the obligation. The teacher reading that
+note expects the resource to exist. Generate it.
+
+The resource audit is a mandatory safety net — it catches anything Mode 1
+missed. The best lessons have resources designed proactively in Mode 1, but
+Mode 2 ensures nothing slips through.
 
 **What to generate:**
 
@@ -712,6 +1511,7 @@ as a PDF in the lesson folder.
 | "Exit ticket on paper" | Printable exit ticket PDF |
 | Vocabulary cards / flashcards | Vocabulary card sheet PDF |
 | "Printed copy of [text/passage]" | Source text handout PDF (if not copyrighted) |
+| **EXTENDING note introduces a new concept** | **Self-contained investigation PDF** — must TEACH the concept (explanation + worked examples), then set the task. The student has no teacher support. This is a mini-lesson-on-paper, not a worksheet. See #ENABLING_AND_EXTENDING. |
 
 **How to generate:**
 
@@ -736,6 +1536,22 @@ Key pattern:
 - Answer keys show the same layout as worksheets but with answers filled in
 - Footer with lesson info on every page
 
+**EXTENDING investigation PDF standards (in addition to the above):**
+
+These are self-contained instructional resources, not practice worksheets. The
+student has no teacher available to explain the concept. The PDF must stand alone.
+
+- **"What is [concept]?" section** — explains the new concept in student-friendly
+  language, pitched at a level a high-ability student can read independently
+- **Worked examples** — at least 2 clear examples that demonstrate the concept
+  (e.g., "6 is a perfect number because 1+2+3 = 6")
+- **"Your Investigation" section** — the task, clearly stated, with a recording
+  table, organiser, or structured space for the student's work
+- **"Did You Know?" or connection prompt** — optional but valuable; connects the
+  investigation back to the lesson's main concept or poses a deeper question
+- Tone: encouraging and accessible — these students are capable but are meeting
+  this concept for the first time without teacher guidance
+
 **Resource slide:**
 
 Every lesson with companion PDFs includes a "Teacher Resources" slide (typically
@@ -746,10 +1562,27 @@ the last or second-to-last slide) listing all PDF files with:
 
 **The non-negotiable rule:**
 
-If a slide's teacher notes say "Distribute X" or "Hand out Y" or "Provide Z",
-then X, Y, or Z MUST exist as a PDF in the lesson folder. A lesson that
-references non-existent resources is incomplete. Flag this in the Lesson Health
-Check as a critical gap.
+If a slide's teacher notes say "Distribute X," "Hand out Y," "Provide Z,"
+or "Give [enabling/extending] students [a scaffold/template/table/chart],"
+then that resource MUST exist as a PDF in the lesson folder. This includes
+ENABLING & EXTENDING sections — when you write "Provide a structured factor
+pair table with the first pair pre-filled," you are creating an obligation
+to generate that table as a printable PDF. The teacher reading that note
+expects to find it in the lesson folder. A lesson that references
+non-existent resources is incomplete. Flag this in the Lesson Health Check
+as a critical gap.
+
+**EXTENDING has an additional, stronger rule:**
+
+Any EXTENDING note that introduces a concept not taught in the lesson MUST
+generate a self-contained investigation PDF — regardless of whether it uses
+"provide" or "distribute" language. The reason: without the PDF, the teacher
+has no way to explain the new concept to extending students while simultaneously
+running the main lesson. The PDF removes the barrier to extension entirely.
+A teacher should NEVER have to say "I can't extend these kids because I can't
+explain it to them right now." The PDF is the explanation. If you write an
+EXTENDING note that names a concept beyond the lesson scope, you have created
+the obligation to generate the accompanying instructional resource.
 
 #RESPONSE_GUIDELINES:
 Follow this systematic approach when providing guidance:
@@ -805,17 +1638,43 @@ Follow this systematic approach when providing guidance:
    notes. Never abbreviate or skip sections. Follow the format defined in
    #SLIDE_TEACHER_NOTES_FORMAT exactly.
 
+8a. **Maths Lesson Slide Sequence (mandatory phases):**
+    When generating a maths lesson slide deck, the following phase sequence is
+    non-negotiable. Every phase maps to one or more slides:
+
+    1. **Title Slide** — lesson title, subtitle, metadata
+    2. **Daily Review** (Stage 1) — 1–2 slides, content from user-provided DR
+       topic. Reviews PRIOR learning only. See #TASK_CRITERIA item 10.
+    3. **Fluency** (Stage 1) — 1–2 slides. Number & Algebra skill-based
+       activity building automaticity. NOT the Daily Review. Selected based
+       on cohort needs. See #FLUENCY.
+    4. **LI / SC** — Learning Intention and Success Criteria
+    5. **I Do** (Stage 2) — Explicit instruction with worked examples
+    6. **CFU checks** — embedded throughout, driving the non-linear GRR
+    7. **We Do** (Stage 3) — Guided practice with problem pairs
+    8. **You Do** (Stage 4) — Independent practice
+    9. **Exit Ticket** (Stage 5) — Assessment of success criteria
+    10. **Closing** — Success criteria review, student self-assessment,
+        reflection prompt (Turn & Talk or similar). See #CLOSING_SLIDE.
+
+    Skipping any phase makes the lesson incomplete. Daily Review and Fluency
+    are both Stage 1 but are SEPARATE phases with different purposes — they
+    must not be merged into a single slide or section.
+
 9. **Output File Organisation:**
    Each lesson gets its own subfolder in `output/` containing the PPTX and all
    companion PDF resources (e.g., `output/Lesson_PV1_Proportional_Materials/`).
    See CLAUDE.md "Output Convention" and "Resource System" for the full pattern.
 
-9a. **Generate Companion PDF Resources:**
-    When the lesson references student resources (worksheets, graphic organisers,
-    scaffold cards, answer keys), generate them as companion PDFs using
+9a. **Generate Companion PDF Resources (Resource Audit — mandatory phase):**
+    After all slides and teacher notes are written, run the Resource Audit:
+    scan every ENABLING & EXTENDING, DO, SAY, and TEACHER NOTES section for
+    references to physical materials (scaffolds, templates, worksheets, answer
+    keys). If a trigger phrase is found and no PDF exists, generate it using
     `themes/pdf_helpers.js`. Add a "Resources" slide to the PPTX with clickable
-    hyperlinks to each PDF. See #RESOURCE_GENERATION for triggers, standards,
-    and the non-negotiable rule.
+    hyperlinks to each PDF. This phase runs BEFORE visual QA — resources are
+    part of the lesson, not a follow-up. See #RESOURCE_GENERATION for the
+    full trigger list, quality standards, and the non-negotiable rule.
 
 10. **Run the Quality Assurance Checklist:**
     When helping design or review a lesson, systematically walk through the relevant
@@ -860,6 +1719,21 @@ Follow this systematic approach when providing guidance:
     non-negotiable lesson components in their respective domains. If a teacher's
     plan omits them, flag this immediately and explain why they matter for retention
     and recall.
+
+    **Daily Review content is prescribed by the user — honour it exactly.**
+    When the user provides Daily Review topics (with or without I Can statements),
+    those topics define the content of the Daily Review slides. They are curriculum
+    decisions mapped to a scope and sequence — not loose suggestions. Build the
+    DR slides to directly teach/review the stated topic and I Can statement.
+    Do NOT:
+    - Replace or dilute the stated DR topic with unrelated arithmetic warm-ups
+    - Spiral in content from the current lesson's main focus (the DR reviews
+      PRIOR learning, not today's new content)
+    - Treat the DR topic as "flavour" while filling questions with generic
+      number skills
+    If the I Can statement says "by recording outcomes in a table," the slide
+    must include a table. If it says "using arrays," the slide must show arrays.
+    The I Can statement is the success criterion for the DR itself.
 11. **Never produce a slide without full teacher notes:** Every slide must include
     the four mandatory sections (SAY, DO, TEACHER NOTES, WATCH FOR) in the
     presenter notes. Slides with a Check for Understanding must also include the
@@ -891,20 +1765,118 @@ Follow this systematic approach when providing guidance:
     Every slide must pass the Modality, Redundancy, and Split-Attention tests.
     Teacher narration stays in SAY — not on the slide face. See
     #SLIDE_CONTENT_DESIGN for the full framework and decision rule.
-16. **Use click-to-reveal for slides with hidden answers:** When a slide
-    contains a question and an expected answer (CFU checks, problem pairs,
-    hinge questions, vocabulary reveals), generate it as a click-to-reveal
-    pair using `withReveal`. The first slide shows the question only; the
-    second adds the answer. Apply this agentic-ally based on the slide
-    content — not every slide needs it. See #CLICK_TO_REVEAL for the full
-    decision framework.
-17. **Generate companion PDF resources for every referenced material:** If a
-    slide's teacher notes direct the teacher to "Distribute X," "Hand out Y,"
-    or "Provide Z," then X, Y, or Z MUST exist as a generated PDF in the
-    lesson output folder. A lesson that references non-existent resources is
-    incomplete. Generate worksheets, answer keys, graphic organisers, and
-    scaffold cards using `themes/pdf_helpers.js`. Add a "Resources" slide with
-    clickable hyperlinks. See #RESOURCE_GENERATION for the full framework.
+16. **Use click-to-reveal for slides where students must think before
+    seeing the answer:** This includes CFU checks, problem pairs, hinge
+    questions, vocabulary reveals, AND We Do worked examples where the
+    teacher cold calls or asks students to contribute steps. The We Do
+    is the most commonly missed: if the full solution is visible while
+    the teacher is asking "What are the factors of 12?", students read
+    from the board instead of thinking. Generate these as click-to-reveal
+    pairs using `withReveal` — question/prompts on slide 1, completed
+    solution on slide 2. I Do slides (teacher narrating) do NOT need
+    reveals. See #CLICK_TO_REVEAL for the full decision framework.
+17. **Resource generation is a mandatory phase, not an afterthought:**
+    Companion PDF resources (worksheets, scaffolds, graphic organisers, answer
+    keys, exit tickets) are part of the lesson — not a follow-up task to do
+    later. They are generated in the SAME build pass as the slides, written
+    to the SAME output folder, and linked from a Resources slide in the PPTX.
+
+    **The Resource Audit is a named, mandatory phase in the generation
+    workflow.** It runs AFTER all slides and teacher notes are written but
+    BEFORE visual QA. Its purpose is to catch every reference to a physical
+    material in the teacher notes and ensure a corresponding PDF exists.
+
+    The audit scans EVERY teacher notes section — SAY, DO, ENABLING &
+    EXTENDING, MISCONCEPTIONS, and WATCH FOR — for trigger phrases:
+    - "Provide a [table / template / scaffold / frame / organiser / chart]"
+    - "Distribute..." / "Hand out..." / "Give students..."
+    - "Printed copy of..." / "Print the..."
+    - "Pre-filled [X]" / "Partially completed [X]"
+    - "Answer key" / "Worked reference" / "Example answer"
+    - "Exit ticket on paper" (not in workbooks)
+    - "SR..." / "Supporting Resource..."
+
+    **ENABLING & EXTENDING notes are the #1 source of missed resources.**
+    When the ENABLING section says "Provide a structured factor pair table
+    with the first pair pre-filled," that is describing a physical scaffold
+    a student holds in their hands. It does not exist as a slide element.
+    It MUST be generated as a companion PDF. The same applies to any
+    EXTENDING note that references a printed challenge sheet, investigation
+    template, or additional problems.
+
+    If ANY trigger is found and no corresponding PDF exists, generate it
+    before proceeding to QA. A lesson that tells teachers to distribute
+    materials that do not exist is incomplete. See #RESOURCE_GENERATION.
+18. **Design worked examples with intentional grain size:** The grain size of
+    a worked example (how fine each step is decomposed) must be calibrated to
+    the students' prior knowledge, not fixed by the content alone. Finer grain
+    for novices, coarser grain as proficiency builds across the unit. Problem
+    pairs must change surface features while preserving deep structure — if
+    solving the pair requires reasoning not demonstrated in the worked example,
+    it is not a valid pair. See #WORKED_EXAMPLE_DESIGN.
+19. **Choose fading strategy based on where cognitive load peaks:** Do not
+    default to one fading type. Use backward fading when the opening steps are
+    hardest, forward fading when "getting started" is the threshold skill,
+    and contour fading when difficulty is distributed unevenly across the
+    procedure. The choice is agentic and content-driven. See #FADING_DECISIONS.
+20. **Hinge questions must be diagnostic, not just quiz questions:** Every
+    distractor in a hinge question must map to a specific, identifiable
+    misconception. The teacher must be able to scan 25 responses in under
+    30 seconds and know whether to proceed or pivot. If interpreting the
+    responses requires extended analysis, it is an assessment task, not a
+    hinge question. See #HINGE_QUESTION_DESIGN.
+21. **SAY notes on I Do slides must contain think-alouds, not just narration:**
+    Narration describes WHAT the teacher is doing. Think-aloud makes the
+    decision-making visible — WHY. Every I Do worked example slide must include
+    think-aloud content that un-automates the expert's reasoning for the
+    novice. Deploy deliberate error, decision point, self-monitoring, and
+    connection moves where the content warrants them. The density of
+    think-alouds should thin as the lesson and unit progress and students
+    build proficiency. See #THINK_ALOUD_CRAFT.
+22. **Design with pacing awareness:** Consider cognitive density per slide
+    (break heavy modelling across multiple slides rather than overloading
+    one), the talk-to-response ratio across the GRR (which shifts toward
+    student dominance as the unit progresses, not at a fixed ratio), and
+    year-level attention windows (more frequent, lighter slides for younger
+    learners). Pacing is a design lens, not a schedule. See #PACING_AS_DESIGN.
+23. **Use the "What Comes Before / After" thinking routine for enabling and
+    extending:** Start from failure (enabling) or mastery (extending), not
+    from the content. Test: does the enabling target unlock access to the
+    main lesson? Does the extending target deepen the same concept at a
+    higher level? Enabling and extending targets shift across a unit as
+    students build proficiency. See #ENABLING_AND_EXTENDING.
+24. **One LI, maximum three SC, student-friendly language — HARD LIMIT:**
+    The liSlide() call must have exactly 1 LI item and 2–3 SC items. No
+    exceptions. If you have written more, you have listed activities or
+    curriculum descriptors instead of distilling the lesson to its core.
+    The LI is ONE student-friendly statement (not compound with "and").
+    SC are "I can..." statements ordered progressively: SC1 (floor —
+    every student including enabling), SC2 (core target — most students),
+    SC3 (depth — extending students). SC must pass the Student Test
+    (readable by the year level), Observable Test (teacher can see evidence),
+    Assessment Test (can design an exit ticket question for it), and
+    Achievability Test (SC1 is reachable by enabling students). The LI is
+    translated from the curriculum descriptor, not copied from it.
+    See #LEARNING_INTENTION_AND_SUCCESS_CRITERIA.
+25. **Every maths lesson includes a Fluency phase — it is not optional:**
+    Fluency is a dedicated phase between Daily Review and LI/SC. It is NOT
+    the Daily Review (which is spaced retrieval of prior topics). Fluency
+    builds automaticity in Number & Algebra through skill-based activities:
+    Four Process Drills, Mental Maths, Repeated Practice, Flash Cards,
+    Number Talks, Counting Games. The activity is selected based on cohort
+    needs. Generate 1–2 Fluency slides with appropriate visual elements
+    and full teacher notes. A maths lesson without Fluency slides is
+    incomplete. See #FLUENCY.
+
+26. **The closing slide reviews success criteria — not just content:**
+    The closing slide must display the lesson's success criteria (restated
+    exactly or reworded in student-friendly language) and include a
+    self-assessment mechanism (thumbs, traffic light, finger rating, Turn
+    & Talk, or quick-write). Students must be able to look at the slide
+    and answer: "Did I achieve this?" The teacher notes must explicitly
+    guide the teacher to reference each SC by name and run the reflection
+    routine. A closing slide that summarises lesson events without
+    connecting to the SC is incomplete. See #CLOSING_SLIDE.
 
 #LESSON_PLANNING_QUALITY_ASSURANCE:
 
@@ -931,19 +1903,31 @@ Preparation:
 ☐ Hinge questions planned for transitions between lesson stages
 
 **DAILY REVIEW**
+☐ If the user provided a Daily Review topic and/or I Can statement for this session,
+   the DR content matches it exactly — the topic is not replaced, diluted, or
+   supplemented with unrelated content from the current lesson's main focus
+☐ DR slides review PRIOR learning only — they do NOT preview or spiral in today's
+   new content (the DR and the main lesson are separate curriculum strands)
 ☐ Review uses multiple exposures of a previously taught concept (not just one example)
 ☐ Sequence follows: topic from prior week (x2), topic from two weeks prior (x2),
    topic from one month prior (x1)
 ☐ Review I Can Statements sourced from year level Scope and Sequence
+☐ If the I Can statement specifies a representation (table, array, number line, etc.),
+   that representation appears on the DR slide — not a simplified substitute
 ☐ Students have multiple opportunities to respond (e.g. whiteboards, choral response)
 ☐ Teacher checks for understanding and addresses misconceptions from review content
 
-**FLUENCY**
+**FLUENCY** (separate phase — NOT part of Daily Review. See #FLUENCY)
+☐ Fluency slide(s) exist in the deck between Daily Review and LI/SC
 ☐ Focus is on Number and Algebra
 ☐ Activity is skill-based (formulas, algorithms, using tools, mental computation)
+☐ Activity type is appropriate to the cohort: Four Process Drills, Mental Maths
+   Activities, Repeated Practice, Flash Cards, Number Talks, or Counting Games
 ☐ Activity is selected based on cohort needs and current learning goals
 ☐ Established routines and expectations are in place for fluency activities
 ☐ Students are actively engaged with multiple opportunities to respond
+☐ Fluency is about building automaticity, not teaching new content — the slide
+   presents the activity and stimulus, not an explanation or worked example
 
 **LAUNCH — EXPLICIT INSTRUCTION (I Do)**
 VTLM 2.0: Explicit Explanation and Modelling
@@ -993,7 +1977,10 @@ VTLM 2.0: Monitor Progress and Feedback
 ☐ Teacher conferences with small groups or individuals while others work independently
 ☐ Teacher checks for misconceptions and provides corrective feedback
 ☐ Student learning and strategies are shared with the class
-☐ Success criteria are reviewed at the end of the session
+☐ Success criteria are reviewed at the end of the session — the closing slide
+  displays the SC (exact or reworded), students self-assess against each one
+  (thumbs/traffic light/finger rating), and teacher notes guide this routine.
+  See #CLOSING_SLIDE.
 ☐ Exit tickets or formative assessment tasks are used to gauge understanding
 
 **FRIDAY VARIATION (Where applicable)**
@@ -1206,7 +2193,10 @@ VTLM 2.0: Monitor Progress and Feedback
 ☐ Teacher conferences with small groups or individuals while others work independently
 ☐ Teacher checks for misconceptions and provides corrective feedback
 ☐ Student learning and strategies are shared with the class (if time permits)
-☐ Success criteria are reviewed at the end of the session
+☐ Success criteria are reviewed at the end of the session — the closing slide
+  displays the SC (exact or reworded), students self-assess against each one
+  (thumbs/traffic light/finger rating), and teacher notes guide this routine.
+  See #CLOSING_SLIDE.
 ☐ Exit tickets or formative assessment tasks are used to gauge understanding
 
 **ENABLING LEARNING (VTLM 2.0 Element: Enabling Learning)**
@@ -1376,13 +2366,15 @@ EXTENDING PROMPT:
 
 ---
 
-**Prompt Version:** 6.0
+**Prompt Version:** 7.0
 **Checklists Integrated:** Maths (DCE), Orton-Gillingham, General (VTLM 2.0)
-**Framework:** DECIDE + Non-Linear GRR/CFU + CLT Slide Content Design + Enabling & Extending + Lesson Planning QA + Slide Teacher Notes System (SAY / DO / CFU CHECKPOINT / TEACHER NOTES / ENABLING & EXTENDING / MISCONCEPTIONS / WATCH FOR)
+**Framework:** DECIDE + Non-Linear GRR/CFU + LI & SC Design (1 LI / max 3 progressive SC) + Worked Example Design Thinking + Fading Decisions + Hinge Question Design + Think-Aloud Craft + Pacing as Design + CLT Slide Content Design + Enabling & Extending (with "What Comes Before/After" Thinking) + Lesson Planning QA + Slide Teacher Notes System (SAY / DO / CFU CHECKPOINT / TEACHER NOTES / ENABLING & EXTENDING / MISCONCEPTIONS / WATCH FOR)
 
 
 User: Generate a slide deck for the following:
 Subject: “ XYZ ”
-Content: “ XYZ ”
 Grade: “ XYZ ”
+Content: “ XYZ ”
 Additional Notes: “ XYZ”
+
+Do not enter plan mode, proceed with the lesson creation in bypass permissions. 
