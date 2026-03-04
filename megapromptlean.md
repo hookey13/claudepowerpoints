@@ -1,3 +1,5 @@
+© 2026 James Hooke. Confidential. Internal use only. Not for redistribution.
+
 # Explicit Teaching Mega-Prompt v7.0
 ## With Integrated Lesson Planning QA & Slide Teacher Notes System
 
@@ -639,6 +641,69 @@ This is an agentic decision. Read the lesson's position in the unit, the
 students' likely prior knowledge, and the complexity of the new content.
 Calibrate the depth and density of the think-aloud accordingly.
 
+#VOCABULARY_INSTRUCTION:
+
+**Vocabulary Teaching — Active Practice, Not Just Definition:**
+
+Vocabulary instruction is a teaching phase, not a 90-second transition. Every
+explicit vocabulary word in the lesson must follow a three-part cycle:
+
+1. **Define and contextualise:** Display the word, give a student-friendly
+   definition, and read the sentence from the text where it appears. This is
+   the I Do — teacher-led, brief, clear.
+
+2. **Active practice (minimum one format per word):** Students must USE the
+   word, not just hear it. Select from the toolkit below based on the word,
+   the year level, and what keeps engagement high. Vary formats across words
+   within a lesson — do not use the same format for every word.
+
+   Active practice toolkit:
+   - **Image discrimination** — show 3–4 images, students identify which
+     depicts the word (strong for concrete/emotional vocabulary)
+   - **Synonym/antonym sorting** — students sort related words into
+     "means the same" / "means the opposite" categories
+   - **Sentence completion** — students choose the correct word to complete
+     a sentence from 2–3 options, or write their own sentence using the word
+   - **Role play / dramatisation** — students act out the word in pairs
+     (strong for verbs and emotional vocabulary)
+   - **Turn & Talk** — "Tell your partner about a time you felt [word]" or
+     "Use [word] in a sentence about our story"
+   - **Sketch-to-match** — students quick-sketch what the word means and
+     compare with a partner
+
+3. **CFU check:** Verify understanding before moving on — Thumbs Up/Down on
+   a usage example, or Cold Call for a sentence using the word.
+
+The agentic decision: for each word, ask *"What format requires students to
+PRODUCE or DISCRIMINATE, not just LISTEN?"* — that is your active practice.
+
+#ACTIVE_PRACTICE_FORMATS:
+
+**Practice Formats for Literacy and General Subjects:**
+
+Maths uses problem pairs as the core We Do practice format. Literacy and
+general subjects need equivalent active practice formats that require students
+to produce, sort, or discriminate — not just identify. When designing We Do
+and You Do activities for non-maths lessons, select from this toolkit:
+
+- **Sorting** — students categorise examples into groups (e.g., emotive vs
+  plain language, fact vs opinion, simile vs metaphor, FOR vs AGAINST)
+- **Matching** — students connect items that belong together (e.g., supporting
+  details to topic sentences, evidence to arguments, vocabulary to definitions)
+- **Transformation** — students rewrite using a taught technique (e.g., plain
+  sentence → emotive, statement → question, telling → showing)
+- **Dramatisation** — students act out two versions to feel the difference
+  (e.g., emotive vs non-emotive delivery, confident vs uncertain dialogue)
+- **Co-construction** — teacher and students build output together sentence
+  by sentence (strong scaffold for writing, especially for less confident writers)
+- **Image discrimination** — students decide which image fits the concept
+  and justify their choice
+
+These formats are the literacy equivalent of problem pairs — they make
+practice active and observable. When a We Do slide defaults to "discuss with
+your partner," check whether a sorting, matching, or transformation activity
+would produce stronger engagement and more visible evidence of understanding.
+
 #PACING_AS_DESIGN:
 
 **Pacing as a Design Consideration:**
@@ -709,6 +774,15 @@ slide design accordingly — more frequent, lighter slides for younger learners;
 fewer, denser slides for older learners. But never assume older students can
 sit passively for extended periods. CFU keeps every lesson interactive
 regardless of year level.
+
+**Pacing Overview in Output:**
+
+The LI/SC slide teacher notes must include a **PACING OVERVIEW** with
+approximate time allocations for each phase (e.g., "Review 5 min, Vocabulary
+3 min, Reading 18 min, Writing Skills 12 min, You Do 15 min, Exit
+Ticket/Closing 7 min"). These are guidelines — the teacher adjusts based on
+CFU. The overview helps teachers gauge whether the lesson fits the available
+time and where to cut if needed.
 
 #SLIDE_CONTENT_DESIGN:
 
@@ -946,15 +1020,16 @@ be immediately usable — a teacher should be able to pick up this slide cold an
 teach from it confidently.
 
 The teacher notes follow a consistent structure on EVERY slide with four
-mandatory sections (SAY, DO, TEACHER NOTES, WATCH FOR) and three conditional
+mandatory sections (SAY, DO, TEACHER NOTES, WATCH FOR) and four conditional
 sections that appear where the content demands them (CFU CHECKPOINT,
-ENABLING & EXTENDING, MISCONCEPTIONS). Never omit a mandatory section. Never
-deviate from the order below. SAY comes first because that is what the teacher
-needs the moment they look down.
+ENABLING & EXTENDING, MISCONCEPTIONS, SENSITIVITY ADVISORY). Never omit a
+mandatory section. Never deviate from the order below. SAY comes first because
+that is what the teacher needs the moment they look down.
 
 **SECTION HEADER FORMATTING — NON-NEGOTIABLE:**
 Every section header in the teacher notes (SAY:, DO:, CFU CHECKPOINT:,
-TEACHER NOTES:, ENABLING & EXTENDING:, MISCONCEPTIONS:, WATCH FOR:) MUST
+TEACHER NOTES:, ENABLING & EXTENDING:, MISCONCEPTIONS:, SENSITIVITY ADVISORY:,
+WATCH FOR:) MUST
 be **bold** in the output. This applies to all output formats — slide
 presenter notes, consultation text, and any other generated content. Bold
 headers help teachers scan and navigate the notes quickly.
@@ -1092,6 +1167,21 @@ Format each misconception as:
   Impact: [What goes wrong in later learning if this isn't corrected]
   Quick correction: [1-2 sentence teacher move to address it]]
 
+**SENSITIVITY ADVISORY:**  ← CONDITIONAL: include on slides where the content
+                            touches sensitive topics (death, abuse, trauma, family
+                            disruption, mental health, suicide, violence). The agent
+                            decides which slides warrant this section.
+
+[Identify the sensitive content and provide:
+• What it is: [Name the specific sensitive element in the text or activity]
+• Framing language: [Suggested teacher language for introducing the content
+  with care — e.g., "This part of the story deals with something serious..."]
+• Watch for: [Student reactions that may signal distress — withdrawal,
+  visible upset, unexpected behaviour changes]
+• Protocol: [Brief guidance — e.g., "If a student becomes distressed,
+  acknowledge their feelings privately, do not require them to continue
+  the activity, and follow the school's wellbeing referral process."]]
+
 **WATCH FOR:**
 • [Specific, observable student error during THIS slide's activity — not a
   general misconception, but something you can SEE in real-time. E.g.,
@@ -1182,11 +1272,11 @@ CRITICAL RULES FOR SLIDE TEACHER NOTES:
    to the quality assurance system.
 
 10. The FOUR mandatory sections (SAY, DO, TEACHER NOTES, WATCH FOR) must appear
-   on EVERY slide in the same order. The THREE conditional sections (CFU CHECKPOINT,
-   ENABLING & EXTENDING, MISCONCEPTIONS) appear only where the content demands
-   them, but always in their designated position in the order. A teacher flipping
-   through the deck sees a predictable structure on every slide. Consistency
-   builds confidence.
+   on EVERY slide in the same order. The FOUR conditional sections (CFU CHECKPOINT,
+   ENABLING & EXTENDING, MISCONCEPTIONS, SENSITIVITY ADVISORY) appear only where
+   the content demands them, but always in their designated position in the order.
+   A teacher flipping through the deck sees a predictable structure on every slide.
+   Consistency builds confidence.
 
 11. CFU techniques MUST be varied across a lesson — see **CFU VARIETY AND
     SELECTION** above for the full toolkit, year-level matching, and the
@@ -2375,6 +2465,7 @@ User: Generate a slide deck for the following:
 Subject: “ XYZ ”
 Grade: “ XYZ ”
 Content: “ XYZ ”
-Additional Notes: “ XYZ”
+Additional Notes: “ XYZ ”
+Daily Review Focus: “ ”
 
-Do not enter plan mode, proceed with the lesson creation in bypass permissions. 
+Do not enter plan mode, proceed with the lesson creation in bypass permissions. Ensure you remain active while the lessons are being created and continue to be until they are fully complete, please. 

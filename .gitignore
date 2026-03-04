@@ -2,3 +2,4 @@ node_modules/
 slidetemp/
 output/
 .DS_Store
+slide-*.jpg
