@@ -619,7 +619,8 @@ When writing SAY notes for I Do slides, ask: *What is the invisible thinking
 a novice would miss here?* The answer is your think-aloud content. Every step
 in a worked example has a decision behind it — the expert has automated that
 decision, but the novice hasn't. The think-aloud un-automates the expert's
-thinking and makes it available to the novice.
+thinking and makes it available to the novice. Keep that thinking explicit, but
+write it as compressed classroom talk rather than polished monologue.
 
 Key think-aloud moves to deploy where the content warrants them:
 
@@ -649,6 +650,13 @@ Key think-aloud moves to deploy where the content warrants them:
   here / circle this because it's the key piece..." — narrates physical
   actions that direct student attention to the critical feature of the
   visual on screen.
+
+Voice rule for all think-aloud moves:
+- Keep the reasoning, shorten the packaging. A strong think-aloud still shows
+  the decision, check, error, or connection, but it should sound like live
+  teaching: "Okay, this side is 15, so the other side has to match." not
+  "The equation therefore requires the corresponding expression to evaluate
+  to an equivalent quantity."
 
 **The Balance Shifts Across the Lesson and Unit:**
 
@@ -1099,6 +1107,9 @@ Teacher notes must feel light and skimmable, not essay-like.
 - `DO:` usually 2-4 short bullets
 - `TEACHER NOTES:` maximum 2 short sentences
 - `WATCH FOR:` 1-2 short bullets
+- `SAY:` bullets must be directly speakable in class. They are teacher cue lines, not polished narration or briefing prose.
+- Allow light conversational glue when it helps flow (e.g. "Right, watch this part." / "Okay, what's my first step?"), but keep it brief and purposeful.
+- Avoid slang, robotic openings, lesson-announcer phrasing, abstract mini-lectures, and any line the teacher would need to mentally rewrite before saying aloud.
 - Only include conditional sections when they are genuinely needed.
 
 **CFU VARIETY AND SELECTION — NON-NEGOTIABLE:**
@@ -1119,10 +1130,12 @@ SLIDE TEACHER NOTES TEMPLATE (apply to every slide):
 ──────────────────────────────────────────────────────
 
 **SAY:**
-- [Key talking point that accompanies or expands on what is shown on the slide.
-  Each dot point is a separate idea the teacher communicates - not a word-for-word
-  script. The teacher uses their own words and professional judgement to deliver
-  these points naturally. Keep each point concise - one idea per dot point.]
+- [Write `SAY:` as teacher cue bullets, not polished script prose. Each bullet
+  should sound like something a teacher could say immediately in class. Keep it
+  concise, natural, and easy to deliver - one idea per bullet.]
+- [Prefer direct prompts, short follow-ups, question-led phrasing, and brief
+  think-aloud cues. Keep the tone classroom-natural and professional, with no
+  slang and no presenter-style narration.]
 - [Where the slide content needs to be read aloud (e.g., a quote, a definition,
   a key instruction), indicate this: "Read from slide: ..." so the teacher knows
   to read it directly rather than paraphrase.]
@@ -1130,12 +1143,41 @@ SLIDE TEACHER NOTES TEMPLATE (apply to every slide):
   responses in square brackets. E.g.: "Ask: What operation do we do first?
   [Multiplication - because of BODMAS.]"]
 - [Where the slide involves modelling (I Do), list the key thinking moves to
-  make visible - not a full think-aloud script, but the essential reasoning
-  steps the teacher should voice.]
+  make visible. Keep the reasoning explicit, but compress it into natural,
+  speakable prompts rather than a polished monologue.]
 - [Where the slide involves guided practice (We Do), list the checking prompts.
   Where it involves independent practice (You Do), list the launch points.]
-- [No filler - no "all right everyone, pens down, eyes up" or "let's get
-  started." Only substantive content the teacher needs to deliver.]
+- [Cut empty management filler, but do allow light connectors when they improve
+  flow. "Okay, try this one." is fine. "Today we will now begin our exploration
+  of..." is not.]
+
+**SAY VOICE - AVOID / PREFER:**
+- Avoid: formal launch prose like "Today we will explore equivalent number
+  sentences and discover how they can be used to identify unknown values."
+  Prefer: "Today we're looking at equivalent number sentences. If both sides
+  match, we can use that to find the missing value."
+- Avoid: presenter transitions like "Let me demonstrate the process for you."
+  Prefer: "Watch this one first." / "I'll model the first step."
+- Avoid: over-explained think-alouds like "The question becomes: what number,
+  when used as the divisor, will generate the required quotient?"
+  Prefer: "So what has to happen here? What do I divide 30 by to get 15?"
+- Avoid: rigid CFU prompts like "Students will now indicate whether the
+  expressions are equivalent."
+  Prefer: "Quick check - same value or not? Thumbs up or down."
+
+**SAY VOICE - BEFORE / AFTER EXAMPLES:**
+- Title / launch before: "Welcome to our Algebra unit on finding unknown values.
+  Over six sessions we'll learn how to use number properties to crack equations."
+  After: "We're starting algebra today. Our job is to find the missing value and
+  explain how we know."
+- I Do think-aloud before: "I know that 3 x 5 = 15. I also know that 30 / 2 = 15.
+  Both expressions equal 15. That means they are equivalent."
+  After: "First I'll work out this side: 3 x 5 is 15. Now this side: 30 divided
+  by 2 is also 15. Same value, so yes - these are equivalent."
+- CFU prompt before: "Here are two expressions: 6 x 4 and 48 / 2. Are they
+  equivalent? Show me thumbs up for yes, thumbs down for no."
+  After: "Quick check. 6 x 4 and 48 divided by 2 - same value or not? Thumbs up
+  or down."
 
 **DO:**
 - [Physical action the teacher takes - e.g., "Point to the worked example on screen"]
@@ -1153,7 +1195,7 @@ Technique: [Name the specific CFU technique - e.g., "Show Me Boards with Justifi
 
 Script:
 - [Exact direction the teacher follows to run this check. This IS scripted -
-  unlike SAY (which is talking points), the CFU script tells the teacher
+  unlike SAY (which is teacher cue bullets), the CFU script tells the teacher
   precisely what to say and do so the check is executed correctly.]
 - [E.g., "Say: On your whiteboard, write the first step you would take to
   solve this problem. You have 20 seconds. Hold up on my signal."]
@@ -1269,10 +1311,12 @@ END OF SLIDE TEACHER NOTES TEMPLATE
 CRITICAL RULES FOR SLIDE TEACHER NOTES:
 
 1. SAY always comes first. It is always dot-pointed — each point is a separate
-   key idea the teacher needs to communicate. These are talking points, not a
-   script. The teacher brings their own voice and delivery. No filler phrases,
-   no classroom management cues (e.g., "pens down, eyes up"), no robotic
-   openings. Only substantive content that accompanies or expands on the slide.
+   key idea the teacher needs to communicate. These are teacher cue bullets, not
+   polished script prose. Each point should be directly speakable in class,
+   sound natural in a teacher's mouth, and need little or no mental rewriting.
+   No slang, no robotic openings, no formal briefing tone, and no empty
+   classroom management cues. Only substantive content that accompanies or
+   expands on the slide.
 
 2. SAY must include key questions where the slide involves CFU. Write the
    question as a dot point with expected/ideal student responses in square

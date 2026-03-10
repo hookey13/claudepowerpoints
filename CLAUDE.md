@@ -64,6 +64,9 @@ For builder signatures, palette schema, and full API: read `docs/theme-system.md
 - Speaker notes are plain text in PptxGenJS/PowerPoint. NEVER use markdown in teacher notes. Do not use `**bold**`, `_italics_`, backticks, markdown headings, or markdown lists.
 - Teacher notes must be ASCII-safe for PowerPoint, PowerPoint for iPad, and exported notes views. Use straight quotes `' "`, hyphen bullets `-`, `...`, `->`, `>=`, `<=`, and `x`. Avoid smart quotes, em dashes, unicode bullets, unicode arrows, and other decorative symbols in notes.
 - Keep teacher notes scannable. Prefer short bullets, not dense paragraphs. `SAY` should usually be 2-4 short bullets, `DO` 2-4 short bullets, `TEACHER NOTES` no more than 2 short sentences, and `WATCH FOR` 1-2 bullets.
+- `SAY:` is teacher cue language, not script prose. Each bullet should sound like something a teacher could say immediately in class with little or no rewriting.
+- Use a classroom-natural voice in `SAY:`: direct prompts, short follow-ups, question-led phrasing, and concise think-aloud cues. Light connective phrasing is allowed when it helps flow, but keep it brief and purposeful.
+- Avoid slang, lesson-announcer phrasing, polished exposition, abstract briefing language, and over-explained transitions in `SAY:`. If a bullet sounds more like presenter copy than classroom talk, rewrite it.
 - Section headers in notes should be plain uppercase text like `SAY:` and `DO:`. Do not try to force bold with markdown.
 - If a slide uses `liSlide()`, the Learning Intention must be a single plain sentence and the Success Criteria must be exactly 3 simple `I can...` bullets. The first success criterion must be ultra-achievable for almost every student.
 - Do not add a `PACING OVERVIEW` block to speaker notes by default. If timing guidance is genuinely needed, keep it to one short sentence in `TEACHER NOTES`.

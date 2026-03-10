@@ -77,6 +77,7 @@ Console warnings during build = layout bugs. Fix before shipping.
 - Every lesson with companion PDFs gets a resource slide via `addResourceSlide()` from `pdf_helpers.js`.
 - Output goes to `output/<LessonFolder>/` - PPTX at the root, companion PDFs in a `resources-lesson{N}/` subfolder (N = lesson number in the unit/week).
 - PptxGenJS hyperlinks use relative paths - include the subfolder prefix (e.g., `resources-lesson3/SR1_Worksheet.pdf`).
+- `SAY:` notes are teacher cue bullets, not formal narration. Write 2-4 short, directly speakable bullets that sound natural in class, use light conversational glue only when it helps flow, and avoid slang, polished briefing tone, or mini-lecture prose the teacher would have to mentally rewrite.
 
 For resource generation details and PDF helper API: read `docs/resource-system.md`.
 For ad-hoc (non-themed) presentation design guidance: read `docs/design-guide.md`.
