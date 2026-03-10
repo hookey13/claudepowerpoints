@@ -42,6 +42,17 @@ ADVANCED_SC1_RE = re.compile(
 NON_ASCII_RE = re.compile(r"[^\x09\x0A\x0D\x20-\x7E]")
 RESOURCE_CODE_RE = re.compile(r"\b[A-Z]{2,}\d+(?:_[A-Za-z0-9]+)*\b")
 DAY_NAME_RE = re.compile(r"\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b", re.IGNORECASE)
+LI_NOTE_MISMATCH_PATTERNS = [
+    re.compile(r"\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+learning intentions\b", re.IGNORECASE),
+    re.compile(r"\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+lis\b", re.IGNORECASE),
+    re.compile(r"\bhere are our learning intentions\b", re.IGNORECASE),
+    re.compile(r"\blearning intentions today\b", re.IGNORECASE),
+    re.compile(r"\bread each li\b", re.IGNORECASE),
+    re.compile(r"\bread each learning intention\b", re.IGNORECASE),
+    re.compile(r"\bpoint to each li\b", re.IGNORECASE),
+    re.compile(r"\bpoint to each learning intention\b", re.IGNORECASE),
+    re.compile(r"\bchoral read lis?\b", re.IGNORECASE),
+]
 
 PROFILES = {
     "literacy-60": {
@@ -279,6 +290,13 @@ def li_sc_issues(slide: SlideData) -> list[Issue]:
         issues.append(Issue("warning", f"slide {slide.index}", f"LI/SC slide appears to contain {len(li_candidates)} Learning Intention lines; expected 1."))
     if len(sc_candidates) != 3:
         issues.append(Issue("warning", f"slide {slide.index}", f"LI/SC slide appears to contain {len(sc_candidates)} Success Criteria lines; expected 3."))
+    notes_text = "\n".join(
+        line.strip()
+        for line in slide.notes_lines
+        if line.strip() and not line.strip().startswith("[")
+    )
+    if len(li_candidates) == 1 and any(pattern.search(notes_text) for pattern in LI_NOTE_MISMATCH_PATTERNS):
+        issues.append(Issue("warning", f"slide {slide.index} notes", "LI/SC notes refer to multiple learning intentions, but the slide contains a single Learning Intention."))
     if sc_candidates and ADVANCED_SC1_RE.search(sc_candidates[0]):
         issues.append(Issue("warning", f"slide {slide.index}", "SC1 looks too demanding for an ultra-achievable first criterion."))
     return issues

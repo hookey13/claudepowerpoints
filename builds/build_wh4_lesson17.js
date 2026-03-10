@@ -6,6 +6,7 @@
 
 const pptxgen = require("pptxgenjs");
 const fs      = require("fs");
+const path    = require("path");
 
 const {
   C, FONT_H, FONT_B,
@@ -21,13 +22,27 @@ const {
 const {
   createPdf, writePdf, addPdfHeader, addSectionHeading,
   addBodyText, addTipBox, addPdfFooter, addLinedArea,
-  addResourceSlide,
+  addResourceSlide, getSessionResourceFolder, makeSessionResource,
 } = require("../themes/pdf_helpers");
 
+const SESSION_NUMBER = 2;
 const FOOTER = "War Horse | Lesson 17 of 25 | Week 4 | Year 5/6 Literacy";
 const OUT_DIR = "output/WH4_Lesson17_Friedrich_And_Topthorn";
-const RES_DIR = OUT_DIR + "/resources-session2";
-if (!fs.existsSync(RES_DIR)) fs.mkdirSync(RES_DIR, { recursive: true });
+const RES_DIR = path.join(OUT_DIR, getSessionResourceFolder(SESSION_NUMBER));
+const WORKSHEET_RESOURCE = makeSessionResource(
+  SESSION_NUMBER,
+  "Sentence Combining Worksheet",
+  "Five sentences about Friedrich for students to combine - one per student."
+);
+const ANSWER_KEY_RESOURCE = makeSessionResource(
+  SESSION_NUMBER,
+  "Answer Key",
+  "Teacher reference: model answer plus alternative valid combinations."
+);
+const RESOURCE_ITEMS = [WORKSHEET_RESOURCE, ANSWER_KEY_RESOURCE];
+const WORKSHEET_PDF_PATH = path.join(OUT_DIR, WORKSHEET_RESOURCE.fileName);
+const ANSWER_KEY_PDF_PATH = path.join(OUT_DIR, ANSWER_KEY_RESOURCE.fileName);
+fs.mkdirSync(RES_DIR, { recursive: true });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Teacher notes
@@ -56,23 +71,23 @@ WATCH FOR:
 [General: Title \u2014 VTLM 2.0: Establishing Purpose and Relevance]`;
 
 const NOTES_LI = `SAY:
-\u2022 Read from slide: \u201CHere are our learning intentions for today.\u201D
-\u2022 Point to each LI briefly. Keep this brisk \u2014 there are five, so don\u2019t elaborate.
-\u2022 Point to the success criteria: \u201CBy the end of the lesson, these are the things you will be able to do. We will come back to these at the end.\u201D
+\u2022 Read the learning intention from the slide once so students hear the full destination for today.
+\u2022 Name the two connected strands: close reading of Morpurgo's language and characterisation, then clearer sentence combining about Friedrich.
+\u2022 Point to the success criteria: \u201CThese three success criteria show exactly what success looks like today. We'll come back to them at the end.\u201D
 
 DO:
-\u2022 Read each LI aloud. Gesture to each one quickly. Do not pause for discussion.
-\u2022 Read the SCs. Ask students to give a thumbs up if they already feel confident about any SC.
+\u2022 Read the single LI once, then read the SCs.
+\u2022 Ask students to give a thumbs up if one SC already feels familiar.
 \u2022 Total time: 90 seconds maximum.
 
 TEACHER NOTES:
-Five learning intentions is dense but manageable for Grade 5/6. Protect the sentence combining segment - it is the priority new learning. The first four are reading-focused and consolidated through the pause points. The fifth (sentence structures) is the priority new learning and has dedicated I Do / We Do / You Do time. The SCs are deliberately fewer (3) and map to observable outcomes: simile analysis, character analysis, and sentence combining. VTLM 2.0: Making Learning Visible / Clear Learning Intentions.
+The single LI keeps the lesson coherent: close reading of Morpurgo's craft in Chapters 13-14 plus sentence combining as the transfer task. SC1 is simile analysis, SC2 is sentence combining, and SC3 is Friedrich character analysis. SC2 is the priority new learning; SC1 and SC3 are reinforced through the reading and pause points. VTLM 2.0: Making Learning Visible / Clear Learning Intention.
 
 WATCH FOR:
-\u2022 Students who seem overwhelmed by 5 LIs \u2014 reassure: \u201CMost of these build on what we\u2019ve been doing all term. The new skill today is sentence combining.\u201D
-\u2022 Students who give thumbs up on all SCs \u2014 probe: \u201CWhat is a simile? Can you give me an example?\u201D This will quickly reveal genuine understanding.
+\u2022 Students who lock onto only the reading side or only the writing side - remind them the LI connects both.
+\u2022 Students who give thumbs up on all SCs - probe: \u201CWhat is a simile? Can you show me how you would combine two Friedrich facts into one sentence?\u201D
 
-[General: LI/SC \u2014 VTLM 2.0: Making Learning Visible / Clear Learning Intentions]`;
+[General: Learning Intention \u2014 VTLM 2.0: Making Learning Visible / Clear Learning Intention]`;
 
 const NOTES_VOCAB_LUSH = `SAY:
 \u2022 \u201CRead this word with me: lush.\u201D [Students repeat.]
@@ -547,13 +562,13 @@ const NOTES_RESOURCES = `SAY:
 
 DO:
 \u2022 Click on the PDF links to verify they open correctly before the lesson.
-\u2022 Print the Sentence Combining Worksheet \u2014 one per student (or one per pair if reducing paper).
-\u2022 Keep the Answer Key for teacher reference during the You Do phase.
+\u2022 Print the ${WORKSHEET_RESOURCE.name} \u2014 one per student (or one per pair if reducing paper).
+\u2022 Keep the ${ANSWER_KEY_RESOURCE.name} for teacher reference during the You Do phase.
 
 TEACHER NOTES:
 Two companion PDFs are provided:
-1. Session 2 Sentence Combining Worksheet - contains the five source sentences, lined space for student response, and a challenge extension about Topthorn.
-2. Session 2 Answer Key - the teacher model answer plus alternative valid combinations for reference during marking or conferencing.
+1. ${WORKSHEET_RESOURCE.name} - contains the five source sentences, lined space for student response, and a challenge extension about Topthorn.
+2. ${ANSWER_KEY_RESOURCE.name} - the teacher model answer plus alternative valid combinations for reference during marking or conferencing.
 
 Print before the lesson. The worksheet is designed for the You Do phase (Slide 19).
 
@@ -564,7 +579,7 @@ Print before the lesson. The worksheet is designed for the You Do phase (Slide 1
 // ─────────────────────────────────────────────────────────────────────────────
 
 async function generateWorksheetPdf() {
-  const doc = createPdf({ title: "Sentence Combining Worksheet" });
+  const doc = createPdf({ title: WORKSHEET_RESOURCE.name });
 
   let y = addPdfHeader(doc, "Sentence Combining \u2014 Friedrich", {
     subtitle: "War Horse Chapters 13\u201314",
@@ -615,12 +630,12 @@ async function generateWorksheetPdf() {
 
   addPdfFooter(doc, "War Horse | Lesson 17 of 25 | Week 4 | Year 5/6 Literacy");
 
-  await writePdf(doc, RES_DIR + "/Session 2 Sentence Combining Worksheet.pdf");
-  console.log("\u2713 Written Session 2 Sentence Combining Worksheet.pdf");
+  await writePdf(doc, WORKSHEET_PDF_PATH);
+  console.log(`\u2713 Written ${WORKSHEET_RESOURCE.name}.pdf`);
 }
 
 async function generateAnswerKeyPdf() {
-  const doc = createPdf({ title: "Sentence Combining Answer Key" });
+  const doc = createPdf({ title: ANSWER_KEY_RESOURCE.name });
 
   let y = addPdfHeader(doc, "Sentence Combining \u2014 Answer Key", {
     subtitle: "Teacher Reference \u2014 War Horse Chapters 13\u201314",
@@ -687,8 +702,8 @@ async function generateAnswerKeyPdf() {
 
   addPdfFooter(doc, "War Horse | Lesson 17 of 25 | Week 4 | Year 5/6 Literacy \u2014 TEACHER REFERENCE");
 
-  await writePdf(doc, RES_DIR + "/Session 2 Answer Key.pdf");
-  console.log("\u2713 Written Session 2 Answer Key.pdf");
+  await writePdf(doc, ANSWER_KEY_PDF_PATH);
+  console.log(`\u2713 Written ${ANSWER_KEY_RESOURCE.name}.pdf`);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -713,16 +728,12 @@ async function generateAnswerKeyPdf() {
   );
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 2: LEARNING INTENTIONS & SUCCESS CRITERIA
+  // SLIDE 2: LEARNING INTENTION & SUCCESS CRITERIA
   // ═══════════════════════════════════════════════════════════════════════════
   liSlide(
     pres,
     [
-      "Compare purposes for different texts and consider why authors and illustrators have structured texts in particular ways",
-      "Question the assertions made by authors when engaging with print and digital texts",
-      "Analyse attributes of character",
-      "Identify how perspective is made evident through authorial choices",
-      "Vary sentence structures or lengths when using simple, compound and complex sentences, with a focus on achieving clarity and effect suited to text purpose",
+      "We are learning to analyse how Morpurgo uses language and characterisation in Chapters 13-14, and to combine ideas about a character into clearer sentences",
     ],
     [
       "I can identify a simile in the text and explain what is being compared",
@@ -1241,18 +1252,7 @@ async function generateAnswerKeyPdf() {
   // ═══════════════════════════════════════════════════════════════════════════
   addResourceSlide(
     pres,
-    [
-      {
-        name: "Session 2 Sentence Combining Worksheet",
-        fileName: "resources-session2/Session 2 Sentence Combining Worksheet.pdf",
-        description: "Five sentences about Friedrich for students to combine - one per student.",
-      },
-      {
-        name: "Session 2 Answer Key",
-        fileName: "resources-session2/Session 2 Answer Key.pdf",
-        description: "Teacher reference: model answer plus alternative valid combinations.",
-      },
-    ],
+    RESOURCE_ITEMS,
     { C, FONT_H, FONT_B },
     FOOTER,
     NOTES_RESOURCES

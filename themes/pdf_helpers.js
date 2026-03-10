@@ -2,9 +2,9 @@
 // Theme-agnostic utilities for creating printable A4 worksheets, answer keys,
 // graphic organisers, and other companion resources alongside PPTX slide decks.
 //
-// Uses pdfkit. All colours passed as 6-char hex (no #). Fonts use Windows
-// Arial (registered as Helvetica/Helvetica-Bold) for full Unicode support
-// (□, Δ, ×, ÷, ≥, ≠ etc.). Falls back to built-in Helvetica if unavailable.
+// Uses pdfkit. All colours passed as 6-char hex (no #). Fonts prefer a
+// cross-platform sans family with broad Unicode support (□, Δ, ×, ÷, ≥, ≠
+// etc.) and fall back to built-in Helvetica if no complete family is found.
 
 "use strict";
 
@@ -59,6 +59,57 @@ function resourceNameFromFileName(fileName) {
   if (!fileName) return "Resource";
   const baseName = path.basename(fileName, path.extname(fileName));
   return cleanResourceLabel(baseName) || "Resource";
+}
+
+function getPdfFontFamilyCandidates() {
+  if (process.platform === "win32") {
+    return [
+      {
+        regular: "C:/Windows/Fonts/arial.ttf",
+        bold: "C:/Windows/Fonts/arialbd.ttf",
+        italic: "C:/Windows/Fonts/ariali.ttf",
+      },
+      {
+        regular: "C:/Windows/Fonts/calibri.ttf",
+        bold: "C:/Windows/Fonts/calibrib.ttf",
+        italic: "C:/Windows/Fonts/calibrii.ttf",
+      },
+    ];
+  }
+
+  if (process.platform === "darwin") {
+    return [
+      {
+        regular: "/System/Library/Fonts/Supplemental/Arial.ttf",
+        bold: "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+        italic: "/System/Library/Fonts/Supplemental/Arial Italic.ttf",
+      },
+    ];
+  }
+
+  return [
+    {
+      regular: "/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf",
+      bold: "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf",
+      italic: "/usr/share/fonts/truetype/liberation2/LiberationSans-Italic.ttf",
+    },
+    {
+      regular: "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+      bold: "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+      italic: "/usr/share/fonts/truetype/liberation/LiberationSans-Italic.ttf",
+    },
+    {
+      regular: "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+      bold: "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+      italic: "/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf",
+    },
+  ];
+}
+
+function resolvePdfFontFamily() {
+  return getPdfFontFamilyCandidates().find((family) =>
+    [family.regular, family.bold, family.italic].every((filePath) => fs.existsSync(filePath))
+  ) || null;
 }
 
 // ── Page constants (A4 in points: 595.28 x 841.89) ─────────────────────────
@@ -163,18 +214,13 @@ function createPdf(opts) {
     bufferPages: true,
   });
 
-  // Register Arial for full Unicode support (□ Δ etc. that built-in Helvetica
-  // WinAnsiEncoding cannot render). Resolve paths cross-platform.
-  const fontPaths = process.platform === "win32"
-    ? { regular: "C:/Windows/Fonts/arial.ttf", bold: "C:/Windows/Fonts/arialbd.ttf", italic: "C:/Windows/Fonts/ariali.ttf" }
-    : { regular: "/System/Library/Fonts/Supplemental/Arial.ttf", bold: "/System/Library/Fonts/Supplemental/Arial Bold.ttf", italic: "/System/Library/Fonts/Supplemental/Arial Italic.ttf" };
+  const fontFamily = resolvePdfFontFamily();
   try {
-    if (fs.existsSync(fontPaths.regular)) {
-      doc.registerFont("Sans", fontPaths.regular);
-      doc.registerFont("Sans-Bold", fontPaths.bold);
-      doc.registerFont("Sans-Italic", fontPaths.italic);
+    if (fontFamily) {
+      doc.registerFont("Sans", fontFamily.regular);
+      doc.registerFont("Sans-Bold", fontFamily.bold);
+      doc.registerFont("Sans-Italic", fontFamily.italic);
     }
-    // else: fall back to built-in Helvetica
   } catch (_) {
     // Fall back to built-in Helvetica if system fonts unavailable
   }

@@ -86,7 +86,7 @@ function createBaseBuilders(C, FONT_H, FONT_B, el, shadowFn) {
 
     const normalizedTargets = normalizeLessonTargets(liItems, scItems);
     if (normalizedTargets.warnings.length) {
-      console.warn(`[liSlide] ${normalizedTargets.warnings.join("; ")}. Keeping the first LI and first three SC items.`);
+      console.warn(`[liSlide] ${normalizedTargets.warnings.join("; ")}. Extra items will be truncated; only the first LI and first three SC items render on the slide.`);
     }
     liItems = normalizedTargets.liItems;
     scItems = normalizedTargets.scItems;

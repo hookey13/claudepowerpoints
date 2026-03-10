@@ -6,6 +6,7 @@
 
 const pptxgen = require("pptxgenjs");
 const fs = require("fs");
+const path = require("path");
 
 const {
   C, FONT_H, FONT_B,
@@ -21,13 +22,33 @@ const {
 const {
   createPdf, writePdf, addPdfHeader, addSectionHeading,
   addBodyText, addTipBox, addPdfFooter, addLinedArea,
-  addResourceSlide,
+  addResourceSlide, getSessionResourceFolder, makeSessionResource,
 } = require("../themes/pdf_helpers");
 
+const SESSION_NUMBER = 3;
 const FOOTER = "War Horse | Lesson 18 of 25 | Week 4 | Year 5/6 Literacy";
 const OUT_DIR = "output/WH4_Lesson18_No_Mans_Land";
-const RES_DIR = OUT_DIR + "/resources-session3";
-if (!fs.existsSync(RES_DIR)) fs.mkdirSync(RES_DIR, { recursive: true });
+const RES_DIR = path.join(OUT_DIR, getSessionResourceFolder(SESSION_NUMBER));
+const WORKSHEET_RESOURCE = makeSessionResource(
+  SESSION_NUMBER,
+  "Because But So Worksheet",
+  "Student worksheet: complete three sentences using because, but, and so. Includes challenge extension."
+);
+const ANSWER_KEY_RESOURCE = makeSessionResource(
+  SESSION_NUMBER,
+  "Answer Key",
+  "Teacher reference: model answers with alternative valid completions."
+);
+const REFERENCE_RESOURCE = makeSessionResource(
+  SESSION_NUMBER,
+  "Literary Devices Reference",
+  "Student reference: 5 devices with definitions and Chapter 15 examples. Keep for narrative writing."
+);
+const RESOURCE_ITEMS = [WORKSHEET_RESOURCE, ANSWER_KEY_RESOURCE, REFERENCE_RESOURCE];
+const WORKSHEET_PDF_PATH = path.join(OUT_DIR, WORKSHEET_RESOURCE.fileName);
+const ANSWER_KEY_PDF_PATH = path.join(OUT_DIR, ANSWER_KEY_RESOURCE.fileName);
+const REFERENCE_PDF_PATH = path.join(OUT_DIR, REFERENCE_RESOURCE.fileName);
+fs.mkdirSync(RES_DIR, { recursive: true });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Teacher Notes
@@ -60,27 +81,23 @@ WATCH FOR:
 [General: Title | VTLM 2.0: Establishing Purpose and Relevance]`;
 
 const NOTES_LI_SC = `SAY:
-\u2022 Five learning intentions today \u2014 let\u2019s read through them together
-\u2022 First: comparing purposes for different texts \u2014 we\u2019re looking at WHY Morpurgo structures this chapter the way he does
-\u2022 Second: questioning the assertions made by authors \u2014 what is Morpurgo choosing to show us and what is he leaving out?
-\u2022 Third: analysing character attributes \u2014 Joey\u2019s courage, fear, resilience
-\u2022 Fourth: identifying how perspective shapes our understanding \u2014 everything is through Joey\u2019s eyes. How does that change what we know?
-\u2022 Fifth: varying sentence structures \u2014 we\u2019ll practise using \u201Cbecause\u201D, \u201Cbut\u201D and \u201Cso\u201D to extend sentences
+\u2022 Read the learning intention once so students hear the full destination for today.
+\u2022 Name the two linked strands: analysing Morpurgo's craft in Chapter 15 and extending sentences clearly with because, but, and so.
 \u2022 Read the success criteria together. Ask: Which of these feels most challenging? [Take 2\u20133 responses]
 
 DO:
-\u2022 Choral read LIs, then SCs
+\u2022 Choral read the LI, then the SCs.
 \u2022 Keep the LI/SC introduction brisk
 \u2022 Highlight SC2 (conjunctions) and SC3 (perspective) as the two biggest focuses today
 
 TEACHER NOTES:
-Five LIs is substantial but appropriate for a chapter this rich. The SCs are concrete and assessable. SC1 focuses on literary devices (analytical reading), SC2 on perspective (critical reading), and SC3 on sentence-level writing (composition). This creates a balanced lesson across comprehension and composition. The conjunction focus connects naturally to narrative writing \u2014 students need varied sentence structures in their own stories. VTLM 2.0: Clear Learning Intentions with Visible Success Criteria.
+The single LI keeps the lesson focused: literary analysis of Chapter 15 plus sentence-level writing transfer. SC1 focuses on literary devices, SC2 on conjunction sentence building, and SC3 on perspective. This keeps the lesson coherent while still honouring how rich the chapter is. The conjunction focus connects naturally to narrative writing - students need varied sentence structures in their own stories. VTLM 2.0: Clear Learning Intention with Visible Success Criteria.
 
 WATCH FOR:
-\u2022 Students who feel overwhelmed by 5 LIs \u2014 reassure that several overlap and build on each other
-\u2022 Students who are strong readers but weaker writers (or vice versa) \u2014 the lesson gives both groups opportunities to shine
+\u2022 Students who only attend to the device work or only to the writing - remind them the LI deliberately connects both.
+\u2022 Students who are strong readers but weaker writers (or vice versa) - the lesson gives both groups opportunities to shine
 
-[General: Learning Intentions | VTLM 2.0: Clear Learning Intentions]`;
+[General: Learning Intention | VTLM 2.0: Clear Learning Intention]`;
 
 const NOTES_VOCAB_MURKY = `SAY:
 \u2022 Our first vocabulary word today is \u201Cmurky\u201D
@@ -316,64 +333,27 @@ WATCH FOR:
 
 [General: I Do \u2014 Literary Devices | VTLM 2.0: Explicit Teaching]`;
 
-const NOTES_DEVICES_2 = `SAY:
-\u2022 Now metaphor. This chapter has THREE powerful metaphors, and they\u2019re all connected. Look at the first: \u201C\u2026a great grey lumbering monster that belched out smoke from behind as it rocked down the hillside towards me.\u201D
-\u2022 What is Morpurgo describing? [A tank]
-\u2022 But he doesn\u2019t call it a tank. Why? [Because Joey doesn\u2019t know what a tank is. He\u2019s never seen one. So he sees it as a monster]
-\u2022 This is the power of perspective \u2014 because we\u2019re seeing through Joey\u2019s eyes, a tank BECOMES a monster
-\u2022 Look at the second: the one monster becomes SEVERAL monsters, rolling \u201Cinexorably\u201D down towards him. The metaphor builds \u2014 one monster multiplies into many
-\u2022 And the third: the entire experience is described as \u201Ca nightmare of agony, terror and loneliness.\u201D Joey\u2019s reality has become a nightmare \u2014 that\u2019s metaphor too
-\u2022 Ask: What makes these metaphors so effective? [They show us the world through Joey\u2019s innocent eyes. He has no human words for tanks and war \u2014 he can only compare them to things he understands: monsters and nightmares]
+const NOTES_DEVICES_COMBINED = `SAY:
+\u2022 Start with the metaphor card: \u201CJoey calls the tank a monster because, from his point of view, that is what it feels like.\u201D
+\u2022 Move to personification: \u201CExhaustion is treated like an attacker that overtakes Joey and forces him down.\u201D
+\u2022 Finish with repetition: \u201CHe would know ... He would know.\u201D Ask: What does the repeated phrase show about Joey's trust in Albert?
+\u2022 Point to the note at the bottom: perspective shapes metaphor. A human soldier would say tank; Joey says monster.
 
 DO:
-\u2022 Display all three metaphor examples
-\u2022 Read each one aloud with dramatic expression
-\u2022 Draw explicit attention to PERSPECTIVE: these metaphors work BECAUSE they come from Joey\u2019s point of view
-\u2022 Connect to LI4: perspective shapes understanding. The reader understands the battlefield differently because of Joey\u2019s innocence
+\u2022 Read the three examples aloud in order: metaphor, personification, repetition.
+\u2022 Keep pushing for effect, not just naming the device.
+\u2022 Connect SC1 to accurate device naming and SC3 to perspective: Joey's point of view changes how the battlefield is described.
+\u2022 Cold call 2-3 students for which device feels most powerful and why.
 
 TEACHER NOTES:
-The three metaphors form a deliberate progression: single monster \u2192 multiple monsters \u2192 nightmare. This escalation mirrors Joey\u2019s increasing terror. The key pedagogical insight is that these metaphors are inseparable from perspective \u2014 a human narrator would call them tanks, but Joey\u2019s animal perspective transforms them into something primal and terrifying. This is Morpurgo\u2019s most sophisticated narrative technique: using the first-person animal voice to defamiliarise the familiar. Students who grasp this understand both metaphor AND authorial choice simultaneously. For narrative writing: encourage students to think about how their narrator\u2019s perspective shapes the metaphors they use. VTLM 2.0: Explicit Teaching / Deep Analysis.
-
-MISCONCEPTIONS:
-\u2022 Misconception: Metaphor and simile are the same thing
-  Why: Both involve comparison; students haven\u2019t internalised the structural difference
-  Impact: Imprecise literary analysis
-  Quick correction: \u201CSimile says something is LIKE something else. Metaphor says something IS something else. The tank isn\u2019t \u2018like\u2019 a monster \u2014 to Joey, it IS a monster\u201D
-\u2022 Misconception: The author is being \u201Cunrealistic\u201D by calling tanks \u201Cmonsters\u201D
-  Why: Students apply their own knowledge (they know what tanks are) instead of adopting the narrator\u2019s perspective
-  Impact: Misses the entire point of first-person narration
-  Quick correction: \u201CRemember, Joey is a horse. He has NEVER seen a tank. What would YOU call a giant metal thing that belches smoke if you\u2019d never seen one before?\u201D
+This combined slide intentionally condenses the final three devices so the lesson stays lean without losing analytical depth. The visible slide now uses one metaphor example as the anchor, then pairs it with personification and repetition so students can compare three different ways Morpurgo intensifies Joey's experience. SC1 is addressed through accurate device naming and effect; SC3 is reinforced through the perspective note, which explains why the tank is presented as a monster. VTLM 2.0: Explicit Teaching / Deep Analysis.
 
 WATCH FOR:
-\u2022 Students who can\u2019t distinguish metaphor from simile \u2014 reinforce: no \u201Clike\u201D or \u201Cas\u201D = metaphor
-\u2022 Students who miss the perspective angle \u2014 ask: \u201CWould a human soldier describe the tank as a monster? Why does Joey?\u201D
-\u2022 Students who are engaged by the monster imagery \u2014 channel this energy: \u201CThis is what great narrative writing does. It makes us see familiar things in unfamiliar ways\u201D
+\u2022 Students who label the metaphor as a simile - remind them there is no \u201Clike\u201D or \u201Cas\u201D.
+\u2022 Students who can name the device but not its effect - prompt: \u201CWhat does it make you picture, feel, or understand about Joey?\u201D
+\u2022 Students who miss the perspective link - ask: \u201CWould a human narrator choose the word monster here?\u201D
 
 [General: I Do \u2014 Literary Devices Part 2 | VTLM 2.0: Explicit Teaching / Deep Analysis]`;
-
-const NOTES_DEVICES_3 = `SAY:
-\u2022 Two more devices. First, personification \u2014 we already met this at our first pause point. Here\u2019s the full example again: \u201CAnd then exhaustion finally overtook me, sapped the strength from my legs and forced me to lie down and sleep.\u201D
-\u2022 Remember: exhaustion is given human actions \u2014 overtaking, sapping, forcing. It becomes a character that defeats Joey
-\u2022 Second: repetition. Look at this: \u201C\u2026I shall never know. \u2026 He would know \u2026 He would know.\u201D
-\u2022 Why does Morpurgo repeat \u201CHe would know\u201D? [To emphasise Joey\u2019s faith in Albert. Even in his darkest moment, Joey believes Albert would understand him. The repetition shows how deeply Joey clings to this belief]
-\u2022 These five devices together \u2014 simile, onomatopoeia, metaphor, personification, repetition \u2014 are the toolkit Morpurgo uses to make this chapter so powerful
-\u2022 Ask: Which device do you think is MOST effective in this chapter? Why? [Take 2\u20133 responses \u2014 no wrong answer here]
-
-DO:
-\u2022 Display both examples
-\u2022 Reconnect the personification example to Pause Point 1 \u2014 students already analysed this
-\u2022 For repetition, read the repeated phrase with emphasis: \u201CHe would know. He WOULD know.\u201D
-\u2022 Ask students to hold up fingers for which device they find most effective (1=simile, 2=onomatopoeia, 3=metaphor, 4=personification, 5=repetition)
-
-TEACHER NOTES:
-Completing the five-device survey gives students a comprehensive analytical vocabulary for this chapter. Repetition is often undervalued as a literary device \u2014 students tend to see it as \u201Csloppy writing\u201D rather than a deliberate technique. Drawing attention to HOW repetition functions (emphasis, emotional weight, rhythm) reframes it as a sophisticated choice. The \u201Cmost effective device\u201D question has no right answer and promotes critical evaluation \u2014 students must justify their preference with textual reasoning. This is higher-order thinking (evaluation on Bloom\u2019s taxonomy). For narrative writing: encourage students to experiment with at least one of these devices in their own stories. VTLM 2.0: Explicit Teaching / Higher-Order Thinking.
-
-WATCH FOR:
-\u2022 Students who dismiss repetition as \u201Cboring\u201D or \u201Ca mistake\u201D \u2014 redirect: \u201CIf Morpurgo wrote it twice, he chose to. Why?\u201D
-\u2022 Students who struggle with the preference question \u2014 scaffold: \u201CWhich one made you feel the most? Which one created the strongest picture in your mind?\u201D
-\u2022 Students who are ready for extension \u2014 ask: \u201CCan you find another example of ANY of these devices in the chapter that we haven\u2019t discussed?\u201D
-
-[General: I Do \u2014 Literary Devices Part 3 | VTLM 2.0: Explicit Teaching / Higher-Order Thinking]`;
 
 const NOTES_CFU_DEVICES = `SAY:
 \u2022 Time to check your understanding. I\u2019m going to show you a quote from Chapter 15 and I want you to identify which literary device it uses
@@ -557,9 +537,9 @@ WATCH FOR:
 
 const NOTES_RESOURCES = `SAY:
 - Three printable resources for today's lesson
-- The Session 3 Because But So Worksheet is for the You Do activity
-- The Session 3 Answer Key is for your reference - multiple valid answers are included
-- The Session 3 Literary Devices Reference is a student keepsake - they can use it when writing their own narratives
+- The ${WORKSHEET_RESOURCE.name} is for the You Do activity
+- The ${ANSWER_KEY_RESOURCE.name} is for your reference - multiple valid answers are included
+- The ${REFERENCE_RESOURCE.name} is a student keepsake - they can use it when writing their own narratives
 
 DO:
 - Print the worksheet before the lesson (one per student)
@@ -594,16 +574,12 @@ async function build() {
   );
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 2 — Learning Intentions & Success Criteria
+  // SLIDE 2 — Learning Intention & Success Criteria
   // ═══════════════════════════════════════════════════════════════════════════
   liSlide(
     pres,
     [
-      "Compare purposes for different texts and consider why authors and illustrators have structured texts in particular ways",
-      "Question the assertions made by authors when engaging with print and digital texts",
-      "Analyse attributes of character",
-      "Identify how perspective is made evident through authorial choices",
-      "Vary sentence structures or lengths when using simple, compound and complex sentences, with a focus on achieving clarity and effect suited to text purpose",
+      "We are learning to analyse how Morpurgo uses literary devices and perspective in Chapter 15, and to extend sentences clearly using because, but and so",
     ],
     [
       "I can identify at least one literary device used in Chapter 15 and name its effect",
@@ -887,7 +863,7 @@ async function build() {
     }
 
     addFooter(s, FOOTER);
-    s.addNotes(NOTES_DEVICES_2 + "\n\n" + NOTES_DEVICES_3);
+    s.addNotes(NOTES_DEVICES_COMBINED);
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1045,23 +1021,7 @@ async function build() {
   const theme = { C, FONT_H, FONT_B, addTopBar, addTitle, addFooter, addCard };
   addResourceSlide(
     pres,
-    [
-      {
-        name: "Session 3 Because But So Worksheet",
-        fileName: "resources-session3/Session 3 Because But So Worksheet.pdf",
-        description: "Student worksheet: complete three sentences using because, but, and so. Includes challenge extension.",
-      },
-      {
-        name: "Session 3 Answer Key",
-        fileName: "resources-session3/Session 3 Answer Key.pdf",
-        description: "Teacher reference: model answers with alternative valid completions.",
-      },
-      {
-        name: "Session 3 Literary Devices Reference",
-        fileName: "resources-session3/Session 3 Literary Devices Reference.pdf",
-        description: "Student reference: 5 devices with definitions and Chapter 15 examples. Keep for narrative writing.",
-      },
-    ],
+    RESOURCE_ITEMS,
     theme,
     FOOTER,
     NOTES_RESOURCES
@@ -1072,7 +1032,7 @@ async function build() {
   // ═══════════════════════════════════════════════════════════════════════════
 
   // ─── PDF 1: Because-But-So Worksheet ──────────────────────────────────────
-  const ws = createPdf({ title: "Because-But-So Worksheet" });
+  const ws = createPdf({ title: WORKSHEET_RESOURCE.name });
   let wsY = addPdfHeader(ws, "Because, But, So \u2014 Sentence Building", {
     color: C.PRIMARY,
     subtitle: "Chapter 15: No Man\u2019s Land",
@@ -1121,7 +1081,7 @@ async function build() {
   addPdfFooter(ws, "War Horse | Lesson 18 | Because-But-So Worksheet");
 
   // ─── PDF 2: Because-But-So Answer Key ─────────────────────────────────────
-  const ak = createPdf({ title: "Because-But-So Answer Key" });
+  const ak = createPdf({ title: ANSWER_KEY_RESOURCE.name });
   let akY = addPdfHeader(ak, "Because, But, So \u2014 Answer Key", {
     color: C.ALERT,
     subtitle: "Teacher Reference \u2014 Chapter 15: No Man\u2019s Land",
@@ -1161,7 +1121,7 @@ async function build() {
   addPdfFooter(ak, "War Horse | Lesson 18 | Answer Key \u2014 TEACHER COPY");
 
   // ─── PDF 3: Literary Devices Reference Sheet ─────────────────────────────
-  const ld = createPdf({ title: "Literary Devices Reference Sheet" });
+  const ld = createPdf({ title: REFERENCE_RESOURCE.name });
   let ldY = addPdfHeader(ld, "Literary Devices \u2014 Reference Sheet", {
     color: C.ACCENT,
     subtitle: "Five devices from Chapter 15 of War Horse",
@@ -1227,16 +1187,16 @@ async function build() {
 
   // ─── Write all files ──────────────────────────────────────────────────────
   await Promise.all([
-    pres.writeFile(`${OUT_DIR}/WH4_Lesson18.pptx`),
-    writePdf(ws, `${RES_DIR}/Session 3 Because But So Worksheet.pdf`),
-    writePdf(ak, `${RES_DIR}/Session 3 Answer Key.pdf`),
-    writePdf(ld, `${RES_DIR}/Session 3 Literary Devices Reference.pdf`),
+    pres.writeFile({ fileName: `${OUT_DIR}/WH4_Lesson18.pptx` }),
+    writePdf(ws, WORKSHEET_PDF_PATH),
+    writePdf(ak, ANSWER_KEY_PDF_PATH),
+    writePdf(ld, REFERENCE_PDF_PATH),
   ]);
 
   console.log("Done: WH4_Lesson18.pptx");
-  console.log("Done: Session 3 Because But So Worksheet.pdf");
-  console.log("Done: Session 3 Answer Key.pdf");
-  console.log("Done: Session 3 Literary Devices Reference.pdf");
+  console.log(`Done: ${WORKSHEET_RESOURCE.name}.pdf`);
+  console.log(`Done: ${ANSWER_KEY_RESOURCE.name}.pdf`);
+  console.log(`Done: ${REFERENCE_RESOURCE.name}.pdf`);
 }
 
 build().catch(console.error);

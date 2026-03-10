@@ -75,8 +75,10 @@ Console warnings during build = layout bugs. Fix before shipping.
 - White icons need a coloured circle background on light surfaces.
 - `withReveal(buildFn, revealFn)` creates duplicate slide pairs for click-to-reveal. Use for CFU answers, We Do solutions, hinge questions. Do NOT use for I Do, exit tickets, or titles.
 - Every lesson with companion PDFs gets a resource slide via `addResourceSlide()` from `pdf_helpers.js`.
-- Output goes to `output/<LessonFolder>/` - PPTX at the root, companion PDFs in a `resources-lesson{N}/` subfolder (N = lesson number in the unit/week).
-- PptxGenJS hyperlinks use relative paths - include the subfolder prefix (e.g., `resources-lesson3/SR1_Worksheet.pdf`).
+- Output goes to `output/<LessonFolder>/` - PPTX at the root, companion PDFs in a `resources-session{N}/` subfolder (N = the session number for that lesson).
+- PptxGenJS hyperlinks use relative paths - include the subfolder prefix and session-first filename (e.g., `resources-session3/Session 3 Worksheet.pdf`).
+- Use the session resource helpers in `themes/pdf_helpers.js` (`getSessionResourceFolder`, `formatSessionResourceFileName`, `makeSessionResource`) instead of hardcoding resource folder names or teacher-facing PDF labels.
+- `liSlide()` must receive exactly 1 Learning Intention item and exactly 3 Success Criteria items. Distil curriculum descriptors into one destination statement before writing the slide; extra LI items are truncated by the helper and make the deck misleading.
 - `SAY:` notes are teacher cue bullets, not formal narration. Write 2-4 short, directly speakable bullets that sound natural in class, use light conversational glue only when it helps flow, and avoid slang, polished briefing tone, or mini-lecture prose the teacher would have to mentally rewrite.
 
 For resource generation details and PDF helper API: read `docs/resource-system.md`.
