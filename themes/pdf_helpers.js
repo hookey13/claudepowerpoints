@@ -12,6 +12,55 @@ const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
 
+function normaliseSessionNumber(sessionNumber) {
+  const value = Number.parseInt(sessionNumber, 10);
+  if (!Number.isInteger(value) || value < 1) {
+    throw new Error("Session number must be a positive integer.");
+  }
+  return value;
+}
+
+function cleanResourceLabel(label) {
+  const raw = String(label || "")
+    .replace(/[_-]+/g, " ")
+    .replace(/[<>:\"/\\\\|?*]/g, " ");
+  return raw.replace(/\s+/g, " ").trim();
+}
+
+function getSessionResourceFolder(sessionNumber) {
+  return `resources-session${normaliseSessionNumber(sessionNumber)}`;
+}
+
+function formatSessionResourceName(sessionNumber, label) {
+  const session = normaliseSessionNumber(sessionNumber);
+  const suffix = cleanResourceLabel(label);
+  return suffix ? `Session ${session} ${suffix}` : `Session ${session} Resource`;
+}
+
+function formatSessionResourceFileName(sessionNumber, label, opts) {
+  const o = opts || {};
+  const extValue = o.ext || ".pdf";
+  const ext = extValue.startsWith(".") ? extValue : `.${extValue}`;
+  const folder = o.folder || getSessionResourceFolder(sessionNumber);
+  const baseName = cleanResourceLabel(o.baseName || formatSessionResourceName(sessionNumber, label));
+  return path.posix.join(folder, `${baseName}${ext}`);
+}
+
+function makeSessionResource(sessionNumber, label, description, opts) {
+  const o = opts || {};
+  return {
+    name: cleanResourceLabel(o.name || formatSessionResourceName(sessionNumber, label)),
+    fileName: o.fileName || formatSessionResourceFileName(sessionNumber, label, o),
+    description: description || "",
+  };
+}
+
+function resourceNameFromFileName(fileName) {
+  if (!fileName) return "Resource";
+  const baseName = path.basename(fileName, path.extname(fileName));
+  return cleanResourceLabel(baseName) || "Resource";
+}
+
 // ── Page constants (A4 in points: 595.28 x 841.89) ─────────────────────────
 
 const PAGE = {
@@ -615,6 +664,7 @@ function addResourceSlide(pres, resources, theme, footer, notes) {
   const startY = 1.7;
 
   resources.forEach((res, i) => {
+    const displayName = cleanResourceLabel(res.name) || resourceNameFromFileName(res.fileName);
     const cy = startY + i * (cardH + gap);
 
     // Card background
@@ -643,11 +693,11 @@ function addResourceSlide(pres, resources, theme, footer, notes) {
     });
 
     // Resource name (clickable)
-    s.addText(res.name, {
+    s.addText(displayName, {
       x: 1.4, y: cy + 0.08, w: 7.5, h: 0.3,
       fontSize: 14, fontFace: FH, color: TC.NAVY || "1B3A6B",
       bold: true, margin: 0,
-      hyperlink: { url: res.fileName, tooltip: "Open " + res.name },
+      hyperlink: { url: res.fileName, tooltip: "Open " + displayName },
     });
 
     // Description
@@ -676,6 +726,11 @@ module.exports = {
   PAGE,
   // Utilities
   hex, lighten,
+  cleanResourceLabel,
+  getSessionResourceFolder,
+  formatSessionResourceName,
+  formatSessionResourceFileName,
+  makeSessionResource,
   // Document lifecycle
   createPdf, writePdf,
   // Page elements

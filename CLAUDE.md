@@ -109,13 +109,17 @@ Console warnings during build = layout bugs. Fix before shipping.
 - White icons need a coloured circle background on light surfaces.
 - `withReveal(buildFn, revealFn)` creates duplicate slide pairs for click-to-reveal. Use for CFU answers, We Do solutions, hinge questions. Do NOT use for I Do, exit tickets, or titles.
 - Every lesson with companion PDFs gets a resource slide via `addResourceSlide()` from `pdf_helpers.js`.
-- Output goes to `output/<LessonFolder>/` - PPTX at the root, companion PDFs in a `resources-lesson{N}/` subfolder (N = lesson number in the unit/week).
-- PptxGenJS hyperlinks use relative paths - include the subfolder prefix (e.g., `resources-lesson3/SR1_Worksheet.pdf`).
+- Output goes to `output/<LessonFolder>/` - PPTX at the root, companion PDFs in a `resources-session{N}/` subfolder where `N` is the session number within that week's sequence.
+- PptxGenJS hyperlinks use relative paths - include the subfolder prefix (e.g., `resources-session3/Session 3 Worksheet.pdf`).
+- Resource names must be teacher-friendly and session-first: `Session 1 Worksheet`, `Session 1 Answer Key`, `Session 2 Enabling Scaffold`.
+- Use the same human-readable name on the resource slide and in the PDF filename stem. Avoid codes like `WH4_L16`, `SR1`, `GO1`, `ET_Lesson5`, or similar.
+- Do not use day names in resource filenames. Teachers run sessions on different days.
+- Do not use underscores in teacher-facing PDF filenames. Use spaces.
 
 For resource generation details and PDF helper API: read `docs/resource-system.md`.
 For ad-hoc (non-themed) presentation design guidance: read `docs/design-guide.md`.
 
-**Scaffold quality:** An enabling scaffold must change the FORM of the task, not just the wording. It must draw a visual model, pre-fill intermediate steps, or provide a structural framework. If you claim "the model is drawn for you," draw the model with PDFKit primitives. Text that describes a visual is not a visual. Read `docs/resource-system.md` section "Scaffold Quality Rules" before writing any SR2.
+**Scaffold quality:** An enabling scaffold must change the FORM of the task, not just the wording. It must draw a visual model, pre-fill intermediate steps, or provide a structural framework. If you claim "the model is drawn for you," draw the model with PDFKit primitives. Text that describes a visual is not a visual. Read `docs/resource-system.md` section "Scaffold Quality Rules" before writing an enabling scaffold PDF.
 
 ## Build Script Authoring (Critical)
 

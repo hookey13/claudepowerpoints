@@ -1678,7 +1678,7 @@ materials that have not been generated as PDFs.
 - "Pre-filled [X]" / "Partially completed [X]" / "First pair pre-filled"
 - "Answer key" / "Worked reference" / "Example answer"
 - "Exit ticket on paper" (not in workbooks)
-- "SR..." / "Supporting Resource..."
+- "Session 1 Worksheet" / "Session 2 Answer Key"
 
 **EXTENDING-specific triggers (scan every EXTENDING note separately):**
 - "Investigate..." / "Explore..." / "Research..." / "Discover..."
@@ -1703,8 +1703,8 @@ Mode 2 ensures nothing slips through.
 
 | Trigger in lesson content | Resource to generate |
 |---------------------------|---------------------|
-| "Complete SR3" / "Distribute worksheet" | Practice worksheet PDF |
-| "Hand SR4 (example answer)" / "scaffold" | Answer key / worked example PDF |
+| "Open Session 3 Worksheet" / "Distribute worksheet" | Practice worksheet PDF |
+| "Use Session 3 Answer Key" / "scaffold" | Answer key / worked example PDF |
 | "Provide a graphic organiser" | Two-column or structured organiser PDF |
 | "Exit ticket on paper" | Printable exit ticket PDF |
 | Vocabulary cards / flashcards | Vocabulary card sheet PDF |
@@ -1757,6 +1757,15 @@ the last or second-to-last slide) listing all PDF files with:
 - Clickable hyperlinks (relative filename paths)
 - Brief description of each resource
 - Teacher notes explaining when/how to use each resource
+
+Resource naming on that slide is non-negotiable:
+- Start every teacher-facing resource name with `Session N`
+- Match the resource slide card title to the PDF filename stem
+- Use human-readable labels like `Session 1 Worksheet`, `Session 1 Answer Key`,
+  `Session 2 Enabling Scaffold`, `Session 3 Extension`
+- Do NOT use day names
+- Do NOT use code-heavy names such as `WH4_L16`, `SR1`, `GO1`, `EXT1`, `ET_Lesson5`
+- Do NOT use underscores in teacher-facing PDF filenames
 
 **The non-negotiable rule:**
 
@@ -1989,7 +1998,7 @@ Follow this systematic approach when providing guidance:
     - "Pre-filled [X]" / "Partially completed [X]"
     - "Answer key" / "Worked reference" / "Example answer"
     - "Exit ticket on paper" (not in workbooks)
-    - "SR..." / "Supporting Resource..."
+    - "Session 1 Worksheet" / "Session 2 Answer Key"
 
     **ENABLING & EXTENDING notes are the #1 source of missed resources.**
     When the ENABLING section says "Provide a structured factor pair table
@@ -2002,6 +2011,11 @@ Follow this systematic approach when providing guidance:
     If ANY trigger is found and no corresponding PDF exists, generate it
     before proceeding to QA. A lesson that tells teachers to distribute
     materials that do not exist is incomplete. See #RESOURCE_GENERATION.
+
+    Teacher-facing PDF naming must stay human-readable and session-first:
+    - start the filename stem with `Session N`
+    - match the resource slide card title to the PDF filename stem
+    - avoid day names, underscores, and code-heavy labels like `WH4_L16`, `SR1`, `GO1`, or `EXT1`
 18. **Design worked examples with intentional grain size:** The grain size of
     a worked example (how fine each step is decomposed) must be calibrated to
     the students' prior knowledge, not fixed by the content alone. Finer grain
@@ -2567,10 +2581,99 @@ EXTENDING PROMPT:
 
 
 User: Generate a slide deck for the following:
-Subject: “ Maths ”
+Subject: “ Literacy ”
 Grade: “ 5/6 ”
-Content: “ XYZ ”
-Additional Notes: “ Generate 6 lessons (6 slide decks) ”
-Daily Review Focus: “ ”
+Content: “ Lesson 17
+Week 4
+Learning Intentions	●	Compare purposes for different texts and consider why authors and illustrators have structured texts in particular ways
+●	Question the assertions made by authors when engaging with print and digital texts 
+●	Analyse attributes of character
+●	Identify how perspective is made evident through authorial choices
+●	Vary sentence structures or lengths when using simple, compound and complex sentences, with a focus on achieving clarity and effect suited to text purpose 
+Text-Level Reading
+Text Pages*	105-117
+
+Chapter 13-14	Reading Mode	Student read aloud
+Big Ideas	Chapter 13
+Spring comes around and the conditions improve. The mud dries up and the ground becomes easier to walk on. The war seems to quiet down a little and there are less battles occurring nearby. There is more food to go around so Joey and Topthorn are able to eat more and regain their strength. They are entrusted into the care of a soldier named Friedrich who the other soldiers think of as someone who is crazy because he talks to himself. Friedrich confides in Joey and Topthorn and explains that he acts as he does as a front because he thinks the whole war and the other soldiers are actually the crazy ones. Friedrich takes a particular liking for Topthorn and rides him often. 
+
+Chapter 14
+The gun troop were taking a rest on an autumn day under the shade of a tree by a river. Joey and Topthorn are led down to the water for a drink. On the way back up the bank, Topthorn collapses and dies. Joey is very sad and nuzzles close to him to comfort him. Friedrich is sad that he has died as well. As they mourn for Topthorn, a shelling begins on the troop and they all scramble for cover. Friedrich tries to lead Joey away but he refuses to leave Topthorn’s side. Friedrich is hit by the shelling and collapses. Joey is left alone without the troop after they have all retreated.
+Pause Points and Queries	'...so that I can return again to Schleiden and become Butcher Friedrich that everyone knew and respected before all this mess began.' p.109
+What does the author want us to know about Friedrich?
+
+'We don’t belong in the same universe as a creature like this.’ p.113
+What’s the big idea here?
+
+'...with the gunners hauling frantically on their reins and straining to push the gun from behind.’ p.117
+What just happened?
+Literary Terms and Devices	Simile: And to find a horse like this in the middle of this filthy abomination of a war, is for me like finding a butterfly on a dung heap. (p.113)
+Vocabulary
+Incidental	optimism, sporadic, idleness, lush, obliging, tedious, strenuous, bustle, sane, rational, benighted, implicitly, confided, admiration, wretched, nobility, serenity, personify, abomination, vigorously, wearily, sluggishly, frantic, finality, spontaneous, inclination
+Explicit	lush, serenity
+Sentence-Level Writing
+Lesson Detail	Sentence Combining
+●	Revise pronouns, commas and conjunctions.
+●	Students combine the sentences about Friedrich together using pronouns, commas and conjunctions as needed.
+●	Sentences to combine: 
+○	Friedrich talks to himself.
+○	Friedrich thinks war is crazy.
+○	Friedrich is from Schleiden.
+○	Friedrich is a butcher.
+○	Friedrich is too afraid to leave the army. 
+●	Note: Reduce the number of sentences to combine if needed as a support for students.
+●	Teacher to model with an example:
+○	e.g., Friedrich, a butcher from Schleiden, thinks war is crazy but is too afraid to leave the army so he talks to himself instead.
+
+Lesson 18
+Week 4
+Learning Intentions	●	Compare purposes for different texts and consider why authors and illustrators have structured texts in particular ways
+●	Question the assertions made by authors when engaging with print and digital texts 
+●	Analyse attributes of character
+●	Identify how perspective is made evident through authorial choices
+●	Vary sentence structures or lengths when using simple, compound and complex sentences, with a focus on achieving clarity and effect suited to text purpose
+Text-Level Reading
+Text Pages*	118-126
+
+Chapter 15	Reading Mode	Student read aloud
+Big Ideas	Chapter 15
+Joey stays by Topthorn and Friedrich’s sides for a day but then is interrupted by the sight and sound of a tank coming up through the trees. This scares Joey and he runs away to escape. Joey runs through the terrain and the darkness. He hurts his leg on some wire and struggles to walk. He continues on searching for somewhere peaceful away from the gunfire and shelling that light up the night sky around him. As dawn approaches, he realises he is near to some British troops who spot him moving through No Man’s Land.
+Pause Points and Queries	'And then exhaustion finally overtook me, sapped the strength from my legs and forced me to lie down and sleep.' p.120
+What’s happening?
+
+'...and moving towards the darker more silent world ahead of me.' p.123
+What’s going on?
+
+'This was what the soldiers called ‘no man’s land.' p.126
+What do you think the author wants us to know?
+Literary Terms and Devices	Simile: …leaving behind great craters that smoked as if the earth itself was on fire. (p.118)
+
+Onomatopoeia: …I heard through the crump and whistle of the shells the whining sound of motors accompanied by a terrifying rattle of steel that set my ears back against my head. (p.119)
+
+Metaphor: …a great grey lumbering monster that belched out smoke from behind as it rocked down the hillside towards me. (p.119)
+…the one monster had become several monsters and they were rolling inexorably down towards me… (p.119)
+… a nightmare of agony, terror and loneliness. (p.122)
+
+Personification: And then exhaustion finally overtook me, sapped the strength from my legs and forced me to lie down and sleep. (p.120)
+
+Repetition: …I shall never know. … He would know … He would know. (p.121)
+Vocabulary
+Incidental	briefly, compelled, belched, inexorably, sapped, intermittent, murky, stagnant, lumbered, pulsated, contemplate, vague, urgent, gingerly, vast
+Explicit	murky, vague
+Sentence-Level Writing
+Lesson Detail	Because, but, so
+●	Revise conjunctions ‘because’, ‘but’ and ‘so’: 
+○	‘because’ to indicate why something is true 
+○	‘but’ to indicate a change in direction
+○	‘so’ to show what happens as a result of something else 
+●	Students write three sentences by adding onto the sentence stem after the conjunction.
+●	Sentence stem: Joey ran as far away as he could …
+●	Teacher to model with examples as needed:
+○	e.g., … because he was terrified of the tank and wanted to find a place that was calm and safe.
+○	e.g., … but he still couldn’t escape the war altogether.
+○	e.g., … so he found himself alone and injured in the dark.
+ ”
+Additional Notes: “ Generate 2 lessons (2 slide decks) Note that there was a third lesson, but it's already been taught and completed for the week that comes prior to the first one generated for you. It's a three-session week, but the first session's already been done and organized, so you're only generating the two sessions that come after it here. Note that there was a third lesson, but it's already been taught and completed for the week that comes prior to the first one generated for you. It's a three-session week, but the first session's already been done and organized, so you're only generating the two sessions that come after it here.”
+Daily Review Focus: “n/a”
 
 Do not enter plan mode, proceed with the lesson creation in bypass permissions. Ensure you remain active while the lessons are being created and continue to be until they are fully complete, please. 

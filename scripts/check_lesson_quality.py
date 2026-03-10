@@ -40,6 +40,8 @@ ADVANCED_SC1_RE = re.compile(
     re.IGNORECASE,
 )
 NON_ASCII_RE = re.compile(r"[^\x09\x0A\x0D\x20-\x7E]")
+RESOURCE_CODE_RE = re.compile(r"\b[A-Z]{2,}\d+(?:_[A-Za-z0-9]+)*\b")
+DAY_NAME_RE = re.compile(r"\b(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b", re.IGNORECASE)
 
 PROFILES = {
     "literacy-60": {
@@ -213,6 +215,40 @@ def likely_footer(line: str) -> bool:
     )
 
 
+def is_resource_slide(slide: SlideData) -> bool:
+    lower_lines = [line.strip().lower() for line in slide.text_lines if line.strip()]
+    return "teacher resources" in lower_lines or "printable resources" in lower_lines
+
+
+def resource_slide_issues(slide: SlideData) -> list[Issue]:
+    if not is_resource_slide(slide):
+        return []
+
+    issues: list[Issue] = []
+    ignored_prefixes = (
+        "teacher resources",
+        "printable resources",
+        "click any resource below",
+    )
+    ignored_exact = {"pdf"}
+
+    for line in slide.text_lines:
+        stripped = line.strip()
+        lower = stripped.lower()
+        if not stripped or likely_footer(stripped):
+            continue
+        if lower in ignored_exact or any(lower.startswith(prefix) for prefix in ignored_prefixes):
+            continue
+        if "_" in stripped:
+            issues.append(Issue("warning", f"slide {slide.index}", f"Resource slide contains an underscore-heavy teacher-facing label: '{stripped}'.")) 
+        if RESOURCE_CODE_RE.search(stripped):
+            issues.append(Issue("warning", f"slide {slide.index}", f"Resource slide contains a code-style resource label: '{stripped}'.")) 
+        if DAY_NAME_RE.search(stripped):
+            issues.append(Issue("warning", f"slide {slide.index}", f"Resource slide contains a day name; use session numbering instead: '{stripped}'.")) 
+
+    return issues
+
+
 def li_sc_issues(slide: SlideData) -> list[Issue]:
     lines = [line.strip() for line in slide.text_lines if line.strip()]
     joined = " ".join(lines).lower()
@@ -328,6 +364,7 @@ def analyze(slides: list[SlideData], profile_name: str) -> tuple[list[Issue], di
             issues.append(Issue("warning", f"slide {slide.index} notes", f"WATCH FOR has {watch_for_count} bullets; profile max is {profile['max_watch_for_bullets']}."))
 
         issues.extend(li_sc_issues(slide))
+        issues.extend(resource_slide_issues(slide))
 
     if explicit_vocab_count > profile["max_explicit_vocab"]:
         issues.append(Issue("warning", "deck", f"Detected {explicit_vocab_count} explicit vocabulary slides; profile default is 0-{profile['max_explicit_vocab']}."))
