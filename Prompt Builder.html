@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson Prompt Builder</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        :root {
+            --bg: #eef2f6;
+            --panel: #ffffff;
+            --panel-alt: #f7fafc;
+            --border: #d9e2ec;
+            --text: #1f2933;
+            --muted: #52606d;
+            --primary: #284b63;
+            --primary-dark: #1d3749;
+            --secondary: #52796f;
+            --accent: #bc6c25;
+            --success: #1f7a4f;
+            --warn: #ad6800;
+            --danger: #b42318;
+            --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        }
+
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at top right, rgba(82, 121, 111, 0.14), transparent 28%),
+                radial-gradient(circle at top left, rgba(188, 108, 37, 0.14), transparent 22%),
+                var(--bg);
+            color: var(--text);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .shell {
+            max-width: 1280px;
+            margin: 32px auto;
+            padding: 0 20px 32px;
+        }
+
+        .hero,
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero {
+            padding: 28px 30px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+            color: var(--primary-dark);
+        }
+
+        .subtitle,
+        .helper,
+        .status {
+            color: var(--muted);
+        }
+
+        .subtitle {
+            margin: 0;
+            font-size: 15px;
+            max-width: 880px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(360px, 460px) minmax(0, 1fr);
+            gap: 20px;
+            align-items: start;
+        }
+
+        .panel {
+            padding: 22px;
+        }
+
+        .panel h2 {
+            margin: 0 0 14px;
+            font-size: 18px;
+            color: var(--primary-dark);
+        }
+
+        .section {
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--panel-alt);
+            margin-bottom: 16px;
+        }
+
+        .section h3 {
+            margin: 0 0 12px;
+            font-size: 15px;
+            color: var(--primary);
+        }
+
+        .field {
+            margin-bottom: 14px;
+        }
+
+        .field:last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1.5px solid #c7d2da;
+            border-radius: 8px;
+            background: #fff;
+            color: var(--text);
+            font: inherit;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        textarea {
+            min-height: 88px;
+            resize: vertical;
+            line-height: 1.45;
+        }
+
+        textarea.tall {
+            min-height: 180px;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(40, 75, 99, 0.14);
+        }
+
+        .helper {
+            margin: 6px 0 0;
+            font-size: 12px;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .btn {
+            appearance: none;
+            border: none;
+            border-radius: 9px;
+            padding: 11px 18px;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.12s ease, opacity 0.12s ease, background 0.12s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #3d5d54;
+        }
+
+        .btn-muted {
+            background: #e5ebf0;
+            color: var(--text);
+        }
+
+        .btn-muted:hover {
+            background: #dce4ea;
+        }
+
+        .status {
+            margin-top: 14px;
+            min-height: 22px;
+            font-size: 13px;
+        }
+
+        .status.good {
+            color: var(--success);
+        }
+
+        .status.warn {
+            color: var(--warn);
+        }
+
+        .status.bad {
+            color: var(--danger);
+        }
+
+        .meta-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .meta-card {
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: linear-gradient(180deg, #fbfcfd, #f3f7fa);
+        }
+
+        .meta-card strong {
+            display: block;
+            font-size: 13px;
+            color: var(--primary-dark);
+            margin-bottom: 3px;
+        }
+
+        .meta-card span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .preview-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .preview-header p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        #preview {
+            width: 100%;
+            min-height: 880px;
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #fbfcfe;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 12.5px;
+            line-height: 1.5;
+            white-space: pre;
+        }
+
+        .missing-data {
+            padding: 14px 16px;
+            border: 1px solid #f5c2c7;
+            border-radius: 10px;
+            background: #fff1f2;
+            color: var(--danger);
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 1080px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            #preview {
+                min-height: 560px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <section class="hero">
+            <h1>Lesson Prompt Builder</h1>
+            <p class="subtitle">
+                This page rebuilds the final `User:` request inside `megapromptlean.md` and copies either that prompt
+                alone or `CLAUDE.md` followed by it.
+            </p>
+        </section>
+
+        <div id="missing-data" class="missing-data" style="display: none;"></div>
+
+        <div class="layout">
+            <section class="panel">
+                <h2>Prompt Inputs</h2>
+
+                <div class="section">
+                    <h3>User Request</h3>
+
+                    <div class="field">
+                        <label for="deck-count">Number of slide decks</label>
+                        <input id="deck-count" type="text" list="deck-count-options" placeholder="1" inputmode="numeric" pattern="[0-9]*" />
+                        <p class="helper">Choose 1-5 or type a whole number.</p>
+                    </div>
+
+                    <div class="field">
+                        <label for="lesson-subject">Subject</label>
+                        <input id="lesson-subject" list="lesson-subject-options" placeholder="Literacy" />
+                    </div>
+
+                    <div class="field">
+                        <label for="lesson-grade">Grade</label>
+                        <input id="lesson-grade" list="grade-options" placeholder="5/6" />
+                    </div>
+
+                    <div class="field">
+                        <label for="lesson-content">Content</label>
+                        <textarea id="lesson-content" class="tall" placeholder="Paste the full lesson brief here."></textarea>
+                    </div>
+
+                    <div class="field">
+                        <label for="additional-notes">Additional Notes</label>
+                        <textarea id="additional-notes" placeholder="Any constraints, sequencing notes, or extra directions."></textarea>
+                    </div>
+
+                    <div class="field">
+                        <label for="daily-review">Daily Review Focus</label>
+                        <textarea id="daily-review" placeholder="n/a"></textarea>
+                    </div>
+
+                    <div class="field">
+                        <label for="execution-instructions">Execution Instructions</label>
+                        <textarea id="execution-instructions" placeholder="Optional final instructions for the model."></textarea>
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button type="button" id="copy-claude" class="btn btn-primary">Copy for Claude</button>
+                    <button type="button" id="copy-chatgpt" class="btn btn-secondary">Copy for ChatGPT</button>
+                    <button type="button" id="reset-fields" class="btn btn-muted">Reset Fields</button>
+                </div>
+
+                <div id="status" class="status">Ready.</div>
+            </section>
+
+            <section class="panel">
+                <div class="meta-strip">
+                    <div class="meta-card">
+                        <strong>Claude copy</strong>
+                        <span>`megapromptlean.md` with your filled-in fields.</span>
+                    </div>
+                    <div class="meta-card">
+                        <strong>ChatGPT copy</strong>
+                        <span>`CLAUDE.md` first, then the finished mega-prompt.</span>
+                    </div>
+                    <div class="meta-card">
+                        <strong>Data source</strong>
+                        <span>Refresh `prompt_builder_data.js` after editing either markdown file.</span>
+                    </div>
+                </div>
+
+                <div class="preview-header">
+                    <div>
+                        <h2 style="margin: 0 0 4px;">Prompt Preview</h2>
+                        <p>Live preview of the Claude prompt output.</p>
+                    </div>
+                </div>
+
+                <textarea id="preview" readonly spellcheck="false"></textarea>
+            </section>
+        </div>
+    </div>
+
+    <datalist id="lesson-subject-options">
+        <option value="Literacy"></option>
+        <option value="Numeracy"></option>
+        <option value="Inquiry"></option>
+        <option value="Science"></option>
+        <option value="Respectful Relationships"></option>
+        <option value="Wellbeing"></option>
+    </datalist>
+
+    <datalist id="deck-count-options">
+        <option value="1"></option>
+        <option value="2"></option>
+        <option value="3"></option>
+        <option value="4"></option>
+        <option value="5"></option>
+    </datalist>
+
+    <datalist id="grade-options">
+        <option value="Foundation"></option>
+        <option value="1"></option>
+        <option value="2"></option>
+        <option value="3/4"></option>
+        <option value="5/6"></option>
+        <option value="7/8"></option>
+        <option value="9/10"></option>
+    </datalist>
+
+    <script src="prompt_builder_data.js"></script>
+    <script>
+        (function () {
+            var data = window.PROMPT_BUILDER_DATA || null;
+            var statusEl = document.getElementById("status");
+            var previewEl = document.getElementById("preview");
+            var missingDataEl = document.getElementById("missing-data");
+            var deckCountEl = document.getElementById("deck-count");
+            var fieldIds = [
+                "deck-count",
+                "lesson-subject",
+                "lesson-grade",
+                "lesson-content",
+                "additional-notes",
+                "daily-review",
+                "execution-instructions"
+            ];
+
+            var placeholders = {
+                deckCount: "1",
+                lessonSubject: "[SUBJECT]",
+                lessonGrade: "[GRADE]",
+                lessonContent: "[CONTENT]",
+                additionalNotes: "[ADDITIONAL NOTES]",
+                dailyReview: "[DAILY REVIEW FOCUS]",
+                executionInstructions: ""
+            };
+
+            var defaultValuesById = {
+                "deck-count": "1",
+                dailyReview: "n/a"
+            };
+
+            function setStatus(kind, message) {
+                statusEl.className = "status " + kind;
+                statusEl.textContent = message;
+            }
+
+            function normalizeValue(value) {
+                return (value || "").replace(/\r\n/g, "\n").trim();
+            }
+
+            function getFieldValue(id) {
+                var element = document.getElementById(id);
+                return element ? element.value : "";
+            }
+
+            function buildFields() {
+                return {
+                    deckCount: normalizeValue(getFieldValue("deck-count")) || placeholders.deckCount,
+                    lessonSubject: normalizeValue(getFieldValue("lesson-subject")) || placeholders.lessonSubject,
+                    lessonGrade: normalizeValue(getFieldValue("lesson-grade")) || placeholders.lessonGrade,
+                    lessonContent: normalizeValue(getFieldValue("lesson-content")) || placeholders.lessonContent,
+                    additionalNotes: normalizeValue(getFieldValue("additional-notes")) || placeholders.additionalNotes,
+                    dailyReview: normalizeValue(getFieldValue("daily-review")) || placeholders.dailyReview,
+                    executionInstructions: normalizeValue(getFieldValue("execution-instructions")) || placeholders.executionInstructions
+                };
+            }
+
+            function parseDeckCount(value) {
+                var cleaned = String(value || "").trim();
+                if (!cleaned) {
+                    return 1;
+                }
+
+                if (!/^\d+$/.test(cleaned)) {
+                    throw new Error("Number of slide decks must be a whole number.");
+                }
+
+                var count = Number(cleaned);
+                if (!Number.isFinite(count) || count < 1) {
+                    throw new Error("Number of slide decks must be 1 or more.");
+                }
+
+                return count;
+            }
+
+            function validateDeckCountField(showBrowserMessage) {
+                if (!deckCountEl) {
+                    return true;
+                }
+
+                try {
+                    parseDeckCount(deckCountEl.value);
+                    deckCountEl.setCustomValidity("");
+                    return true;
+                } catch (error) {
+                    deckCountEl.setCustomValidity(error.message);
+                    if (showBrowserMessage) {
+                        deckCountEl.reportValidity();
+                    }
+                    return false;
+                }
+            }
+
+            function buildRequestOpening(fields) {
+                var count = parseDeckCount(fields.deckCount);
+                return count === 1
+                    ? "Generate 1 slide deck based on the content below:"
+                    : "Generate " + count + " slide decks based on the content below:";
+            }
+
+            function quoteMultiline(value) {
+                return '"' + String(value).replace(/"/g, '\\"') + '"';
+            }
+
+            function buildUserSection(fields, eol) {
+                var lines = [
+                    "User: " + buildRequestOpening(fields),
+                    "Subject: " + quoteMultiline(fields.lessonSubject),
+                    "Grade: " + quoteMultiline(fields.lessonGrade),
+                    "Content: " + quoteMultiline(fields.lessonContent),
+                    "Additional Notes: " + quoteMultiline(fields.additionalNotes),
+                    "Daily Review Focus: " + quoteMultiline(fields.dailyReview)
+                ];
+
+                if (fields.executionInstructions) {
+                    lines.push("", fields.executionInstructions);
+                }
+
+                return lines.join(eol);
+            }
+
+            function buildMegaPrompt() {
+                if (!data || !data.megaprompt) {
+                    return "";
+                }
+
+                var fields = buildFields();
+                var template = data.megaprompt;
+                var eol = template.indexOf("\r\n") >= 0 ? "\r\n" : "\n";
+                var userSection = buildUserSection(fields, eol);
+
+                template = template.replace(
+                    /User: [\s\S]*$/,
+                    userSection
+                );
+
+                return template;
+            }
+
+            function buildChatGptPrompt() {
+                if (!data || !data.claude) {
+                    return "";
+                }
+                return data.claude + "\r\n\r\n" + buildMegaPrompt();
+            }
+
+            function fallbackSelectText(text) {
+                var scratch = document.createElement("textarea");
+                scratch.value = text;
+                scratch.setAttribute("readonly", "readonly");
+                scratch.style.position = "fixed";
+                scratch.style.opacity = "0";
+                scratch.style.pointerEvents = "none";
+                document.body.appendChild(scratch);
+                scratch.focus();
+                scratch.select();
+                setTimeout(function () {
+                    document.body.removeChild(scratch);
+                }, 0);
+            }
+
+            function copyText(text, successMessage) {
+                if (!text) {
+                    setStatus("bad", "Prompt data is missing. Run the data generator first.");
+                    return;
+                }
+
+                navigator.clipboard.writeText(text).then(function () {
+                    setStatus("good", successMessage);
+                }).catch(function () {
+                    fallbackSelectText(text);
+                    setStatus("warn", "Clipboard write failed. The full text is selected so you can copy manually.");
+                });
+            }
+
+            function refreshPreview() {
+                try {
+                    validateDeckCountField(false);
+                    previewEl.value = buildMegaPrompt();
+                    if (previewEl.value) {
+                        setStatus("good", "Preview updated.");
+                    }
+                } catch (error) {
+                    previewEl.value = "";
+                    setStatus("bad", error.message);
+                }
+            }
+
+            function resetFields() {
+                fieldIds.forEach(function (id) {
+                    var element = document.getElementById(id);
+                    if (!element) return;
+                    element.value = defaultValuesById[id] || "";
+                });
+                refreshPreview();
+                setStatus("good", "Fields reset.");
+            }
+
+            if (!data || !data.megaprompt || !data.claude) {
+                missingDataEl.style.display = "block";
+                missingDataEl.textContent = "Missing prompt data. Run `node scripts/generate_prompt_builder_data.js` from the project root, then refresh this page.";
+                setStatus("bad", "Prompt data not loaded.");
+                return;
+            }
+
+            fieldIds.forEach(function (id) {
+                var element = document.getElementById(id);
+                if (!element) return;
+                element.addEventListener("input", refreshPreview);
+                element.addEventListener("change", refreshPreview);
+            });
+
+            if (deckCountEl) {
+                deckCountEl.addEventListener("blur", function () {
+                    validateDeckCountField(true);
+                });
+            }
+
+            document.getElementById("copy-claude").addEventListener("click", function () {
+                if (!validateDeckCountField(true)) {
+                    setStatus("bad", "Enter a whole number for slide decks.");
+                    return;
+                }
+                copyText(buildMegaPrompt(), "Claude prompt copied.");
+            });
+
+            document.getElementById("copy-chatgpt").addEventListener("click", function () {
+                if (!validateDeckCountField(true)) {
+                    setStatus("bad", "Enter a whole number for slide decks.");
+                    return;
+                }
+                copyText(buildChatGptPrompt(), "ChatGPT prompt copied with CLAUDE.md first.");
+            });
+
+            document.getElementById("reset-fields").addEventListener("click", resetFields);
+
+            Object.keys(defaultValuesById).forEach(function (id) {
+                var element = document.getElementById(id);
+                if (element && !element.value) {
+                    element.value = defaultValuesById[id];
+                }
+            });
+
+            refreshPreview();
+        })();
+    </script>
+</body>
+</html>

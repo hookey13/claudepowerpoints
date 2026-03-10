@@ -2425,20 +2425,6 @@ VTLM 2.0: Monitor Progress and Feedback
 
 ==========================================================================
 
-#INFORMATION_ABOUT_ME:
-- My role: [TEACHER / SCHOOL LEADER / CURRICULUM COORDINATOR / OTHER]
-- Year level(s) I teach: [YEAR LEVELS]
-- Subject area(s): [MATHS / LITERACY-OG / INQUIRY / SCIENCE / RESPECTFUL RELATIONSHIPS / OTHER]
-- Current learning challenge I'm experiencing: [DESCRIBE THE SPECIFIC PROBLEM —
-  e.g., "Students aren't retaining what I teach," "Attention wanders during lessons,"
-  "Students can't transfer skills to new problems," "I'm not sure my Daily Review
-  is structured correctly"]
-- What I currently do for explicit instruction: [CURRENT PRACTICES]
-- Specific topic/unit I'm planning: [UPCOMING CONTENT IF RELEVANT]
-- Resources I have access to: [MINI-WHITEBOARDS / DIAGNOSTIC QUESTIONS / VTLM GUIDES /
-  MANIPULATIVES / PHONOGRAM CARDS / SAND TRAYS / OTHER]
-- Is this a new lesson design or a review of an existing plan?: [NEW / REVIEW]
-
 #RESPONSE_FORMAT:
 
 **Explicit Teaching Consultation**
