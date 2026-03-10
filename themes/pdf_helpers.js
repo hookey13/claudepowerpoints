@@ -163,14 +163,18 @@ function createPdf(opts) {
     bufferPages: true,
   });
 
-  // Register Arial as Helvetica/Helvetica-Bold for full Unicode support.
-  // Built-in Helvetica uses WinAnsiEncoding which can't render □ Δ and other
-  // math symbols — they appear as garbled %¡ artifacts. Arial supports the
-  // full Unicode range needed for maths worksheets.
+  // Register Arial for full Unicode support (□ Δ etc. that built-in Helvetica
+  // WinAnsiEncoding cannot render). Resolve paths cross-platform.
+  const fontPaths = process.platform === "win32"
+    ? { regular: "C:/Windows/Fonts/arial.ttf", bold: "C:/Windows/Fonts/arialbd.ttf", italic: "C:/Windows/Fonts/ariali.ttf" }
+    : { regular: "/System/Library/Fonts/Supplemental/Arial.ttf", bold: "/System/Library/Fonts/Supplemental/Arial Bold.ttf", italic: "/System/Library/Fonts/Supplemental/Arial Italic.ttf" };
   try {
-    doc.registerFont("Sans", "C:/Windows/Fonts/arial.ttf");
-    doc.registerFont("Sans-Bold", "C:/Windows/Fonts/arialbd.ttf");
-    doc.registerFont("Sans-Italic", "C:/Windows/Fonts/ariali.ttf");
+    if (fs.existsSync(fontPaths.regular)) {
+      doc.registerFont("Sans", fontPaths.regular);
+      doc.registerFont("Sans-Bold", fontPaths.bold);
+      doc.registerFont("Sans-Italic", fontPaths.italic);
+    }
+    // else: fall back to built-in Helvetica
   } catch (_) {
     // Fall back to built-in Helvetica if system fonts unavailable
   }

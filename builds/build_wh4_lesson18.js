@@ -26,7 +26,8 @@ const {
 
 const FOOTER = "War Horse | Lesson 18 of 25 | Week 4 | Year 5/6 Literacy";
 const OUT_DIR = "output/WH4_Lesson18_No_Mans_Land";
-if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
+const RES_DIR = OUT_DIR + "/resources-session3";
+if (!fs.existsSync(RES_DIR)) fs.mkdirSync(RES_DIR, { recursive: true });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Teacher Notes
@@ -69,18 +70,8 @@ const NOTES_LI_SC = `SAY:
 
 DO:
 \u2022 Choral read LIs, then SCs
-\u2022 Don\u2019t linger \u2014 students know the routine by Week 4
-\u2022 Highlight SC2 (perspective) and SC3 (conjunctions) as the two biggest focuses today
-
-PACING OVERVIEW:
-\u2022 Title + LI/SC: 3 minutes
-\u2022 Vocabulary (murky, vague, incidental list): 5 minutes
-\u2022 Reading introduction + read aloud with pause points: 15 minutes
-\u2022 Literary devices (3 slides): 8 minutes
-\u2022 CFU \u2014 literary devices: 3 minutes
-\u2022 Conjunctions I Do + We Do + You Do: 15 minutes
-\u2022 Closing review: 3 minutes
-\u2022 Total: ~52 minutes (adjust reading pace if needed)
+\u2022 Keep the LI/SC introduction brisk
+\u2022 Highlight SC2 (conjunctions) and SC3 (perspective) as the two biggest focuses today
 
 TEACHER NOTES:
 Five LIs is substantial but appropriate for a chapter this rich. The SCs are concrete and assessable. SC1 focuses on literary devices (analytical reading), SC2 on perspective (critical reading), and SC3 on sentence-level writing (composition). This creates a balanced lesson across comprehension and composition. The conjunction focus connects naturally to narrative writing \u2014 students need varied sentence structures in their own stories. VTLM 2.0: Clear Learning Intentions with Visible Success Criteria.
@@ -540,9 +531,9 @@ WATCH FOR:
 
 const NOTES_CLOSING = `SAY:
 \u2022 Let\u2019s review our success criteria before we finish
-\u2022 SC1: Can you identify and explain how Morpurgo uses simile, onomatopoeia, metaphor, personification, and repetition? Show me a thumbs up, sideways, or down [scan]
-\u2022 SC2: Can you analyse how Joey\u2019s perspective shapes the reader\u2019s understanding? Think about the tank as a monster \u2014 that only works because we\u2019re seeing through Joey\u2019s eyes. Thumbs? [scan]
-\u2022 SC3: Can you write three different sentences using \u201Cbecause,\u201D \u201Cbut,\u201D and \u201Cso\u201D? Thumbs? [scan]
+\u2022 SC1: Can you identify at least one literary device from Chapter 15 and name its effect? Thumbs up, sideways, or down [scan]
+\u2022 SC2: Can you write three different sentences using \u201Cbecause,\u201D \u201Cbut,\u201D and \u201Cso\u201D? Thumbs? [scan]
+\u2022 SC3: Can you explain how Joey\u2019s perspective shapes the way we understand the battlefield? Think about the tank as a monster \u2014 that only works because we see through Joey\u2019s eyes. Thumbs? [scan]
 \u2022 Turn and talk: What is one thing from today\u2019s lesson that you could use to make your own narrative writing stronger?
 \u2022 [30 seconds pair talk, then 2\u20133 Cold Call responses]
 \u2022 What a chapter. Joey is alone in no man\u2019s land \u2014 and we\u2019ll find out what happens next time
@@ -565,19 +556,19 @@ WATCH FOR:
 [General: Closing | VTLM 2.0: Review and Reflect]`;
 
 const NOTES_RESOURCES = `SAY:
-\u2022 Three printable resources for today\u2019s lesson
-\u2022 The Because-But-So Worksheet is for the You Do activity
-\u2022 The Answer Key is for your reference \u2014 multiple valid answers are included
-\u2022 The Literary Devices Reference Sheet is a student keepsake \u2014 they can use it when writing their own narratives
+- Three printable resources for today's lesson
+- The Session 3 Because But So Worksheet is for the You Do activity
+- The Session 3 Answer Key is for your reference - multiple valid answers are included
+- The Session 3 Literary Devices Reference is a student keepsake - they can use it when writing their own narratives
 
 DO:
-\u2022 Print the worksheet before the lesson (one per student)
-\u2022 Print the answer key (teacher copy only)
-\u2022 Print the reference sheet (one per student) \u2014 consider printing on card stock if available
-\u2022 Click any resource card to open the PDF
+- Print the worksheet before the lesson (one per student)
+- Print the answer key (teacher copy only)
+- Print the reference sheet (one per student) - consider printing on card stock if available
+- Click any resource card to open the PDF
 
 TEACHER NOTES:
-The reference sheet serves a dual purpose: it reinforces today\u2019s learning and provides a lasting writing tool. Students who struggle with literary devices in their own writing can refer back to the Chapter 15 examples as models. The worksheet design deliberately separates the three conjunctions into distinct sections to reinforce their different functions. The challenge section extends capable students without requiring additional teacher input.
+The reference sheet serves a dual purpose: it reinforces today's learning and provides a lasting writing tool. Students who struggle with literary devices in their own writing can refer back to the Chapter 15 examples as models. The worksheet design deliberately separates the three conjunctions into distinct sections to reinforce their different functions. The challenge section extends capable students without requiring additional teacher input.
 
 [General: Resources | VTLM 2.0: Student Resources]`;
 
@@ -615,9 +606,9 @@ async function build() {
       "Vary sentence structures or lengths when using simple, compound and complex sentences, with a focus on achieving clarity and effect suited to text purpose",
     ],
     [
-      "I can identify and explain how the author uses simile, onomatopoeia, metaphor, personification and repetition to create tension and emotion",
-      "I can analyse how Joey\u2019s perspective shapes the reader\u2019s understanding of the battlefield",
+      "I can identify at least one literary device used in Chapter 15 and name its effect",
       "I can write three different sentences using \u201Cbecause\u201D, \u201Cbut\u201D and \u201Cso\u201D to extend a sentence stem",
+      "I can explain how Joey\u2019s perspective shapes the way we understand the battlefield",
     ],
     NOTES_LI_SC,
     FOOTER
@@ -649,32 +640,8 @@ async function build() {
     FOOTER
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 5 — Incidental Vocabulary
-  // ═══════════════════════════════════════════════════════════════════════════
-  contentSlide(
-    pres,
-    "Vocabulary",
-    C.SECONDARY,
-    "Incidental Vocabulary \u2014 Chapter 15",
-    [
-      "briefly \u2014 for a short time",
-      "compelled \u2014 forced or driven to do something",
-      "belched \u2014 sent out forcefully (smoke, fire)",
-      "inexorably \u2014 in a way that cannot be stopped or prevented",
-      "sapped \u2014 gradually drained of strength or energy",
-      "intermittent \u2014 stopping and starting at irregular intervals",
-      "stagnant \u2014 not flowing; still and often foul-smelling",
-      "lumbered \u2014 moved heavily and clumsily",
-      "pulsated \u2014 throbbed or beat with a strong, regular rhythm",
-      "contemplate \u2014 to think about something deeply",
-      "urgent \u2014 requiring immediate action or attention",
-      "gingerly \u2014 in a careful, cautious way",
-      "vast \u2014 extremely large or wide in area or scope",
-    ],
-    NOTES_INCIDENTAL,
-    FOOTER
-  );
+  // Incidental vocabulary slide omitted — lean profile default (OFF).
+  // Teacher can surface words during reading as needed.
 
   // ═══════════════════════════════════════════════════════════════════════════
   // SLIDE 6 — Reading Introduction
@@ -839,129 +806,88 @@ async function build() {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 14 — Literary Devices Part 2: Metaphor (tanks as monsters)
+  // SLIDE 14 — Literary Devices Part 2: Metaphor, Personification & Repetition
   // ═══════════════════════════════════════════════════════════════════════════
   {
     const s = pres.addSlide();
     addTopBar(s, C.ACCENT);
     addBadge(s, "Literary Devices", { color: C.ACCENT, w: 2.0 });
-    addTitle(s, "Metaphor \u2014 Tanks as Monsters");
+    addTitle(s, "Metaphor, Personification & Repetition");
 
-    // Metaphor 1
-    addCard(s, 0.5, CONTENT_TOP, 9, 1.05, { strip: C.PRIMARY, fill: C.WHITE });
+    // Metaphor card
+    const cardH = 1.05;
+    addCard(s, 0.5, CONTENT_TOP, 9, cardH, { strip: C.PRIMARY, fill: C.WHITE });
     s.addShape("roundRect", {
-      x: 0.7, y: CONTENT_TOP + 0.08, w: 1.5, h: 0.26, rectRadius: 0.08,
+      x: 0.7, y: CONTENT_TOP + 0.08, w: 1.4, h: 0.26, rectRadius: 0.08,
       fill: { color: C.PRIMARY },
     });
-    s.addText("Metaphor 1", {
-      x: 0.7, y: CONTENT_TOP + 0.08, w: 1.5, h: 0.26,
+    s.addText("Metaphor", {
+      x: 0.7, y: CONTENT_TOP + 0.08, w: 1.4, h: 0.26,
       fontSize: 10, fontFace: FONT_B, color: C.WHITE, bold: true,
       align: "center", valign: "middle", margin: 0,
+    });
+    s.addText("Describing something AS something else (no \u201Clike\u201D or \u201Cas\u201D)", {
+      x: 2.25, y: CONTENT_TOP + 0.08, w: 5, h: 0.26,
+      fontSize: 10, fontFace: FONT_B, color: C.MUTED, italic: true, margin: 0,
     });
     s.addText("\u201C\u2026a great grey lumbering monster that belched out smoke from behind as it rocked down the hillside towards me.\u201D (p. 119)", {
-      x: 0.75, y: CONTENT_TOP + 0.42, w: 8.4, h: 0.55,
+      x: 0.75, y: CONTENT_TOP + 0.42, w: 8.4, h: 0.60,
       fontSize: 13, fontFace: FONT_H, color: C.CHARCOAL, italic: true, margin: 0,
     });
 
-    // Metaphor 2
-    const m2Y = CONTENT_TOP + 1.17;
-    addCard(s, 0.5, m2Y, 9, 1.05, { strip: C.SECONDARY, fill: C.WHITE });
+    // Personification card
+    const persY = CONTENT_TOP + cardH + 0.12;
+    addCard(s, 0.5, persY, 9, cardH, { strip: C.SUCCESS, fill: C.WHITE });
     s.addShape("roundRect", {
-      x: 0.7, y: m2Y + 0.08, w: 1.5, h: 0.26, rectRadius: 0.08,
-      fill: { color: C.SECONDARY },
+      x: 0.7, y: persY + 0.08, w: 1.8, h: 0.26, rectRadius: 0.08,
+      fill: { color: C.SUCCESS },
     });
-    s.addText("Metaphor 2", {
-      x: 0.7, y: m2Y + 0.08, w: 1.5, h: 0.26,
+    s.addText("Personification", {
+      x: 0.7, y: persY + 0.08, w: 1.8, h: 0.26,
       fontSize: 10, fontFace: FONT_B, color: C.WHITE, bold: true,
       align: "center", valign: "middle", margin: 0,
     });
-    s.addText("\u201C\u2026the one monster had become several monsters and they were rolling inexorably down towards me\u2026\u201D (p. 119)", {
-      x: 0.75, y: m2Y + 0.42, w: 8.4, h: 0.55,
+    s.addText("Giving human qualities to non-human things", {
+      x: 2.65, y: persY + 0.08, w: 5, h: 0.26,
+      fontSize: 10, fontFace: FONT_B, color: C.MUTED, italic: true, margin: 0,
+    });
+    s.addText("\u201CAnd then exhaustion finally overtook me, sapped the strength from my legs and forced me to lie down and sleep.\u201D (p. 120)", {
+      x: 0.75, y: persY + 0.42, w: 8.4, h: 0.60,
       fontSize: 13, fontFace: FONT_H, color: C.CHARCOAL, italic: true, margin: 0,
     });
 
-    // Metaphor 3
-    const m3Y = CONTENT_TOP + 2.34;
-    addCard(s, 0.5, m3Y, 9, 1.05, { strip: C.ALERT, fill: C.WHITE });
+    // Repetition card
+    const repY = persY + cardH + 0.12;
+    addCard(s, 0.5, repY, 9, cardH, { strip: C.ASSESS, fill: C.WHITE });
     s.addShape("roundRect", {
-      x: 0.7, y: m3Y + 0.08, w: 1.5, h: 0.26, rectRadius: 0.08,
-      fill: { color: C.ALERT },
+      x: 0.7, y: repY + 0.08, w: 1.4, h: 0.26, rectRadius: 0.08,
+      fill: { color: C.ASSESS },
     });
-    s.addText("Metaphor 3", {
-      x: 0.7, y: m3Y + 0.08, w: 1.5, h: 0.26,
+    s.addText("Repetition", {
+      x: 0.7, y: repY + 0.08, w: 1.4, h: 0.26,
       fontSize: 10, fontFace: FONT_B, color: C.WHITE, bold: true,
       align: "center", valign: "middle", margin: 0,
     });
-    s.addText("\u201C\u2026a nightmare of agony, terror and loneliness.\u201D (p. 122)", {
-      x: 0.75, y: m3Y + 0.42, w: 8.4, h: 0.55,
+    s.addText("Deliberately repeating words or phrases for emphasis", {
+      x: 2.25, y: repY + 0.08, w: 5, h: 0.26,
+      fontSize: 10, fontFace: FONT_B, color: C.MUTED, italic: true, margin: 0,
+    });
+    s.addText("\u201C\u2026I shall never know. \u2026 He would know \u2026 He would know.\u201D (p. 121)", {
+      x: 0.75, y: repY + 0.42, w: 8.4, h: 0.60,
       fontSize: 13, fontFace: FONT_H, color: C.CHARCOAL, italic: true, margin: 0,
     });
 
     // Perspective note at bottom
-    const noteY = CONTENT_TOP + 3.51;
-    if (noteY + 0.30 <= SAFE_BOTTOM) {
+    const noteY = repY + cardH + 0.15;
+    if (noteY + 0.26 <= SAFE_BOTTOM) {
       s.addText("Joey doesn\u2019t know what tanks are \u2014 so to him, they ARE monsters. Perspective shapes metaphor.", {
-        x: 0.75, y: noteY, w: 8.5, h: 0.30,
-        fontSize: 12, fontFace: FONT_B, color: C.ACCENT, bold: true, italic: true, margin: 0,
+        x: 0.75, y: noteY, w: 8.5, h: 0.26,
+        fontSize: 11, fontFace: FONT_B, color: C.ACCENT, bold: true, italic: true, margin: 0,
       });
     }
 
     addFooter(s, FOOTER);
-    s.addNotes(NOTES_DEVICES_2);
-  }
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 15 — Literary Devices Part 3: Personification + Repetition
-  // ═══════════════════════════════════════════════════════════════════════════
-  {
-    const s = pres.addSlide();
-    addTopBar(s, C.ACCENT);
-    addBadge(s, "Literary Devices", { color: C.ACCENT, w: 2.0 });
-    addTitle(s, "Personification & Repetition");
-
-    // Personification card
-    addCard(s, 0.5, CONTENT_TOP, 9, 1.7, { strip: C.SUCCESS, fill: C.WHITE });
-    s.addShape("roundRect", {
-      x: 0.7, y: CONTENT_TOP + 0.10, w: 1.8, h: 0.30, rectRadius: 0.08,
-      fill: { color: C.SUCCESS },
-    });
-    s.addText("Personification", {
-      x: 0.7, y: CONTENT_TOP + 0.10, w: 1.8, h: 0.30,
-      fontSize: 11, fontFace: FONT_B, color: C.WHITE, bold: true,
-      align: "center", valign: "middle", margin: 0,
-    });
-    s.addText("Giving human qualities to non-human things", {
-      x: 2.65, y: CONTENT_TOP + 0.10, w: 5, h: 0.30,
-      fontSize: 11, fontFace: FONT_B, color: C.MUTED, italic: true, margin: 0,
-    });
-    s.addText("\u201CAnd then exhaustion finally overtook me, sapped the strength from my legs and forced me to lie down and sleep.\u201D (p. 120)", {
-      x: 0.75, y: CONTENT_TOP + 0.55, w: 8.4, h: 1.0,
-      fontSize: 15, fontFace: FONT_H, color: C.CHARCOAL, italic: true, margin: 0,
-    });
-
-    // Repetition card
-    const repY = CONTENT_TOP + 1.84;
-    addCard(s, 0.5, repY, 9, 1.7, { strip: C.ASSESS, fill: C.WHITE });
-    s.addShape("roundRect", {
-      x: 0.7, y: repY + 0.10, w: 1.4, h: 0.30, rectRadius: 0.08,
-      fill: { color: C.ASSESS },
-    });
-    s.addText("Repetition", {
-      x: 0.7, y: repY + 0.10, w: 1.4, h: 0.30,
-      fontSize: 11, fontFace: FONT_B, color: C.WHITE, bold: true,
-      align: "center", valign: "middle", margin: 0,
-    });
-    s.addText("Deliberately repeating words or phrases for emphasis", {
-      x: 2.25, y: repY + 0.10, w: 5, h: 0.30,
-      fontSize: 11, fontFace: FONT_B, color: C.MUTED, italic: true, margin: 0,
-    });
-    s.addText("\u201C\u2026I shall never know. \u2026 He would know \u2026 He would know.\u201D (p. 121)", {
-      x: 0.75, y: repY + 0.55, w: 8.4, h: 1.0,
-      fontSize: 15, fontFace: FONT_H, color: C.CHARCOAL, italic: true, margin: 0,
-    });
-
-    addFooter(s, FOOTER);
-    s.addNotes(NOTES_DEVICES_3);
+    s.addNotes(NOTES_DEVICES_2 + "\n\n" + NOTES_DEVICES_3);
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1121,18 +1047,18 @@ async function build() {
     pres,
     [
       {
-        name: "Because-But-So Worksheet",
-        fileName: "WH4_L18_BBS_Worksheet.pdf",
+        name: "Session 3 Because But So Worksheet",
+        fileName: "resources-session3/Session 3 Because But So Worksheet.pdf",
         description: "Student worksheet: complete three sentences using because, but, and so. Includes challenge extension.",
       },
       {
-        name: "Because-But-So Answer Key",
-        fileName: "WH4_L18_BBS_AnswerKey.pdf",
+        name: "Session 3 Answer Key",
+        fileName: "resources-session3/Session 3 Answer Key.pdf",
         description: "Teacher reference: model answers with alternative valid completions.",
       },
       {
-        name: "Literary Devices Reference Sheet",
-        fileName: "WH4_L18_Literary_Devices.pdf",
+        name: "Session 3 Literary Devices Reference",
+        fileName: "resources-session3/Session 3 Literary Devices Reference.pdf",
         description: "Student reference: 5 devices with definitions and Chapter 15 examples. Keep for narrative writing.",
       },
     ],
@@ -1302,15 +1228,15 @@ async function build() {
   // ─── Write all files ──────────────────────────────────────────────────────
   await Promise.all([
     pres.writeFile(`${OUT_DIR}/WH4_Lesson18.pptx`),
-    writePdf(ws, `${OUT_DIR}/WH4_L18_BBS_Worksheet.pdf`),
-    writePdf(ak, `${OUT_DIR}/WH4_L18_BBS_AnswerKey.pdf`),
-    writePdf(ld, `${OUT_DIR}/WH4_L18_Literary_Devices.pdf`),
+    writePdf(ws, `${RES_DIR}/Session 3 Because But So Worksheet.pdf`),
+    writePdf(ak, `${RES_DIR}/Session 3 Answer Key.pdf`),
+    writePdf(ld, `${RES_DIR}/Session 3 Literary Devices Reference.pdf`),
   ]);
 
   console.log("Done: WH4_Lesson18.pptx");
-  console.log("Done: WH4_L18_BBS_Worksheet.pdf");
-  console.log("Done: WH4_L18_BBS_AnswerKey.pdf");
-  console.log("Done: WH4_L18_Literary_Devices.pdf");
+  console.log("Done: Session 3 Because But So Worksheet.pdf");
+  console.log("Done: Session 3 Answer Key.pdf");
+  console.log("Done: Session 3 Literary Devices Reference.pdf");
 }
 
 build().catch(console.error);

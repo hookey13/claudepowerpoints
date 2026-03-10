@@ -26,7 +26,8 @@ const {
 
 const FOOTER = "War Horse | Lesson 17 of 25 | Week 4 | Year 5/6 Literacy";
 const OUT_DIR = "output/WH4_Lesson17_Friedrich_And_Topthorn";
-if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
+const RES_DIR = OUT_DIR + "/resources-session2";
+if (!fs.existsSync(RES_DIR)) fs.mkdirSync(RES_DIR, { recursive: true });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Teacher notes
@@ -65,23 +66,7 @@ DO:
 \u2022 Total time: 90 seconds maximum.
 
 TEACHER NOTES:
-PACING OVERVIEW:
-\u2022 Slides 1\u20132: Title, LI/SC (3 min)
-\u2022 Slides 3\u20135: Vocabulary \u2014 lush, serenity, incidental words (4 min)
-\u2022 Slide 6: Reading launch Ch 13 (1 min)
-\u2022 Slides 7\u20138: Pause Point 1 \u2014 Friedrich\u2019s identity (3 min)
-\u2022 Slides 9\u201310: Pause Point 2 \u2014 beauty amidst war (3 min)
-\u2022 Slide 11: Literary Device \u2014 simile analysis (4 min)
-\u2022 Slide 12: Reading launch Ch 14 (2 min including sensitivity framing)
-\u2022 Slides 13\u201314: Pause Point 3 \u2014 the shelling (5 min)
-\u2022 Slide 15: CFU \u2014 character analysis (3 min)
-\u2022 Slide 16: Sentence combining I Do (3 min)
-\u2022 Slides 17\u201318: Sentence combining We Do with reveal (4 min)
-\u2022 Slide 19: Sentence combining You Do (5 min)
-\u2022 Slide 20: Closing (2 min)
-\u2022 Slide 21: Resources
-
-Five learning intentions is dense but manageable for Grade 5/6. The first four are reading-focused and consolidated through the pause points. The fifth (sentence structures) is the priority new learning and has dedicated I Do / We Do / You Do time. The SCs are deliberately fewer (3) and map to observable outcomes: simile analysis, character analysis, and sentence combining. VTLM 2.0: Making Learning Visible / Clear Learning Intentions.
+Five learning intentions is dense but manageable for Grade 5/6. Protect the sentence combining segment - it is the priority new learning. The first four are reading-focused and consolidated through the pause points. The fifth (sentence structures) is the priority new learning and has dedicated I Do / We Do / You Do time. The SCs are deliberately fewer (3) and map to observable outcomes: simile analysis, character analysis, and sentence combining. VTLM 2.0: Making Learning Visible / Clear Learning Intentions.
 
 WATCH FOR:
 \u2022 Students who seem overwhelmed by 5 LIs \u2014 reassure: \u201CMost of these build on what we\u2019ve been doing all term. The new skill today is sentence combining.\u201D
@@ -481,10 +466,10 @@ Re-check: \u201CTry again with the frame. 60 seconds.\u201D Listen for improveme
 
 ENABLING & EXTENDING:
 ENABLING PROMPT:
-\u2022 Task: Provide a sentence frame: \u201CFriedrich, a _____ from _____, thinks _____ but _____.\u201D Students fill in blanks using information from the five sentences. This removes the structural challenge and focuses on content selection.
+\u2022 Task: Provide a sentence frame: "Friedrich, a [blank] from [blank], thinks [blank] but [blank]." Students fill in blanks using information from the five sentences. This removes the structural challenge and focuses on content selection.
 
 EXTENDING PROMPT:
-\u2022 Task: Students combine the sentences in TWO different ways, then choose which version they prefer and explain why. This develops metalinguistic awareness \u2014 they evaluate their own sentence construction.
+\u2022 Task: Students combine the sentences in TWO different ways, then choose which version they prefer and explain why. This develops metalinguistic awareness - they evaluate their own sentence construction.
 
 TEACHER NOTES:
 The We Do uses the same five sentences from the I Do, but now students generate their own combinations. This is deliberate: the content is familiar, reducing cognitive load. Multiple valid answers exist \u2014 the reveal shows one strong version, but students should understand that sentence combining has no single \u201Ccorrect\u201D answer. What matters is clarity, grammar, and effective use of pronouns/commas/conjunctions. Accepting different valid combinations validates student thinking and models the flexibility of English syntax. VTLM 2.0: Scaffold Practice.
@@ -535,7 +520,7 @@ const NOTES_CLOSING = `SAY:
 \u2022 Read the reflection prompt: \u201CFriedrich said the war was the real \u2018craziness\u2019 \u2014 not him. What does his story make you think about how we judge people?\u201D
 \u2022 Allow 60 seconds Turn & Talk.
 \u2022 Share 1\u20132 responses. Then read the takeaways.
-\u2022 \u201CCheck the success criteria. Can you explain how Morpurgo uses a simile to create meaning? Thumbs up. Can you explain how Friedrich challenges what it means to be \u2018crazy\u2019? Thumbs up. Can you combine sentences about a character? Thumbs up.\u201D
+\u2022 \u201CCheck the success criteria. Can you identify a simile and explain what is being compared? Thumbs up. Can you combine sentences about a character using pronouns and conjunctions? Thumbs up. Can you explain how Friedrich challenges what it means to be 'crazy'? Thumbs up.\u201D
 \u2022 \u201CToday\u2019s chapters were intense. You handled them with maturity. Well done.\u201D
 
 DO:
@@ -567,8 +552,8 @@ DO:
 
 TEACHER NOTES:
 Two companion PDFs are provided:
-1. Sentence Combining Worksheet \u2014 contains the five source sentences, lined space for student response, and a challenge extension about Topthorn.
-2. Sentence Combining Answer Key \u2014 the teacher model answer plus 2\u20133 alternative valid combinations for reference during marking or conferencing.
+1. Session 2 Sentence Combining Worksheet - contains the five source sentences, lined space for student response, and a challenge extension about Topthorn.
+2. Session 2 Answer Key - the teacher model answer plus alternative valid combinations for reference during marking or conferencing.
 
 Print before the lesson. The worksheet is designed for the You Do phase (Slide 19).
 
@@ -630,8 +615,8 @@ async function generateWorksheetPdf() {
 
   addPdfFooter(doc, "War Horse | Lesson 17 of 25 | Week 4 | Year 5/6 Literacy");
 
-  await writePdf(doc, OUT_DIR + "/Sentence_Combining_Worksheet.pdf");
-  console.log("\u2713 Written Sentence_Combining_Worksheet.pdf");
+  await writePdf(doc, RES_DIR + "/Session 2 Sentence Combining Worksheet.pdf");
+  console.log("\u2713 Written Session 2 Sentence Combining Worksheet.pdf");
 }
 
 async function generateAnswerKeyPdf() {
@@ -702,8 +687,8 @@ async function generateAnswerKeyPdf() {
 
   addPdfFooter(doc, "War Horse | Lesson 17 of 25 | Week 4 | Year 5/6 Literacy \u2014 TEACHER REFERENCE");
 
-  await writePdf(doc, OUT_DIR + "/Sentence_Combining_Answer_Key.pdf");
-  console.log("\u2713 Written Sentence_Combining_Answer_Key.pdf");
+  await writePdf(doc, RES_DIR + "/Session 2 Answer Key.pdf");
+  console.log("\u2713 Written Session 2 Answer Key.pdf");
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -740,9 +725,9 @@ async function generateAnswerKeyPdf() {
       "Vary sentence structures or lengths when using simple, compound and complex sentences, with a focus on achieving clarity and effect suited to text purpose",
     ],
     [
-      "I can analyse how the author uses simile to create meaning about war and beauty",
+      "I can identify a simile in the text and explain what is being compared",
+      "I can combine short sentences about a character using pronouns, commas and conjunctions",
       "I can explain how Friedrich\u2019s character challenges what it means to be \u201Ccrazy\u201D in wartime",
-      "I can combine sentences about a character using pronouns, commas and conjunctions",
     ],
     NOTES_LI,
     FOOTER
@@ -774,22 +759,8 @@ async function generateAnswerKeyPdf() {
     FOOTER
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 5: INCIDENTAL VOCABULARY
-  // ═══════════════════════════════════════════════════════════════════════════
-  contentSlide(
-    pres,
-    "Vocabulary", C.SECONDARY,
-    "Incidental Words \u2014 Chapters 13\u201314",
-    [
-      "optimism \u2022 sporadic \u2022 idleness \u2022 lush \u2022 obliging \u2022 tedious \u2022 strenuous",
-      "bustle \u2022 sane \u2022 rational \u2022 benighted \u2022 implicitly \u2022 confided \u2022 admiration",
-      "wretched \u2022 nobility \u2022 serenity \u2022 personify \u2022 abomination \u2022 vigorously",
-      "wearily \u2022 sluggishly \u2022 frantic \u2022 finality \u2022 spontaneous \u2022 inclination",
-    ],
-    NOTES_INCIDENTAL,
-    FOOTER
-  );
+  // Incidental vocabulary slide omitted — lean profile default (OFF).
+  // Teacher can surface words during reading as needed.
 
   // ═══════════════════════════════════════════════════════════════════════════
   // SLIDE 6: READING INTRODUCTION — Chapter 13
@@ -1272,14 +1243,14 @@ async function generateAnswerKeyPdf() {
     pres,
     [
       {
-        name: "Sentence Combining Worksheet",
-        fileName: "Sentence_Combining_Worksheet.pdf",
-        description: "Five sentences about Friedrich for students to combine \u2014 one per student.",
+        name: "Session 2 Sentence Combining Worksheet",
+        fileName: "resources-session2/Session 2 Sentence Combining Worksheet.pdf",
+        description: "Five sentences about Friedrich for students to combine - one per student.",
       },
       {
-        name: "Sentence Combining Answer Key",
-        fileName: "Sentence_Combining_Answer_Key.pdf",
-        description: "Teacher reference: model answer plus 2\u20133 alternative valid combinations.",
+        name: "Session 2 Answer Key",
+        fileName: "resources-session2/Session 2 Answer Key.pdf",
+        description: "Teacher reference: model answer plus alternative valid combinations.",
       },
     ],
     { C, FONT_H, FONT_B },
