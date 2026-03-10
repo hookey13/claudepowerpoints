@@ -1,17 +1,27 @@
 # Resource System Reference
 
-Lessons reference printable student resources (worksheets, graphic organisers, scaffold cards, answer keys) that teachers must print before the lesson. These are generated as **companion PDF files** alongside the PPTX, bundled in a per-lesson output folder.
+Lessons reference printable student resources (worksheets, graphic organisers, scaffold cards, answer keys) that teachers must print before the lesson. These are generated as **companion PDF files** in a `resources-lesson{N}/` subfolder alongside the PPTX.
 
 ## How It Works
 
 1. **Build script generates PDFs** using `themes/pdf_helpers.js` (pdfkit-based)
-2. **PDFs go in the same folder** as the PPTX (e.g., `output/Lesson_PV1/`)
-3. **A "Resources" slide** at the end of the PPTX lists all companion files with clickable hyperlinks
+2. **PDFs go in `resources-lesson{N}/`** inside the lesson folder (e.g., `output/ALG_Lesson3/resources-lesson3/`)
+3. **A "Resources" slide** at the end of the PPTX lists all companion files with clickable hyperlinks (using subfolder-relative paths)
 4. **Teacher clicks a link** → PDF opens in default viewer → teacher prints it
+
+**Folder structure:**
+```
+output/ALG_Lesson3_Distributive_Property/
+  ALG_Lesson3_Distributive_Property.pptx
+  resources-lesson3/
+    SR1_Distributive_Worksheet.pdf
+    SR2_Enabling_Scaffold.pdf
+    EXT1_Distribution_Subtraction.pdf
+```
 
 ## pdf_helpers.js Exports
 
-`themes/pdf_helpers.js` is theme-agnostic — pass colours as 6-char hex strings. Uses built-in Helvetica fonts (no font files needed).
+`themes/pdf_helpers.js` is theme-agnostic — pass colours as 6-char hex strings. Uses Windows Arial fonts (registered as `Sans`/`Sans-Bold`/`Sans-Italic`) for full Unicode support (□, Δ, ×, ÷, ≥, ≠). Falls back to built-in Helvetica if unavailable. **Do NOT use PDFKit's built-in Helvetica — it only supports WinAnsiEncoding and garbles Unicode math symbols like □ into `%¡`.**
 
 **Document lifecycle:**
 
@@ -54,12 +64,12 @@ addResourceSlide(
   [
     {
       name: "SR3 — Place Value Worksheet",
-      fileName: "SR3_Place_Value_Worksheet.pdf",  // relative to PPTX location
+      fileName: "resources-lesson1/SR3_Place_Value_Worksheet.pdf",  // subfolder-relative to PPTX
       description: "Independent practice — 8 problems.",
     },
     {
       name: "SR4 — Example Answer",
-      fileName: "SR4_Example_Answer.pdf",
+      fileName: "resources-lesson1/SR4_Example_Answer.pdf",
       description: "Answer key for enabling students.",
     },
   ],
@@ -122,6 +132,21 @@ Generate resources based on what the lesson references. Common types:
 | **Vocabulary cards** | When key terms need to be cut out or displayed |
 | **Extending investigation** | When EXTENDING introduces a concept not taught in the lesson — the PDF must teach the concept, give examples, and set the task (the teacher is unavailable to explain it) |
 | **Teacher resource checklist** | Optional — one-page list of everything to prepare |
+
+## Scaffold Quality Rules (Critical)
+
+An enabling scaffold is NOT "the same problems but easier" or "the same problems with hints in the prompt text." If you remove the scaffold label and a student can't tell the difference from SR1, it isn't a scaffold.
+
+**A genuine scaffold must change the FORM of the task**, not just the wording. It must do at least one of:
+
+1. **Draw a visual model** the student can read (area model, number line, array, bar model, diagram). If the tip box says "the model is drawn for you", the model MUST actually be drawn using PDFKit drawing primitives (`.rect()`, `.moveTo()`, `.lineTo()`, `.fill()`, `.stroke()`). Text that *describes* a visual is not a visual.
+2. **Pre-fill intermediate steps** so the student only completes the final gap. If SR1 requires 4 mental steps, SR2 should show steps 1-3 done and ask for step 4.
+3. **Provide a structural framework** (table, flowchart, labelled boxes) that makes the strategy visible. The student fills in values, not invents the method.
+4. **Reduce the problem space** by constraining choices — e.g., multiple-choice instead of open-response, or a partially completed solution to extend.
+
+**Self-check before writing a scaffold:** Read the SR1 and SR2 code side by side. Ask: "What cognitive work does SR2 remove?" If the answer is "nothing — it just rewords the question," rewrite it.
+
+**PDFKit auto-pagination warning:** Dense single-page scaffolds with drawn models can trigger PDFKit auto-pagination from cumulative `doc.text()` calls pushing the internal cursor past the bottom margin, even when explicit y-coordinates are within bounds. Fix: set `doc.page.margins.bottom = 0` after the header/tipbox section to disable auto-pagination, then place the footer with `addPdfFooter()` normally.
 
 ## Naming Convention
 

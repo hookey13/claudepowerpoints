@@ -1,9 +1,12 @@
 "use strict";
 
+const PptxGenJS = require("pptxgenjs");
+
 // ── Core modules ──
 const { SLIDE_W, SLIDE_H, SAFE_RIGHT, SAFE_BOTTOM, CONTENT_TOP, validateBounds } = require("./core/layout");
 const { hexToRgb, luminance, contrastRatio, getContrastColor, validateContrast } = require("./core/contrast");
 const { iconToBase64Png }          = require("./core/icons");
+const { normalizeLessonTargets, sanitizeTeacherNotes, installNotesPatch } = require("./core/notes");
 const { makeShadow, makeCardShadow } = require("./core/shadows");
 const { createElements }           = require("./core/elements");
 const { withReveal }               = require("./core/withReveal");
@@ -42,6 +45,8 @@ const SUBJECT_BUILDER_FACTORIES = {
 const VALID_SUBJECTS    = Object.keys(SUBJECT_PALETTES);
 const VALID_YEAR_LEVELS = ["foundation", "grade1", "grade2", "grade34", "grade56"];
 const VARIANTS_PER_LEVEL = 6;
+
+installNotesPatch(PptxGenJS);
 
 /**
  * Create a fully-bound theme object.
@@ -134,6 +139,10 @@ function createTheme(subject, yearLevel, variant) {
     // Bounds validation
     validateBounds,
 
+    // Content normalization
+    normalizeLessonTargets,
+    sanitizeTeacherNotes,
+
     // Icon rendering
     iconToBase64Png,
 
@@ -172,4 +181,6 @@ module.exports = {
   VALID_SUBJECTS,
   VALID_YEAR_LEVELS,
   VARIANTS_PER_LEVEL,
+  normalizeLessonTargets,
+  sanitizeTeacherNotes,
 };

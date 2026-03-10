@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Convert PPTX slides to individual JPG images for visual QA.
+"""Convert PPTX slides to individual JPG images for optional local preview.
 
 Uses LibreOffice (soffice) for PPTX->PDF, then PyMuPDF for PDF->JPG.
 No Poppler/pdftoppm dependency required.
 
 Images are written to a slidetemp/ directory (created automatically).
-Use --clean to delete the slidetemp/ directory when QA is complete.
+Use --clean to delete the slidetemp/ directory when review is complete.
+
+This is a local convenience tool. Final visual and compatibility QA should
+still happen in Google Slides if that is the delivery target.
 
 Usage:
     python scripts/pptx_to_images.py presentation.pptx [--prefix NAME] [--dpi N]
@@ -81,7 +84,7 @@ def pptx_to_images(pptx_path, output_prefix="slide", dpi=150):
 
     soffice = find_soffice()
     if not soffice:
-        print("Error: LibreOffice (soffice) not found. Install it or add to PATH.", file=sys.stderr)
+        print("Error: LibreOffice (soffice) not found. Install it or add to PATH for local preview.", file=sys.stderr)
         sys.exit(1)
 
     try:
@@ -138,7 +141,7 @@ def pptx_to_images(pptx_path, output_prefix="slide", dpi=150):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Convert PPTX slides to JPG images for visual QA")
+    parser = argparse.ArgumentParser(description="Convert PPTX slides to JPG images for optional local preview")
     parser.add_argument("pptx", nargs="?", help="Path to the .pptx file")
     parser.add_argument("--prefix", default="slide", help="Output filename prefix (default: slide)")
     parser.add_argument("--dpi", type=int, default=150, help="Image resolution (default: 150)")

@@ -1,6 +1,8 @@
 "use strict";
 
+const { contrastRatio } = require("../core/contrast");
 const { SLIDE_H, SAFE_BOTTOM, CONTENT_TOP } = require("../core/layout");
+const { normalizeLessonTargets } = require("../core/notes");
 
 /**
  * Create the 5 universal slide builders bound to a specific palette.
@@ -14,6 +16,18 @@ const { SLIDE_H, SAFE_BOTTOM, CONTENT_TOP } = require("../core/layout");
  * @returns {object} { titleSlide, liSlide, contentSlide, cfuSlide, closingSlide }
  */
 function createBaseBuilders(C, FONT_H, FONT_B, el, shadowFn) {
+  function pickOnDarkColor(preferred, ...fallbacks) {
+    const candidates = [preferred, ...fallbacks].filter(Boolean);
+    const passing = candidates.find((color) => contrastRatio(color, C.BG_DARK) >= 4.5);
+    if (passing) return passing;
+    return candidates.reduce((best, color) =>
+      contrastRatio(color, C.BG_DARK) > contrastRatio(best, C.BG_DARK) ? color : best
+    );
+  }
+
+  const subtitleOnDark = pickOnDarkColor(C.SUBTITLE, C.TEXT_ON_DARK, C.WHITE);
+  const metaOnDark = pickOnDarkColor(C.MUTED, C.TEXT_ON_DARK, C.WHITE);
+  const accentOnDark = pickOnDarkColor(C.ACCENT, C.TEXT_ON_DARK, C.WHITE);
 
   /**
    * titleSlide - Dark full-bleed title for lesson start.
@@ -45,7 +59,7 @@ function createBaseBuilders(C, FONT_H, FONT_B, el, shadowFn) {
     if (subtitle) {
       s.addText(subtitle, {
         x: 0.7, y: 2.25, w: 8.0, h: 0.7,
-        fontSize: 22, fontFace: FONT_B, color: C.SUBTITLE, margin: 0,
+        fontSize: 22, fontFace: FONT_B, color: subtitleOnDark, margin: 0,
       });
     }
 
@@ -53,7 +67,7 @@ function createBaseBuilders(C, FONT_H, FONT_B, el, shadowFn) {
     if (meta) {
       s.addText(meta, {
         x: 0.7, y: 3.05, w: 8.0, h: 0.4,
-        fontSize: 13, fontFace: FONT_B, color: C.MUTED, margin: 0,
+        fontSize: 13, fontFace: FONT_B, color: metaOnDark, margin: 0,
       });
     }
 
@@ -67,8 +81,15 @@ function createBaseBuilders(C, FONT_H, FONT_B, el, shadowFn) {
   function liSlide(pres, liItems, scItems, notes, footer) {
     const s = pres.addSlide();
     el.addTopBar(s, C.PRIMARY);
-    el.addBadge(s, "Learning Objective");
-    el.addTitle(s, "Learning Objective & Success Criteria");
+    el.addBadge(s, "Learning Intention");
+    el.addTitle(s, "Learning Intention & Success Criteria");
+
+    const normalizedTargets = normalizeLessonTargets(liItems, scItems);
+    if (normalizedTargets.warnings.length) {
+      console.warn(`[liSlide] ${normalizedTargets.warnings.join("; ")}. Keeping the first LI and first three SC items.`);
+    }
+    liItems = normalizedTargets.liItems;
+    scItems = normalizedTargets.scItems;
 
     const GAP      = 0.14;
     const LI_HDR_H = 0.44;
@@ -81,19 +102,16 @@ function createBaseBuilders(C, FONT_H, FONT_B, el, shadowFn) {
     const fontSize   = dense ? 11 : 13;
 
     // LI card
-    const liBodyH = liItems.length * perItem;
+    const liBodyH = Math.max(liItems.length * perItem, 0.48);
     const liH     = LI_HDR_H + liBodyH + PAD;
     el.addCard(s, 0.5, CONTENT_TOP, 9, liH, { strip: C.PRIMARY });
-    s.addText("Learning Objective", {
+    s.addText("Learning Intention", {
       x: 0.75, y: CONTENT_TOP + 0.07, w: 5, h: 0.30,
       fontSize: 13, fontFace: FONT_B, color: C.PRIMARY, bold: true, margin: 0,
     });
-    s.addText(liItems.map((t, i) => ({
-      text: t,
-      options: { bullet: true, breakLine: i < liItems.length - 1, fontSize, color: C.CHARCOAL },
-    })), {
+    s.addText(liItems[0] || "", {
       x: 0.75, y: CONTENT_TOP + LI_HDR_H, w: 8.5, h: liBodyH,
-      fontFace: FONT_B, margin: 0,
+      fontFace: FONT_B, fontSize, color: C.CHARCOAL, margin: 0, valign: "middle",
     });
 
     // SC card
@@ -213,17 +231,17 @@ function createBaseBuilders(C, FONT_H, FONT_B, el, shadowFn) {
     });
     s.addText("Turn & Talk", {
       x: 0.7, y: 1.35, w: 2.5, h: 0.38,
-      fontSize: 15, fontFace: FONT_B, color: C.ACCENT, bold: true, margin: 0,
+      fontSize: 15, fontFace: FONT_B, color: accentOnDark, bold: true, margin: 0,
     });
     s.addText(reflectionPrompt, {
       x: 0.7, y: 1.82, w: 8.5, h: 1.2,
-      fontSize: 18, fontFace: FONT_B, color: C.SUBTITLE, italic: true, margin: 0,
+      fontSize: 18, fontFace: FONT_B, color: subtitleOnDark, italic: true, margin: 0,
     });
 
     if (takeaways && takeaways.length) {
       s.addText("Key Takeaways", {
         x: 0.7, y: 3.15, w: 4, h: 0.38,
-        fontSize: 14, fontFace: FONT_B, color: C.ACCENT, bold: true, margin: 0,
+        fontSize: 14, fontFace: FONT_B, color: accentOnDark, bold: true, margin: 0,
       });
       takeaways.forEach((t, i) => {
         const y = 3.62 + i * 0.34;

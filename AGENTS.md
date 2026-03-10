@@ -8,7 +8,6 @@ Node.js project using PptxGenJS to generate explicit teaching slide decks with c
 node builds/build_<unit>_lesson<n>.js          # Build a lesson (run from project root)
 node test_theme.js <subject> <level> [variant] # Test a theme combo
 python -m markitdown output/<file>.pptx        # Content QA - check text, order, typos
-python scripts/check_lesson_quality.py output/<file>.pptx --profile literacy-60  # Lesson density/language QA
 python scripts/pptx_to_images.py output/<file>.pptx  # Optional local preview - slides to slidetemp/*.jpg
 python scripts/pptx_to_images.py --clean       # Delete slidetemp/ after QA
 ```
@@ -58,36 +57,6 @@ For builder signatures, palette schema, and full API: read `docs/theme-system.md
 - Shadow `offset` must be non-negative - negative values corrupt the file.
 - Each presentation needs a fresh `new pptxgen()` instance.
 - Always set `pres.layout = "LAYOUT_16x9"`. NEVER use `"LAYOUT_WIDE"` (wrong dimensions).
-
-## Teacher Notes Rules
-
-- Speaker notes are plain text in PptxGenJS/PowerPoint. NEVER use markdown in teacher notes. Do not use `**bold**`, `_italics_`, backticks, markdown headings, or markdown lists.
-- Teacher notes must be ASCII-safe for PowerPoint, PowerPoint for iPad, and exported notes views. Use straight quotes `' "`, hyphen bullets `-`, `...`, `->`, `>=`, `<=`, and `x`. Avoid smart quotes, em dashes, unicode bullets, unicode arrows, and other decorative symbols in notes.
-- Keep teacher notes scannable. Prefer short bullets, not dense paragraphs. `SAY` should usually be 2-4 short bullets, `DO` 2-4 short bullets, `TEACHER NOTES` no more than 2 short sentences, and `WATCH FOR` 1-2 bullets.
-- Section headers in notes should be plain uppercase text like `SAY:` and `DO:`. Do not try to force bold with markdown.
-- If a slide uses `liSlide()`, the Learning Intention must be a single plain sentence and the Success Criteria must be exactly 3 simple `I can...` bullets. The first success criterion must be ultra-achievable for almost every student.
-- Do not add a `PACING OVERVIEW` block to speaker notes by default. If timing guidance is genuinely needed, keep it to one short sentence in `TEACHER NOTES`.
-- End notes with at most one short framework/meta tag line. Do not stack multiple checklist tags.
-
-## Cognitive Load Defaults
-
-- `Lean` means fewer, better-taught moves, not less learning. Apply this across all sessions, not just literacy.
-- Protect the high-yield parts of instruction: clear modelling, repeated practice, retrieval, CFU, guided practice, and independent application.
-- If a lesson feels overcrowded, cut low-yield extras first: duplicate explanations, oversized vocab banks, unnecessary reveal pairs, long note essays, decorative transitions, and multiple competing objectives.
-- Default future generations to `mixed readiness`, not assumed mastery. Avoid student-facing or `SAY:` phrasing such as `you already know`, `students know the routine`, `not new to you`, `we've done this`, or `by Week X students know` unless the user explicitly asked for a revision/review lesson.
-- Beginner-safe prior-knowledge language is allowed: `Some of you may remember...`, `If this feels new, that's okay`, `We'll build this together`.
-- Less on the slide does not mean less teaching. It means the teacher voice and the practice sequence carry the load instead of cluttered slide text.
-
-## Lean Literacy Defaults
-
-- Default future generations to `mixed readiness`, not assumed mastery. Avoid student-facing or `SAY:` phrasing such as `you already know`, `students know the routine`, `not new to you`, `we've done this`, or `by Week X students know` unless the user explicitly asked for a revision/review lesson.
-- Beginner-safe prior-knowledge language is allowed: `Some of you may remember...`, `If this feels new, that's okay`, `We'll build this together`.
-- Default a 60-minute literacy lesson to one reading/comprehension or craft focus plus one writing/language focus only.
-- Default literacy lesson shape: title, LI/SC, 0-2 explicit vocab slides, reading launch, up to 2 pause points, 1 craft/analysis slide, 1 CFU, 1 I Do, 1 We Do, 1 You Do, closing, resources.
-- Default budget for a 60-minute literacy deck is 10-14 unique slides. Above 14 means the lesson is probably too crowded. Above 16 requires an explicit reason from the user.
-- Default reveal budget is 0-2 reveal pairs. Use reveals only when hiding the answer materially improves thinking. Do not use reveal pairs by default for every vocabulary, CFU, or We Do slide.
-- Incidental vocabulary list slides are off by default. Only include them when the source text genuinely demands them or the user explicitly asks for them.
-- Slide-face text should stay lean. Do not preload large definition banks, long explanation blocks, or multiple abstract objectives onto one lesson by default.
 
 For full PptxGenJS API reference: read `docs/pptxgenjs-reference.md`.
 

@@ -16,8 +16,10 @@ function validateBounds(label, x, y, w, h) {
   if (x + w > SLIDE_W + 0.1) {
     issues.push(`right edge ${(x + w).toFixed(2)}" exceeds slide width (${SLIDE_W}")`);
   }
-  if (y + h > 5.625 + 0.1) {
-    issues.push(`bottom ${(y + h).toFixed(2)}" exceeds slide height (5.625")`);
+  if (y + h > SLIDE_H + 0.1) {
+    issues.push(`bottom ${(y + h).toFixed(2)}" exceeds slide height (${SLIDE_H}")`);
+  } else if (y + h > SAFE_BOTTOM + 0.01) {
+    issues.push(`bottom ${(y + h).toFixed(2)}" exceeds safe content limit (${SAFE_BOTTOM}")`);
   }
   if (issues.length > 0) {
     console.warn(`[bounds] ${label}: ${issues.join("; ")}`);

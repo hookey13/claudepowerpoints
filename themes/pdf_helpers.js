@@ -2,8 +2,9 @@
 // Theme-agnostic utilities for creating printable A4 worksheets, answer keys,
 // graphic organisers, and other companion resources alongside PPTX slide decks.
 //
-// Uses pdfkit. All colours passed as 6-char hex (no #). Fonts use built-in
-// Helvetica family (no external font files needed).
+// Uses pdfkit. All colours passed as 6-char hex (no #). Fonts use Windows
+// Arial (registered as Helvetica/Helvetica-Bold) for full Unicode support
+// (□, Δ, ×, ÷, ≥, ≠ etc.). Falls back to built-in Helvetica if unavailable.
 
 "use strict";
 
@@ -20,6 +21,9 @@ const PAGE = {
   CONTENT_W: 595.28 - 2 * 50,  // 495.28
   CONTENT_H: 841.89 - 2 * 50,  // 741.89
 };
+
+const FOOTER_Y = PAGE.H - PAGE.MARGIN - 10;
+const CONTENT_BOTTOM = FOOTER_Y - 10;
 
 // ── Colour helpers ──────────────────────────────────────────────────────────
 
@@ -48,6 +52,49 @@ function lighten(color, amount) {
   return "#" + [nr, ng, nb].map(v => v.toString(16).padStart(2, "0")).join("");
 }
 
+function ensureBlockFits(doc, y, requiredHeight, opts) {
+  const o = opts || {};
+  const top = o.pageTop != null ? o.pageTop : PAGE.MARGIN;
+  const bottom = o.pageBottom != null ? o.pageBottom : CONTENT_BOTTOM;
+  const fullPageHeight = bottom - top;
+
+  // If the block can fit on a fresh page but not in the remaining space,
+  // move it before drawing so prompts and answer space stay together.
+  if (requiredHeight <= fullPageHeight && y + requiredHeight > bottom) {
+    doc.addPage();
+    return top;
+  }
+
+  return y;
+}
+
+function measureBodyTextHeight(doc, text, opts) {
+  const o = opts || {};
+  const font = o.italic ? "Sans-Italic" : "Sans";
+  return doc.fontSize(o.fontSize || 11).font(font).heightOfString(text, {
+    width: o.width || PAGE.CONTENT_W,
+  });
+}
+
+function measureProblemHeight(doc, prompt, opts) {
+  const o = opts || {};
+  const promptHeight = doc.fontSize(11).font("Sans").heightOfString(prompt, {
+    width: PAGE.CONTENT_W - 28,
+  });
+
+  let totalHeight = Math.max(20, promptHeight) + 10;
+
+  if (o.headers) {
+    totalHeight += (o.hdrH || 26) + (o.valH || 40) + 10;
+  }
+
+  if (o.writeLines) {
+    totalHeight += o.writeLines.length * 24;
+  }
+
+  return totalHeight + 12;
+}
+
 // ── Document creation ───────────────────────────────────────────────────────
 
 /**
@@ -57,7 +104,7 @@ function lighten(color, amount) {
  */
 function createPdf(opts) {
   const o = opts || {};
-  return new PDFDocument({
+  const doc = new PDFDocument({
     size: "A4",
     margin: o.margin || PAGE.MARGIN,
     info: {
@@ -66,6 +113,20 @@ function createPdf(opts) {
     },
     bufferPages: true,
   });
+
+  // Register Arial as Helvetica/Helvetica-Bold for full Unicode support.
+  // Built-in Helvetica uses WinAnsiEncoding which can't render □ Δ and other
+  // math symbols — they appear as garbled %¡ artifacts. Arial supports the
+  // full Unicode range needed for maths worksheets.
+  try {
+    doc.registerFont("Sans", "C:/Windows/Fonts/arial.ttf");
+    doc.registerFont("Sans-Bold", "C:/Windows/Fonts/arialbd.ttf");
+    doc.registerFont("Sans-Italic", "C:/Windows/Fonts/ariali.ttf");
+  } catch (_) {
+    // Fall back to built-in Helvetica if system fonts unavailable
+  }
+
+  return doc;
 }
 
 /**
@@ -105,21 +166,21 @@ function addPdfHeader(doc, title, opts) {
   // Title bar
   doc.save();
   doc.roundedRect(x, y, w, 40, 4).fill(hex(color));
-  doc.fontSize(18).font("Helvetica-Bold").fillColor("#FFFFFF");
+  doc.fontSize(18).font("Sans-Bold").fillColor("#FFFFFF");
   doc.text(title, x + 12, y + 10, { width: w - 24, align: "left" });
   doc.restore();
   y += 48;
 
   // Subtitle
   if (o.subtitle) {
-    doc.fontSize(11).font("Helvetica").fillColor(hex("6B7280"));
+    doc.fontSize(11).font("Sans").fillColor(hex("6B7280"));
     doc.text(o.subtitle, x, y, { width: w });
     y += 18;
   }
 
   // Lesson info line
   if (o.lessonInfo) {
-    doc.fontSize(9).font("Helvetica").fillColor(hex("9CA3AF"));
+    doc.fontSize(9).font("Sans").fillColor(hex("9CA3AF"));
     doc.text(o.lessonInfo, x, y, { width: w });
     y += 16;
   }
@@ -127,7 +188,7 @@ function addPdfHeader(doc, title, opts) {
   // Name / Date line
   if (o.showNameDate !== false) {
     y += 4;
-    doc.fontSize(11).font("Helvetica").fillColor("#000000");
+    doc.fontSize(11).font("Sans").fillColor("#000000");
     doc.text("Name: ", x, y, { continued: true });
     // Underline for name
     const nameLineX = x + 42;
@@ -157,13 +218,14 @@ function addSectionHeading(doc, text, y, opts) {
   const color = o.color || "1B3A6B";
   const x = PAGE.MARGIN;
   const fontSize = o.fontSize || 13;
+  y = ensureBlockFits(doc, y, fontSize + 14);
 
   // Left accent bar
   doc.save();
   doc.rect(x, y, 4, fontSize + 6).fill(hex(color));
   doc.restore();
 
-  doc.fontSize(fontSize).font("Helvetica-Bold").fillColor(hex(color));
+  doc.fontSize(fontSize).font("Sans-Bold").fillColor(hex(color));
   doc.text(text, x + 12, y + 2, { width: PAGE.CONTENT_W - 12 });
 
   return y + fontSize + 14;
@@ -179,7 +241,8 @@ function addSectionHeading(doc, text, y, opts) {
  */
 function addBodyText(doc, text, y, opts) {
   const o = opts || {};
-  const font = o.italic ? "Helvetica-Oblique" : "Helvetica";
+  const font = o.italic ? "Sans-Italic" : "Sans";
+  y = ensureBlockFits(doc, y, measureBodyTextHeight(doc, text, o) + 8);
   doc.fontSize(o.fontSize || 11).font(font).fillColor(hex(o.color || "2D3142"));
   doc.text(text, PAGE.MARGIN, y, { width: PAGE.CONTENT_W });
   return doc.y + 8;
@@ -212,7 +275,7 @@ function addPvChartPdf(doc, y, headers, opts) {
   headers.forEach((h, i) => {
     const cx = x + i * cellW;
     doc.rect(cx, y, cellW, hdrH).fill(hex(color));
-    doc.fontSize(9).font("Helvetica-Bold").fillColor("#FFFFFF");
+    doc.fontSize(9).font("Sans-Bold").fillColor("#FFFFFF");
     doc.text(h, cx, y + 7, { width: cellW, align: "center" });
   });
   doc.restore();
@@ -226,7 +289,7 @@ function addPvChartPdf(doc, y, headers, opts) {
       .lineWidth(1).strokeColor(hex(color)).stroke();
     // Fill in values if provided (for answer keys)
     if (values[i] != null && values[i] !== "") {
-      doc.fontSize(20).font("Helvetica-Bold").fillColor(hex("2D3142"));
+      doc.fontSize(20).font("Sans-Bold").fillColor(hex("2D3142"));
       doc.text(String(values[i]), cx, y + hdrH + 8, { width: cellW, align: "center" });
     }
   });
@@ -247,7 +310,7 @@ function addPvChartPdf(doc, y, headers, opts) {
 function addWriteLine(doc, label, y, opts) {
   const o = opts || {};
   const x = PAGE.MARGIN;
-  doc.fontSize(11).font("Helvetica-Bold").fillColor("#000000");
+  doc.fontSize(11).font("Sans-Bold").fillColor("#000000");
   doc.text(label, x, y);
 
   const labelW = doc.widthOfString(label) + 8;
@@ -262,7 +325,7 @@ function addWriteLine(doc, label, y, opts) {
 
   // Write answer if provided (for answer keys)
   if (o.answer) {
-    doc.fontSize(11).font("Helvetica").fillColor(hex(o.color || "0F7F8C"));
+    doc.fontSize(11).font("Sans").fillColor(hex(o.color || "0F7F8C"));
     doc.text(o.answer, lineX + 4, y, { width: lineW - 8 });
   }
 
@@ -290,21 +353,17 @@ function addProblem(doc, num, prompt, y, opts) {
   const x = PAGE.MARGIN;
   const color = o.color || "1B3A6B";
 
-  // Check if we need a new page (leave at least 180pt for a problem)
-  if (y > PAGE.H - PAGE.MARGIN - 180) {
-    doc.addPage();
-    y = PAGE.MARGIN;
-  }
+  y = ensureBlockFits(doc, y, measureProblemHeight(doc, prompt, o));
 
   // Problem number badge
   doc.save();
   doc.circle(x + 10, y + 8, 10).fill(hex(color));
-  doc.fontSize(11).font("Helvetica-Bold").fillColor("#FFFFFF");
+  doc.fontSize(11).font("Sans-Bold").fillColor("#FFFFFF");
   doc.text(String(num), x + 2, y + 2, { width: 17, align: "center" });
   doc.restore();
 
   // Prompt text
-  doc.fontSize(11).font("Helvetica").fillColor("#000000");
+  doc.fontSize(11).font("Sans").fillColor("#000000");
   doc.text(prompt, x + 28, y, { width: PAGE.CONTENT_W - 28 });
   y = doc.y + 10;
 
@@ -346,9 +405,9 @@ function addStepInstructions(doc, steps, y, opts) {
 
   steps.forEach((step, i) => {
     const label = labels[i] || `Step ${i + 1}:`;
-    doc.fontSize(11).font("Helvetica-Bold").fillColor(hex(color));
+    doc.fontSize(11).font("Sans-Bold").fillColor(hex(color));
     doc.text(label + " ", x + 10, y, { continued: true });
-    doc.font("Helvetica").fillColor("#000000");
+    doc.font("Sans").fillColor("#000000");
     doc.text(step);
     y = doc.y + 6;
   });
@@ -371,10 +430,11 @@ function addTipBox(doc, text, y, opts) {
   const w = PAGE.CONTENT_W;
 
   // Measure text height (use same font as render: Helvetica-Oblique)
-  const textH = doc.fontSize(10).font("Helvetica-Oblique").heightOfString(text, {
+  const textH = doc.fontSize(10).font("Sans-Italic").heightOfString(text, {
     width: w - 30,
   });
   const boxH = textH + 16;
+  y = ensureBlockFits(doc, y, boxH + 10);
 
   doc.save();
   doc.roundedRect(x, y, w, boxH, 3).fill(lighten(color, 0.85));
@@ -382,7 +442,7 @@ function addTipBox(doc, text, y, opts) {
   doc.rect(x, y, 4, boxH).fill(hex(color));
   doc.restore();
 
-  doc.fontSize(10).font("Helvetica-Oblique").fillColor(hex("2D3142"));
+  doc.fontSize(10).font("Sans-Italic").fillColor(hex("2D3142"));
   doc.text(text, x + 14, y + 8, { width: w - 30 });
 
   return y + boxH + 10;
@@ -396,10 +456,11 @@ function addTipBox(doc, text, y, opts) {
  */
 function addPdfFooter(doc, text, opts) {
   const o = opts || {};
-  doc.fontSize(8).font("Helvetica").fillColor(hex(o.color || "9CA3AF"));
-  doc.text(text, PAGE.MARGIN, PAGE.H - PAGE.MARGIN + 10, {
+  doc.fontSize(8).font("Sans").fillColor(hex(o.color || "9CA3AF"));
+  doc.text(text, PAGE.MARGIN, FOOTER_Y, {
     width: PAGE.CONTENT_W,
     align: "center",
+    lineBreak: false,
   });
 }
 
@@ -413,9 +474,30 @@ function addPdfFooter(doc, text, opts) {
  */
 function addLinedArea(doc, y, lineCount, opts) {
   const o = opts || {};
-  const spacing = o.lineSpacing || 28;
+  const preferredSpacing = o.lineSpacing || 28;
+  const minSpacing = o.minLineSpacing || Math.min(preferredSpacing, 20);
   const x = PAGE.MARGIN;
   const w = PAGE.CONTENT_W;
+  let spacing = preferredSpacing;
+  const available = CONTENT_BOTTOM - y;
+  const required = lineCount * preferredSpacing;
+
+  if (required > available) {
+    const compactSpacing = Math.floor(available / Math.max(lineCount, 1));
+    if (o.compact !== false && compactSpacing >= minSpacing) {
+      spacing = compactSpacing;
+    } else {
+      doc.addPage();
+      y = PAGE.MARGIN;
+    }
+  }
+
+  if (y + lineCount * spacing > CONTENT_BOTTOM) {
+    const refitSpacing = Math.floor((CONTENT_BOTTOM - y) / Math.max(lineCount, 1));
+    if (o.compact !== false && refitSpacing >= minSpacing) {
+      spacing = refitSpacing;
+    }
+  }
 
   doc.save();
   doc.strokeColor("#DDDDDD").lineWidth(0.5);
@@ -451,7 +533,7 @@ function addTwoColumnOrganiser(doc, leftHeader, rightHeader, y, opts) {
   [leftHeader, rightHeader].forEach((h, i) => {
     const cx = x + i * colW;
     doc.rect(cx, y, colW, hdrH).fill(hex(color));
-    doc.fontSize(10).font("Helvetica-Bold").fillColor("#FFFFFF");
+    doc.fontSize(10).font("Sans-Bold").fillColor("#FFFFFF");
     doc.text(h, cx, y + 7, { width: colW, align: "center" });
   });
   doc.restore();
@@ -467,7 +549,7 @@ function addTwoColumnOrganiser(doc, leftHeader, rightHeader, y, opts) {
       doc.rect(cx, ry, colW, rowH).lineWidth(0.5).strokeColor(hex(color)).stroke();
       const content = i === 0 ? leftContent : rightContent;
       if (content[r]) {
-        doc.fontSize(10).font("Helvetica").fillColor("#000000");
+        doc.fontSize(10).font("Sans").fillColor("#000000");
         doc.text(content[r], cx + 6, ry + 6, { width: colW - 12 });
       }
     });
