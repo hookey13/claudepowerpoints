@@ -8,102 +8,131 @@
         *, *::before, *::after { box-sizing: border-box; }
 
         :root {
-            --bg: #eef2f6;
+            --bg: #f4f6f9;
             --panel: #ffffff;
-            --panel-alt: #f7fafc;
-            --border: #d9e2ec;
-            --text: #1f2933;
-            --muted: #52606d;
-            --primary: #284b63;
-            --primary-dark: #1d3749;
+            --panel-alt: #f8fafb;
+            --border: #e2e8f0;
+            --border-focus: #4a7c91;
+            --text: #1a202c;
+            --muted: #64748b;
+            --label: #334155;
+            --primary: #2d6a7e;
+            --primary-dark: #1e4d5e;
+            --primary-light: #e8f4f8;
             --secondary: #52796f;
-            --accent: #bc6c25;
-            --success: #1f7a4f;
-            --warn: #ad6800;
-            --danger: #b42318;
-            --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            --secondary-light: #eaf3f0;
+            --accent: #d97706;
+            --success: #16a34a;
+            --success-bg: #f0fdf4;
+            --warn: #ca8a04;
+            --warn-bg: #fefce8;
+            --danger: #dc2626;
+            --danger-bg: #fef2f2;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.04);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: 0.2s ease;
         }
 
         body {
             margin: 0;
-            background:
-                radial-gradient(circle at top right, rgba(82, 121, 111, 0.14), transparent 28%),
-                radial-gradient(circle at top left, rgba(188, 108, 37, 0.14), transparent 22%),
-                var(--bg);
+            background: var(--bg);
             color: var(--text);
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .shell {
-            max-width: 1280px;
-            margin: 32px auto;
-            padding: 0 20px 32px;
+        /* ── Header ── */
+        .header {
+            background: linear-gradient(135deg, #1e4d5e 0%, #2d6a7e 50%, #3a8a7a 100%);
+            padding: 28px 32px;
+            color: #fff;
         }
 
-        .hero,
-        .panel {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            box-shadow: var(--shadow);
+        .header-inner {
+            max-width: 1360px;
+            margin: 0 auto;
         }
 
-        .hero {
-            padding: 28px 30px;
-            margin-bottom: 20px;
+        .header h1 {
+            margin: 0 0 6px;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
         }
 
-        h1 {
-            margin: 0 0 8px;
-            font-size: 28px;
-            color: var(--primary-dark);
-        }
-
-        .subtitle,
-        .helper,
-        .status {
-            color: var(--muted);
-        }
-
-        .subtitle {
+        .header p {
             margin: 0;
-            font-size: 15px;
-            max-width: 880px;
+            font-size: 14px;
+            opacity: 0.85;
+            max-width: 700px;
+            line-height: 1.5;
         }
 
+        /* ── Shell ── */
+        .shell {
+            max-width: 1360px;
+            margin: 0 auto;
+            padding: 24px 24px 40px;
+        }
+
+        /* ── Missing data banner ── */
+        .missing-data {
+            padding: 14px 18px;
+            border-radius: var(--radius-sm);
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 1px solid #fecaca;
+            font-size: 13px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* ── Layout ── */
         .layout {
             display: grid;
-            grid-template-columns: minmax(360px, 460px) minmax(0, 1fr);
-            gap: 20px;
+            grid-template-columns: 440px minmax(0, 1fr);
+            gap: 24px;
             align-items: start;
         }
 
+        /* ── Panels ── */
         .panel {
-            padding: 22px;
-        }
-
-        .panel h2 {
-            margin: 0 0 14px;
-            font-size: 18px;
-            color: var(--primary-dark);
-        }
-
-        .section {
-            padding: 16px;
+            background: var(--panel);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            background: var(--panel-alt);
-            margin-bottom: 16px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
         }
 
-        .section h3 {
-            margin: 0 0 12px;
-            font-size: 15px;
-            color: var(--primary);
+        .panel-header {
+            padding: 18px 22px 16px;
+            border-bottom: 1px solid var(--border);
         }
 
+        .panel-header h2 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .panel-header p {
+            margin: 4px 0 0;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .panel-body {
+            padding: 20px 22px;
+        }
+
+        /* ── Form fields ── */
         .field {
-            margin-bottom: 14px;
+            margin-bottom: 18px;
         }
 
         .field:last-child {
@@ -112,70 +141,96 @@
 
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-size: 13px;
-            font-weight: 700;
-            color: var(--primary-dark);
-        }
-
-        input,
-        textarea {
-            width: 100%;
-            padding: 11px 12px;
-            border: 1.5px solid #c7d2da;
-            border-radius: 8px;
-            background: #fff;
-            color: var(--text);
-            font: inherit;
-            transition: border-color 0.15s ease, box-shadow 0.15s ease;
-        }
-
-        textarea {
-            min-height: 88px;
-            resize: vertical;
-            line-height: 1.45;
-        }
-
-        textarea.tall {
-            min-height: 180px;
-        }
-
-        input:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(40, 75, 99, 0.14);
+            font-weight: 600;
+            color: var(--label);
         }
 
         .helper {
-            margin: 6px 0 0;
-            font-size: 12px;
+            margin: 5px 0 0;
+            font-size: 11.5px;
+            color: var(--muted);
+            line-height: 1.4;
         }
 
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--panel);
+            color: var(--text);
+            font: inherit;
+            font-size: 13.5px;
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+
+        input[type="text"]::placeholder,
+        textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        textarea.tall {
+            min-height: 160px;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgba(45, 106, 126, 0.12);
+        }
+
+        /* ── Inline row for short fields ── */
+        .field-row {
+            display: grid;
+            grid-template-columns: 100px 1fr 1fr;
+            gap: 14px;
+        }
+
+        /* ── Divider ── */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 20px 0;
+        }
+
+        /* ── Buttons ── */
         .button-row {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            margin-top: 18px;
+            padding: 16px 22px;
+            border-top: 1px solid var(--border);
+            background: var(--panel-alt);
+            border-radius: 0 0 var(--radius) var(--radius);
         }
 
         .btn {
             appearance: none;
             border: none;
-            border-radius: 9px;
-            padding: 11px 18px;
+            border-radius: var(--radius-sm);
+            padding: 10px 20px;
             font: inherit;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
-            transition: transform 0.12s ease, opacity 0.12s ease, background 0.12s ease;
-        }
-
-        .btn:hover {
-            transform: translateY(-1px);
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
         }
 
         .btn:active {
-            transform: translateY(0);
+            transform: scale(0.97);
         }
 
         .btn-primary {
@@ -185,6 +240,7 @@
 
         .btn-primary:hover {
             background: var(--primary-dark);
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-secondary {
@@ -194,143 +250,253 @@
 
         .btn-secondary:hover {
             background: #3d5d54;
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-muted {
-            background: #e5ebf0;
-            color: var(--text);
+            background: #e2e8f0;
+            color: var(--muted);
         }
 
         .btn-muted:hover {
-            background: #dce4ea;
+            background: #cbd5e1;
+            color: var(--text);
         }
 
-        .status {
-            margin-top: 14px;
-            min-height: 22px;
+        /* ── Toast notification ── */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
             font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            z-index: 1000;
+            pointer-events: none;
         }
 
-        .status.good {
-            color: var(--success);
+        .toast.visible {
+            transform: translateY(0);
+            opacity: 1;
         }
 
-        .status.warn {
-            color: var(--warn);
+        .toast.good { background: #16a34a; }
+        .toast.warn { background: #ca8a04; }
+        .toast.bad { background: #dc2626; }
+
+        /* ── Preview panel ── */
+        .preview-panel {
+            position: sticky;
+            top: 24px;
         }
 
-        .status.bad {
-            color: var(--danger);
+        .preview-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 22px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .meta-strip {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 10px;
-            margin-bottom: 16px;
+        .preview-toolbar h2 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
         }
 
-        .meta-card {
-            padding: 12px 14px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: linear-gradient(180deg, #fbfcfd, #f3f7fa);
+        .preview-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }
 
-        .meta-card strong {
-            display: block;
-            font-size: 13px;
-            color: var(--primary-dark);
-            margin-bottom: 3px;
-        }
-
-        .meta-card span {
+        .word-count {
             font-size: 12px;
             color: var(--muted);
+            font-variant-numeric: tabular-nums;
         }
 
-        .preview-header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 14px;
-        }
-
-        .preview-header p {
-            margin: 0;
-            font-size: 13px;
+        .btn-icon {
+            appearance: none;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--panel);
             color: var(--muted);
+            padding: 6px 12px;
+            font: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-icon:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
         }
 
         #preview {
             width: 100%;
-            min-height: 880px;
-            padding: 16px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: #fbfcfe;
-            font-family: Consolas, "Courier New", monospace;
-            font-size: 12.5px;
-            line-height: 1.5;
-            white-space: pre;
+            min-height: 360px;
+            padding: 18px 20px;
+            border: none;
+            border-radius: 0 0 var(--radius) var(--radius);
+            background: #fafbfc;
+            font-family: "SF Mono", "Cascadia Code", Consolas, "Courier New", monospace;
+            font-size: 12px;
+            line-height: 1.55;
+            color: var(--text);
+            resize: none;
+            outline: none;
         }
 
-        .missing-data {
+        /* ── Info cards below header ── */
+        .info-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .info-card {
             padding: 14px 16px;
-            border: 1px solid #f5c2c7;
-            border-radius: 10px;
-            background: #fff1f2;
-            color: var(--danger);
-            margin-bottom: 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--panel);
+            box-shadow: var(--shadow-sm);
         }
 
+        .info-card strong {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .info-card span {
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        .source-status {
+            margin-top: 4px;
+            display: block;
+            font-size: 11.5px;
+            color: var(--muted);
+        }
+
+        /* ── Responsive ── */
         @media (max-width: 1080px) {
             .layout {
                 grid-template-columns: 1fr;
             }
 
+            .preview-panel {
+                position: static;
+            }
+
             #preview {
-                min-height: 560px;
+                min-height: 500px;
+            }
+
+            .info-strip {
+                grid-template-columns: 1fr;
+            }
+
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                padding: 20px 16px;
+            }
+
+            .shell {
+                padding: 16px 12px 32px;
+            }
+
+            .panel-body {
+                padding: 16px;
+            }
+
+            .button-row {
+                padding: 14px 16px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="shell">
-        <section class="hero">
+    <div class="header">
+        <div class="header-inner">
             <h1>Lesson Prompt Builder</h1>
-            <p class="subtitle">
-                This page rebuilds the final `User:` request inside `megapromptlean.md` and copies either that prompt
-                alone or `CLAUDE.md` followed by it.
-            </p>
-        </section>
+            <p>Build the final User request for megapromptlean.md. Copy for Claude (prompt only) or ChatGPT (CLAUDE.md + prompt).</p>
+        </div>
+    </div>
 
-        <div id="missing-data" class="missing-data" style="display: none;"></div>
+    <div class="shell">
+        <div id="missing-data" class="missing-data"></div>
+
+        <div class="info-strip">
+            <div class="info-card">
+                <strong>Claude</strong>
+                <span>Copies megapromptlean.md with your fields filled in.</span>
+            </div>
+            <div class="info-card">
+                <strong>ChatGPT</strong>
+                <span>Copies CLAUDE.md first, then the finished mega-prompt.</span>
+            </div>
+            <div class="info-card">
+                <strong>Data source</strong>
+                <span>Generated from CLAUDE.md and megapromptlean.md.</span>
+                <span id="source-status" class="source-status">Run the sync script after editing either markdown file, then refresh.</span>
+            </div>
+        </div>
 
         <div class="layout">
+            <!-- ── Input Panel ── -->
             <section class="panel">
-                <h2>Prompt Inputs</h2>
+                <div class="panel-header">
+                    <h2>Prompt Inputs</h2>
+                    <p>Fill in the fields below. The preview updates live.</p>
+                </div>
 
-                <div class="section">
-                    <h3>User Request</h3>
+                <div class="panel-body">
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="deck-count">Slide Decks</label>
+                            <input id="deck-count" type="text" placeholder="1" inputmode="numeric" pattern="[0-9]*" />
+                        </div>
 
-                    <div class="field">
-                        <label for="deck-count">Number of slide decks</label>
-                        <input id="deck-count" type="text" list="deck-count-options" placeholder="1" inputmode="numeric" pattern="[0-9]*" />
-                        <p class="helper">Choose 1-5 or type a whole number.</p>
+                        <div class="field">
+                            <label for="lesson-subject">Subject</label>
+                            <input id="lesson-subject" list="lesson-subject-options" placeholder="Literacy" />
+                        </div>
+
+                        <div class="field">
+                            <label for="lesson-grade">Grade</label>
+                            <input id="lesson-grade" list="grade-options" placeholder="5/6" />
+                        </div>
                     </div>
 
-                    <div class="field">
-                        <label for="lesson-subject">Subject</label>
-                        <input id="lesson-subject" list="lesson-subject-options" placeholder="Literacy" />
-                    </div>
-
-                    <div class="field">
-                        <label for="lesson-grade">Grade</label>
-                        <input id="lesson-grade" list="grade-options" placeholder="5/6" />
-                    </div>
+                    <div class="divider"></div>
 
                     <div class="field">
                         <label for="lesson-content">Content</label>
@@ -339,7 +505,7 @@
 
                     <div class="field">
                         <label for="additional-notes">Additional Notes</label>
-                        <textarea id="additional-notes" placeholder="Any constraints, sequencing notes, or extra directions."></textarea>
+                        <textarea id="additional-notes" placeholder="Constraints, sequencing notes, or extra directions."></textarea>
                     </div>
 
                     <div class="field">
@@ -354,42 +520,39 @@
                 </div>
 
                 <div class="button-row">
-                    <button type="button" id="copy-claude" class="btn btn-primary">Copy for Claude</button>
-                    <button type="button" id="copy-chatgpt" class="btn btn-secondary">Copy for ChatGPT</button>
-                    <button type="button" id="reset-fields" class="btn btn-muted">Reset Fields</button>
+                    <button type="button" id="copy-claude" class="btn btn-primary">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                        Copy for Claude
+                    </button>
+                    <button type="button" id="copy-chatgpt" class="btn btn-secondary">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                        Copy for ChatGPT
+                    </button>
+                    <button type="button" id="reset-fields" class="btn btn-muted">Reset</button>
                 </div>
-
-                <div id="status" class="status">Ready.</div>
             </section>
 
-            <section class="panel">
-                <div class="meta-strip">
-                    <div class="meta-card">
-                        <strong>Claude copy</strong>
-                        <span>`megapromptlean.md` with your filled-in fields.</span>
-                    </div>
-                    <div class="meta-card">
-                        <strong>ChatGPT copy</strong>
-                        <span>`CLAUDE.md` first, then the finished mega-prompt.</span>
-                    </div>
-                    <div class="meta-card">
-                        <strong>Data source</strong>
-                        <span>Refresh `prompt_builder_data.js` after editing either markdown file.</span>
+            <!-- ── Preview Panel ── -->
+            <section class="panel preview-panel">
+                <div class="preview-toolbar">
+                    <h2>User Section Preview</h2>
+                    <div class="preview-meta">
+                        <span id="word-count" class="word-count"></span>
+                        <button type="button" id="copy-preview" class="btn-icon">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                            Copy
+                        </button>
                     </div>
                 </div>
-
-                <div class="preview-header">
-                    <div>
-                        <h2 style="margin: 0 0 4px;">Prompt Preview</h2>
-                        <p>Live preview of the Claude prompt output.</p>
-                    </div>
-                </div>
-
                 <textarea id="preview" readonly spellcheck="false"></textarea>
             </section>
         </div>
     </div>
 
+    <!-- ── Toast ── -->
+    <div id="toast" class="toast"></div>
+
+    <!-- ── Datalists ── -->
     <datalist id="lesson-subject-options">
         <option value="Literacy"></option>
         <option value="Numeracy"></option>
@@ -397,14 +560,6 @@
         <option value="Science"></option>
         <option value="Respectful Relationships"></option>
         <option value="Wellbeing"></option>
-    </datalist>
-
-    <datalist id="deck-count-options">
-        <option value="1"></option>
-        <option value="2"></option>
-        <option value="3"></option>
-        <option value="4"></option>
-        <option value="5"></option>
     </datalist>
 
     <datalist id="grade-options">
@@ -421,10 +576,14 @@
     <script>
         (function () {
             var data = window.PROMPT_BUILDER_DATA || null;
-            var statusEl = document.getElementById("status");
             var previewEl = document.getElementById("preview");
             var missingDataEl = document.getElementById("missing-data");
             var deckCountEl = document.getElementById("deck-count");
+            var sourceStatusEl = document.getElementById("source-status");
+            var toastEl = document.getElementById("toast");
+            var wordCountEl = document.getElementById("word-count");
+            var toastTimer = null;
+
             var fieldIds = [
                 "deck-count",
                 "lesson-subject",
@@ -446,13 +605,19 @@
             };
 
             var defaultValuesById = {
-                "deck-count": "1",
                 dailyReview: "n/a"
             };
 
-            function setStatus(kind, message) {
-                statusEl.className = "status " + kind;
-                statusEl.textContent = message;
+            function showToast(kind, message) {
+                if (toastTimer) clearTimeout(toastTimer);
+                toastEl.className = "toast " + kind;
+                toastEl.textContent = message;
+                // Force reflow for re-trigger
+                void toastEl.offsetWidth;
+                toastEl.classList.add("visible");
+                toastTimer = setTimeout(function () {
+                    toastEl.classList.remove("visible");
+                }, 3000);
             }
 
             function normalizeValue(value) {
@@ -478,9 +643,7 @@
 
             function parseDeckCount(value) {
                 var cleaned = String(value || "").trim();
-                if (!cleaned) {
-                    return 1;
-                }
+                if (!cleaned) return 1;
 
                 if (!/^\d+$/.test(cleaned)) {
                     throw new Error("Number of slide decks must be a whole number.");
@@ -495,9 +658,7 @@
             }
 
             function validateDeckCountField(showBrowserMessage) {
-                if (!deckCountEl) {
-                    return true;
-                }
+                if (!deckCountEl) return true;
 
                 try {
                     parseDeckCount(deckCountEl.value);
@@ -505,9 +666,7 @@
                     return true;
                 } catch (error) {
                     deckCountEl.setCustomValidity(error.message);
-                    if (showBrowserMessage) {
-                        deckCountEl.reportValidity();
-                    }
+                    if (showBrowserMessage) deckCountEl.reportValidity();
                     return false;
                 }
             }
@@ -541,9 +700,7 @@
             }
 
             function buildMegaPrompt() {
-                if (!data || !data.megaprompt) {
-                    return "";
-                }
+                if (!data || !data.megaprompt) return "";
 
                 var fields = buildFields();
                 var template = data.megaprompt;
@@ -559,10 +716,32 @@
             }
 
             function buildChatGptPrompt() {
-                if (!data || !data.claude) {
-                    return "";
-                }
+                if (!data || !data.claude) return "";
                 return data.claude + "\r\n\r\n" + buildMegaPrompt();
+            }
+
+            function formatGeneratedAt(value) {
+                if (!value) return "";
+                var date = new Date(value);
+                if (Number.isNaN(date.getTime())) return "";
+                return date.toLocaleString("en-AU", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit"
+                });
+            }
+
+            function countWords(text) {
+                if (!text) return 0;
+                return text.split(/\s+/).filter(function (w) { return w.length > 0; }).length;
+            }
+
+            function updateWordCount() {
+                var text = previewEl.value;
+                var count = countWords(text);
+                wordCountEl.textContent = count.toLocaleString() + " words";
             }
 
             function fallbackSelectText(text) {
@@ -582,28 +761,33 @@
 
             function copyText(text, successMessage) {
                 if (!text) {
-                    setStatus("bad", "Prompt data is missing. Run the data generator first.");
+                    showToast("bad", "Prompt data is missing. Run the data generator first.");
                     return;
                 }
 
                 navigator.clipboard.writeText(text).then(function () {
-                    setStatus("good", successMessage);
+                    showToast("good", successMessage);
                 }).catch(function () {
                     fallbackSelectText(text);
-                    setStatus("warn", "Clipboard write failed. The full text is selected so you can copy manually.");
+                    showToast("warn", "Clipboard failed. Text is selected - copy manually.");
                 });
+            }
+
+            function buildUserSectionPreview() {
+                var fields = buildFields();
+                var eol = "\n";
+                return buildUserSection(fields, eol);
             }
 
             function refreshPreview() {
                 try {
                     validateDeckCountField(false);
-                    previewEl.value = buildMegaPrompt();
-                    if (previewEl.value) {
-                        setStatus("good", "Preview updated.");
-                    }
+                    previewEl.value = buildUserSectionPreview();
+                    updateWordCount();
                 } catch (error) {
                     previewEl.value = "";
-                    setStatus("bad", error.message);
+                    wordCountEl.textContent = "";
+                    showToast("bad", error.message);
                 }
             }
 
@@ -614,14 +798,23 @@
                     element.value = defaultValuesById[id] || "";
                 });
                 refreshPreview();
-                setStatus("good", "Fields reset.");
+                showToast("good", "Fields reset.");
             }
+
+            // ── Init ──
 
             if (!data || !data.megaprompt || !data.claude) {
                 missingDataEl.style.display = "block";
                 missingDataEl.textContent = "Missing prompt data. Run `node scripts/generate_prompt_builder_data.js` from the project root, then refresh this page.";
-                setStatus("bad", "Prompt data not loaded.");
+                showToast("bad", "Prompt data not loaded.");
                 return;
+            }
+
+            if (sourceStatusEl) {
+                var generatedLabel = formatGeneratedAt(data.generatedAt);
+                sourceStatusEl.textContent = generatedLabel
+                    ? "Prompt data generated " + generatedLabel + ". Run `node scripts/generate_prompt_builder_data.js` after editing either markdown file."
+                    : "Run `node scripts/generate_prompt_builder_data.js` after editing either markdown file, then refresh.";
             }
 
             fieldIds.forEach(function (id) {
@@ -639,7 +832,7 @@
 
             document.getElementById("copy-claude").addEventListener("click", function () {
                 if (!validateDeckCountField(true)) {
-                    setStatus("bad", "Enter a whole number for slide decks.");
+                    showToast("bad", "Enter a whole number for slide decks.");
                     return;
                 }
                 copyText(buildMegaPrompt(), "Claude prompt copied.");
@@ -647,10 +840,18 @@
 
             document.getElementById("copy-chatgpt").addEventListener("click", function () {
                 if (!validateDeckCountField(true)) {
-                    setStatus("bad", "Enter a whole number for slide decks.");
+                    showToast("bad", "Enter a whole number for slide decks.");
                     return;
                 }
-                copyText(buildChatGptPrompt(), "ChatGPT prompt copied with CLAUDE.md first.");
+                copyText(buildChatGptPrompt(), "ChatGPT prompt copied (with CLAUDE.md).");
+            });
+
+            document.getElementById("copy-preview").addEventListener("click", function () {
+                if (!validateDeckCountField(true)) {
+                    showToast("bad", "Enter a whole number for slide decks.");
+                    return;
+                }
+                copyText(buildUserSectionPreview(), "User section copied.");
             });
 
             document.getElementById("reset-fields").addEventListener("click", resetFields);

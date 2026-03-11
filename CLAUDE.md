@@ -68,6 +68,7 @@ For builder signatures, palette schema, and full API: read `docs/theme-system.md
 - Use a classroom-natural voice in `SAY:`: direct prompts, short follow-ups, question-led phrasing, and concise think-aloud cues. Light connective phrasing is allowed when it helps flow, but keep it brief and purposeful.
 - Avoid slang, lesson-announcer phrasing, polished exposition, abstract briefing language, and over-explained transitions in `SAY:`. If a bullet sounds more like presenter copy than classroom talk, rewrite it.
 - Section headers in notes should be plain uppercase text like `SAY:` and `DO:`. Do not try to force bold with markdown.
+- Separate note sections with a blank line. PowerPoint on iPad reads paragraph breaks more reliably than dense text blocks.
 - If a slide uses `liSlide()`, the Learning Intention must be a single plain sentence and the Success Criteria must be exactly 3 simple `I can...` bullets. The first success criterion must be ultra-achievable for almost every student.
 - Do not add a `PACING OVERVIEW` block to speaker notes by default. If timing guidance is genuinely needed, keep it to one short sentence in `TEACHER NOTES`.
 - End notes with at most one short framework/meta tag line. Do not stack multiple checklist tags.

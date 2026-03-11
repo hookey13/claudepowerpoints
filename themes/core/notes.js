@@ -1,5 +1,8 @@
 "use strict";
 
+const fs = require("fs");
+const JSZip = require("jszip");
+
 const NOTE_SECTION_HEADERS = [
   "SAY",
   "DO",
@@ -13,6 +16,14 @@ const NOTE_SECTION_HEADERS = [
 ];
 
 const ASCII_REPLACEMENTS = [
+  [/â€¢/g, "-"],
+  [/â€“|â€”/g, "-"],
+  [/â€˜|â€™/g, "'"],
+  [/â€œ|â€�/g, '"'],
+  [/â€¦/g, "..."],
+  [/Ã—/g, "x"],
+  [/Ã·/g, "/"],
+  [/Â/g, ""],
   [/[\u2018\u2019\u201A\u201B\u2032]/g, "'"],
   [/[\u201C\u201D\u201E\u201F\u2033]/g, '"'],
   [/[\u2010\u2011\u2012\u2013\u2014\u2015\u2212]/g, "-"],
@@ -40,6 +51,15 @@ let notesPatchInstalled = false;
 
 function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
 function stripMarkdown(value) {
@@ -114,6 +134,176 @@ function sanitizeTeacherNotes(notes) {
   return normalized.join("\n");
 }
 
+function parseNotesSections(notes) {
+  const sanitized = sanitizeTeacherNotes(notes || "");
+  const lines = sanitized ? sanitized.split("\n") : [];
+  const sections = [];
+  let current = null;
+
+  lines.forEach((line) => {
+    const trimmed = line.trim();
+    if (HEADER_PATTERN.test(trimmed.replace(/:$/, "")) || NOTE_SECTION_HEADERS.some((header) => `${header}:` === trimmed)) {
+      current = {
+        name: trimmed.endsWith(":") ? trimmed : `${trimmed}:`,
+        lines: [],
+      };
+      sections.push(current);
+      return;
+    }
+
+    if (current) {
+      current.lines.push(line);
+    }
+  });
+
+  return sections;
+}
+
+function getTeacherNotesSourceIssues(notes, opts) {
+  if (notes == null || notes === "") return [];
+
+  const o = opts || {};
+  const raw = String(notes).replace(/\r\n?/g, "\n");
+  const lines = raw.split("\n");
+  const issues = [];
+  const sanitized = sanitizeTeacherNotes(raw);
+  const sections = parseNotesSections(raw);
+
+  if (o.checkMarkdownHeaders !== false &&
+      /\*\*(?:SAY|DO|PACING OVERVIEW|CFU CHECKPOINT|TEACHER NOTES|ENABLING & EXTENDING|MISCONCEPTIONS|SENSITIVITY ADVISORY|WATCH FOR):\*\*/i.test(raw)) {
+    issues.push("markdown note headers are not allowed");
+  }
+
+  if (o.checkUnicodeBullets !== false && /[\u2022\u2023\u25E6\u2043\u2219\u25CF\u25AA]/.test(raw)) {
+    issues.push("unicode bullets are not allowed");
+  }
+
+  if (o.checkSmartPunctuation !== false &&
+      /[\u2018\u2019\u201A\u201B\u2032\u201C\u201D\u201E\u201F\u2033\u2010\u2011\u2012\u2013\u2014\u2015\u2212\u2026]/.test(raw)) {
+    issues.push("smart punctuation must be authored in ASCII");
+  }
+
+  if (o.checkAscii !== false && /[^\x09\x0A\x0D\x20-\x7E]/.test(raw)) {
+    issues.push("non-ASCII/control characters are not allowed in note source");
+  }
+
+  const maxLines = o.maxLines || 40;
+  const maxChars = o.maxChars || 2600;
+  if (lines.length > maxLines) {
+    issues.push(`note block exceeds ${maxLines} lines`);
+  }
+  if (sanitized && sanitized.length > maxChars) {
+    issues.push(`note block exceeds ${maxChars} characters after sanitizing`);
+  }
+
+  if (o.checkSectionStructure) {
+    const sectionNames = new Set(sections.map((section) => section.name));
+    ["SAY:", "DO:"].forEach((required) => {
+      if (!sectionNames.has(required)) {
+        issues.push(`missing required ${required} section`);
+      }
+    });
+
+    const maxSayBullets = o.maxSayBullets || 16;
+    const maxDoBullets = o.maxDoBullets || 8;
+    const maxWatchForBullets = o.maxWatchForBullets || 5;
+    const maxTeacherNotesLines = o.maxTeacherNotesLines || 8;
+    const maxTeacherNotesChars = o.maxTeacherNotesChars || 1400;
+
+    sections.forEach((section) => {
+      const nonBlank = section.lines.filter((line) => line.trim());
+      const bulletCount = nonBlank.filter((line) => /^-\s+/.test(line.trim())).length;
+      const contentCount = bulletCount || nonBlank.length;
+      const chars = nonBlank.join(" ").length;
+
+      if (section.name === "SAY:" && contentCount > maxSayBullets) {
+        issues.push(`SAY section exceeds ${maxSayBullets} bullets/lines`);
+      }
+      if (section.name === "DO:" && contentCount > maxDoBullets) {
+        issues.push(`DO section exceeds ${maxDoBullets} bullets/lines`);
+      }
+      if (section.name === "WATCH FOR:" && contentCount > maxWatchForBullets) {
+        issues.push(`WATCH FOR section exceeds ${maxWatchForBullets} bullets/lines`);
+      }
+      if (section.name === "TEACHER NOTES:") {
+        if (nonBlank.length > maxTeacherNotesLines) {
+          issues.push(`TEACHER NOTES section exceeds ${maxTeacherNotesLines} lines`);
+        }
+        if (chars > maxTeacherNotesChars) {
+          issues.push(`TEACHER NOTES section exceeds ${maxTeacherNotesChars} characters`);
+        }
+      }
+    });
+  }
+
+  return issues;
+}
+
+function getSlideNotesText(slide) {
+  if (!slide || !Array.isArray(slide._slideObjects)) return "";
+
+  const notesObject = slide._slideObjects.find((obj) => obj && obj._type === "notes");
+  if (!notesObject || !Array.isArray(notesObject.text) || !notesObject.text[0]) {
+    return "";
+  }
+
+  return notesObject.text[0].text || "";
+}
+
+function buildNotesParagraphsXml(notes) {
+  const sanitized = sanitizeTeacherNotes(notes || "");
+  const lines = sanitized ? sanitized.split("\n") : [""];
+  const paragraphs = [];
+
+  lines.forEach((line) => {
+    if (!line) {
+      paragraphs.push('<a:p><a:endParaRPr lang="en-US" dirty="0"/></a:p>');
+      return;
+    }
+
+    paragraphs.push(
+      `<a:p><a:r><a:rPr lang="en-US" dirty="0"/><a:t>${escapeXml(line)}</a:t></a:r><a:endParaRPr lang="en-US" dirty="0"/></a:p>`
+    );
+  });
+
+  if (paragraphs.length === 0) {
+    paragraphs.push('<a:p><a:endParaRPr lang="en-US" dirty="0"/></a:p>');
+  }
+
+  return `<a:bodyPr/><a:lstStyle/>${paragraphs.join("")}`;
+}
+
+function rewriteNotesSlideXml(noteXml, notes) {
+  const replacementBody = buildNotesParagraphsXml(notes);
+  const pattern = /(<p:cNvPr id="3" name="Notes Placeholder 2"\/>[\s\S]*?<p:txBody>)[\s\S]*?(<\/p:txBody>)/;
+
+  if (!pattern.test(noteXml)) {
+    throw new Error("Unable to locate notes placeholder body while rewriting notes XML.");
+  }
+
+  return noteXml.replace(pattern, `$1${replacementBody}$2`);
+}
+
+async function rewriteSpeakerNotesInFile(pptxPath, slides) {
+  if (!pptxPath || !Array.isArray(slides) || slides.length === 0) return;
+
+  const input = await fs.promises.readFile(pptxPath);
+  const zip = await JSZip.loadAsync(input);
+
+  for (let index = 0; index < slides.length; index += 1) {
+    const xmlPath = `ppt/notesSlides/notesSlide${index + 1}.xml`;
+    const file = zip.file(xmlPath);
+    if (!file) continue;
+
+    const noteXml = await file.async("string");
+    const noteText = getSlideNotesText(slides[index]);
+    zip.file(xmlPath, rewriteNotesSlideXml(noteXml, noteText));
+  }
+
+  const output = await zip.generateAsync({ type: "nodebuffer", compression: "DEFLATE" });
+  await fs.promises.writeFile(pptxPath, output);
+}
+
 function cleanTargetText(value) {
   return toAscii(stripMarkdown(String(value || ""))).replace(/\s+/g, " ").trim();
 }
@@ -159,8 +349,11 @@ function installNotesPatch(PptxGenJS) {
   const slide = probe.addSlide();
   const proto = Object.getPrototypeOf(slide);
   const originalAddNotes = proto && proto.addNotes;
+  const presProto = PptxGenJS.prototype;
+  const originalWriteFile = presProto && presProto.writeFile;
 
-  if (typeof originalAddNotes !== "function" || originalAddNotes.__teacherNotesPatched) {
+  if (typeof originalAddNotes !== "function" || typeof originalWriteFile !== "function" ||
+      originalAddNotes.__teacherNotesPatched || originalWriteFile.__teacherNotesPatched) {
     notesPatchInstalled = true;
     return;
   }
@@ -171,12 +364,29 @@ function installNotesPatch(PptxGenJS) {
 
   patchedAddNotes.__teacherNotesPatched = true;
   proto.addNotes = patchedAddNotes;
+
+  async function patchedWriteFile(props) {
+    const filePath = await originalWriteFile.call(this, props);
+    if (typeof filePath === "string") {
+      await rewriteSpeakerNotesInFile(filePath, this.slides || []);
+    }
+    return filePath;
+  }
+
+  patchedWriteFile.__teacherNotesPatched = true;
+  presProto.writeFile = patchedWriteFile;
   notesPatchInstalled = true;
 }
 
 module.exports = {
   NOTE_SECTION_HEADERS,
   sanitizeTeacherNotes,
+  parseNotesSections,
+  getTeacherNotesSourceIssues,
+  getSlideNotesText,
+  buildNotesParagraphsXml,
+  rewriteNotesSlideXml,
+  rewriteSpeakerNotesInFile,
   normalizeLessonTargets,
   installNotesPatch,
 };

@@ -8,6 +8,7 @@
 const pptxgen = require("pptxgenjs");
 const fs = require("fs");
 const { createTheme } = require("../themes/factory");
+const { UNIT, LESSONS } = require("./configs/four_processes");
 const {
   createPdf, writePdf, addPdfHeader, addSectionHeading,
   addBodyText, addProblem, addTipBox, addPdfFooter,
@@ -16,7 +17,9 @@ const {
 } = require("../themes/pdf_helpers");
 
 // ── Theme ─────────────────────────────────────────────────────────────────────
-const T = createTheme("numeracy", "grade56", 2);
+const LESSON = LESSONS[3];
+const RESOURCES = LESSON.resources;
+const T = createTheme(UNIT.subject, UNIT.yearLevel, UNIT.variant);
 const {
   C, FONT_H, FONT_B,
   titleSlide, liSlide, contentSlide, cfuSlide, closingSlide,
@@ -27,30 +30,30 @@ const {
   SAFE_BOTTOM, CONTENT_TOP, STAGE_COLORS,
 } = T;
 
-const OUT_DIR = "output/4Proc_Lesson3_Short_Division";
-const FOOTER = "Session 3 of 4 | Four Processes Review | Year 5/6 Maths";
+const OUT_DIR = LESSON.outDir;
+const FOOTER = LESSON.footer;
 
 // ── Teacher notes ─────────────────────────────────────────────────────────────
 
-const NOTES_TITLE = `**SAY:**
+const NOTES_TITLE = `SAY:
 • "Welcome to Session 3 of our Four Processes Review week. Today we're focusing on short division — the bus stop method."
 • "You've all learned short division before. Today is about making sure we are accurate, fluent, and confident — especially when carrying remainders between columns."
 • "By the end of the lesson, you'll be dividing multi-digit numbers with precision and expressing remainders in three different ways."
 
-**DO:**
+DO:
 • Display the title slide as students settle. Ensure mini-whiteboards and markers are on every desk.
 • Remind students: "This is a REVIEW lesson — we're tightening up our skills, not learning from scratch."
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 Session 3 of a 4-session review week covering the four processes (addition, subtraction, multiplication, division). Students have been previously taught short division — this session targets fluency, accuracy, and common error correction. The lesson follows an explicit teaching structure: Daily Review activates prerequisite knowledge (multiples and divisibility), Fluency builds automaticity with division facts, I Do models the algorithm with think-aloud to surface misconceptions, We Do provides guided practice with withReveal, and You Do gives independent practice. The exit ticket assesses three tiers: clean division, remainder expression, and error analysis.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who seem anxious about division — division is the most commonly feared of the four processes. Reassure: "We're reviewing, not starting from scratch. You know more than you think."
 • Readiness signal: students settling with materials ready.
 
 [Maths: Planning | VTLM 2.0: Planning]`;
 
-const NOTES_DR1 = `**SAY:**
+const NOTES_DR1 = `SAY:
 • "Let's warm up. Today's Daily Review connects to division by looking at how multiples work."
 • "Remember: all multiples can be formed by combining or regrouping. For example, multiples of 7 can be made by adding a multiple of 2 and the matching multiple of 5."
 • "3 times 7 equals 3 times 2 plus 3 times 5. That's 6 plus 15 equals 21. Check: 3 times 7 IS 21."
@@ -58,13 +61,13 @@ const NOTES_DR1 = `**SAY:**
 • Allow 30 seconds. "6 times 2 is 12. 6 times 5 is 30. 12 plus 30 is 42. And 6 times 7 IS 42."
 • "Why does this work? Because 7 equals 2 plus 5, so multiplying by 7 is the same as multiplying by 2 and by 5 and adding the results. This is the distributive law in action."
 
-**DO:**
+DO:
 • Display the slide. Walk through the worked example for 3 x 7 step by step.
 • Allow 30 seconds for students to attempt 6 x 7 on whiteboards.
 • Reveal the answer. Ask: "Can anyone explain WHY this works?"
 • Draw attention to the right-side visual showing the splitting.
 
-**CFU CHECKPOINT:**
+CFU CHECKPOINT:
 Technique: Show Me Boards
 Script:
 • "Using the same method, what is 4 x 7? Split into 4 x 2 and 4 x 5. Show me on your boards."
@@ -72,17 +75,17 @@ Script:
 PROCEED: If >=80% correct, move to DR2.
 PIVOT: If students struggle, model one more: "5 x 7 = 5 x 2 + 5 x 5 = 10 + 25 = 35." Then re-check.
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 This Daily Review target is prescribed: "Number Properties and Algorithms — I can demonstrate that all multiples can be formed by combining or regrouping." The distributive law underpins why short division works — when we carry a remainder to the next column, we're essentially regrouping. By activating this understanding here, students are better prepared to understand WHY carrying works in short division. The connection is not made explicit to students at this point — it's primed implicitly.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who multiply correctly but don't understand WHY the splitting works — note for later. Understanding the distributive property supports later algebraic thinking.
 • Students who get confused by the "splitting" and add 2 and 5 first (getting 7, then multiplying) — they're not splitting, they're just multiplying by 7. Redirect: "The point is to split BEFORE multiplying."
 • Readiness signal: students completing the board check within 15 seconds with working shown.
 
 [Maths: Daily Review | VTLM 2.0: Retention & Recall]`;
 
-const NOTES_DR2 = `**SAY:**
+const NOTES_DR2 = `SAY:
 • "Now let's review divisibility tests. These help us quickly check if a number divides evenly — no calculator needed."
 • "Question 1: Is 45,678 divisible by 9?"
 • "The divisibility rule for 9: add all the digits. If the sum is divisible by 9, the number is divisible by 9."
@@ -91,13 +94,13 @@ const NOTES_DR2 = `**SAY:**
 • "The rule for 3 is the same idea: add the digits. If the sum is divisible by 3, the number is divisible by 3."
 • "1 + 2 + 3 + 4 + 5 = 15. Is 15 divisible by 3? 15 divided by 3 = 5 exactly. YES, 12,345 IS divisible by 3."
 
-**DO:**
+DO:
 • Display the slide. Read Q1 aloud. Model the digit sum for 45,678.
 • Allow students to attempt Q2 on whiteboards (30 seconds).
 • Reveal: "Digit sum of 12,345 is 15, and 15 / 3 = 5. YES."
 • Quick extension: "If 12,345 is divisible by 3, what would 12,345 / 3 actually be? Don't calculate — just know the algorithm will produce a whole number answer."
 
-**CFU CHECKPOINT:**
+CFU CHECKPOINT:
 Technique: Thumbs Up/Down
 Script:
 • "Is 111 divisible by 3? Thumbs up for yes, thumbs down for no."
@@ -106,17 +109,17 @@ Script:
 PROCEED: If >=80% correct on both, move to Fluency.
 PIVOT: If students struggle with the digit sum, model slowly: "Write the digits apart: 2... 4... 5... Now add: 2 plus 4 is 6, plus 5 is 11. Is 11 in the 9 times table? No."
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 This Daily Review target is prescribed: "Multiplication and Division as Inverse Operations — I can use divisibility tests to determine if larger numbers are multiples of one-digit numbers." Divisibility tests connect directly to short division — if a student knows a number is NOT divisible by the divisor, they can predict there will be a remainder before they even start the algorithm. This metacognitive awareness helps students self-monitor during short division. The digit-sum tests for 3 and 9 are the most commonly taught and most useful for checking work.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who add digits incorrectly — this is an arithmetic error, not a conceptual one. Encourage: "Write each digit separately, then add carefully."
 • Students who confuse the rules for 3 and 9 — both use digit sums, but the threshold differs. Clarify: "For 3, the digit sum must be a multiple of 3. For 9, the digit sum must be a multiple of 9."
 • Readiness signal: confident thumbs and quick digit sums.
 
 [Maths: Daily Review | VTLM 2.0: Retention & Recall]`;
 
-const NOTES_FLUENCY = `**SAY:**
+const NOTES_FLUENCY = `SAY:
 • "Division facts sprint. You have 60 seconds. These target the harder division facts: dividing by 6, 7, 8, and 9."
 • "Write answers only — no working needed. If you get stuck, skip it and come back."
 • "Ready? Pencils up... GO."
@@ -124,16 +127,16 @@ const NOTES_FLUENCY = `**SAY:**
 • Read through answers rapidly. Students self-mark.
 • "Hands up — who got 10 or more? 8 or more? If you got fewer than 8, that's OK — these are the hardest division facts. Keep practising."
 
-**DO:**
+DO:
 • Display the slide. Students work silently for exactly 60 seconds.
 • Time precisely. Say "GO" to start and "STOP" to end.
 • Read answers aloud quickly — students self-mark.
 • Ask for hands up at different thresholds to gauge class fluency.
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 Division fact fluency is the critical prerequisite for short division. A student who cannot quickly recall 56 / 8 = 7 will struggle at every step of the algorithm. The 60-second sprint format normalises speed alongside accuracy. Facts targeting /6, /7, /8, /9 are deliberately chosen because these are the hardest and most commonly confused division facts. The facts are presented in mixed order to prevent students from using patterns (e.g., counting by 7s) rather than recall. Students who score below 8/12 may need additional fluency intervention outside this lesson.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who freeze at the start — they may lack confidence. Encourage: "Just do the ones you know first."
 • Students who count on fingers or skip-count — this is not automaticity. Note these students for follow-up fluency practice.
 • Students who confuse 56/7 with 56/8 — common mix-up. These students will likely make errors during short division when identifying the largest multiple.
@@ -141,29 +144,29 @@ Division fact fluency is the critical prerequisite for short division. A student
 
 [Maths: Fluency | VTLM 2.0: Retention & Recall]`;
 
-const NOTES_LISC = `**SAY:**
+const NOTES_LISC = `SAY:
 • Read the LI: "We are learning to use the short division algorithm to divide multi-digit numbers accurately so we can solve division problems fluently."
 • "Let's look at our three success criteria."
 • "SC1: I can set out a short division problem correctly using the bus stop layout. This is the foundation — getting the layout right."
 • "SC2: I can carry out short division including carrying remainders between place value columns. This is the big one today — the carrying is where most errors happen."
 • "SC3: I can interpret the remainder and express it as a whole number remainder, a fraction, or a decimal. This is the final step — what do you DO with the remainder?"
 
-**DO:**
+DO:
 • Display the slide. Point to each SC in turn.
 • Pause after SC2: "This is where the most common errors happen. We're going to spend a lot of time on this today."
 • Leave the slide visible for 20-30 seconds so students can read and internalise.
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 The LI frames short division as a REVIEW skill being consolidated for fluency and accuracy, not as new learning. The three SCs are ordered progressively: SC1 is procedural setup (bus stop layout), SC2 is the core algorithmic skill (carrying remainders), SC3 extends to interpretation (expressing remainders three ways). SC2 is where most Year 5/6 errors occur — students who set up correctly (SC1) still frequently fail at carrying (SC2). SC3 connects short division to fractions and decimals, reinforcing cross-topic links.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who look confident at the LI — they may already be fluent. Plan to release these students to independent practice earlier during We Do.
 • Students who look anxious — note for closer monitoring during I Do.
 • Readiness signal: students nodding or whispering the SC to themselves.
 
 [Maths: Planning — Curriculum Alignment | VTLM 2.0: Planning]`;
 
-const NOTES_WE1 = `**SAY:**
+const NOTES_WE1 = `SAY:
 • "Watch me work through a short division problem. I'm going to think aloud so you can hear my decision-making."
 • "The problem: 846 divided by 2."
 • "First, I set up the bus stop. The DIVISOR — that's the number I'm dividing BY — goes on the LEFT, outside the bus stop. The DIVIDEND — that's the number being divided — goes INSIDE. The answer goes ON TOP."
@@ -174,29 +177,29 @@ const NOTES_WE1 = `**SAY:**
 • "My answer: 423. Let me check: 423 times 2 equals 846. Correct!"
 • "Notice: this was a clean division — no remainders anywhere. Every digit divided evenly. That won't always happen."
 
-**DO:**
+DO:
 • Display the slide. Point to each element of the bus stop layout as you name it.
 • Work through each digit deliberately slowly — narrate EVERY decision.
 • After completing, demonstrate the checking strategy: multiply quotient by divisor.
 • Emphasise: "The answer goes ON TOP — not underneath. Many students get confused about where the answer sits."
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 Worked Example 1 is deliberately simple — 846 / 2 has no carrying, no remainders. This allows students to focus on the LAYOUT and PROCEDURE of the bus stop method without the cognitive load of carrying. The think-aloud models three key metacognitive moves: (1) identifying where each number goes in the bus stop, (2) working left-to-right through the dividend, and (3) checking by multiplying back. The checking strategy (quotient x divisor = dividend) is essential for self-monitoring and should be reinforced throughout the lesson.
 
-**MISCONCEPTIONS:**
+MISCONCEPTIONS:
 • Misconception: "The answer goes below the bus stop line."
   Why: Students may confuse short division layout with long multiplication layout, where partial products go below.
   Impact: If the answer is written below, students lose track of place value alignment and may produce incorrect answers.
   Quick correction: "In the bus stop, the answer always sits ON TOP of the line. Think of it as passengers sitting ON TOP of the bus."
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who look bored or impatient — this example is intentionally easy. They can be reassured that the next example gets harder.
 • Students who seem confused about the layout despite this being review — note for closer monitoring. These students may have a fragile understanding of short division.
 • Readiness signal: students nodding along and some mouthing the answers before you say them.
 
 [Maths: Launch — Explicit Instruction (I Do) | VTLM 2.0: Explicit Explanation & Modelling]`;
 
-const NOTES_WE2 = `**SAY:**
+const NOTES_WE2 = `SAY:
 • "Now a harder one. 7,458 divided by 6. This time there WILL be remainders to carry."
 • "I set up my bus stop: 6 on the outside, 7,458 on the inside."
 • Think-aloud: "First digit: 7. I ask: what's the biggest multiple of 6 that fits into 7? 6 times 1 equals 6. So I write 1 on top. My remainder is 7 minus 6 equals 1."
@@ -206,17 +209,17 @@ const NOTES_WE2 = `**SAY:**
 • "Now I have 18 (the carried 1 with the 8). 18 divided by 6... 6 times 3 equals 18 exactly! Write 3 on top. No remainder."
 • "My answer: 1,243. Let me check: 1,243 times 6... 1,200 times 6 is 7,200, plus 43 times 6 is 258. 7,200 plus 258 equals 7,458. CORRECT!"
 
-**DO:**
+DO:
 • Display the slide. Work through each step with exaggerated deliberateness.
 • Use colour-coding on the slide: each step in a different colour to show the progression.
 • At the carrying step, physically write the small superscript digit — make this very visible.
 • Pause at the deliberate error moment (14 / 6 = 3?): "6 times 3 is 18 — TOO BIG! Always check that your multiple doesn't exceed the number."
 • Demonstrate the verification: "1,243 times 6 should give me back 7,458."
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 This is the core worked example of the lesson. 7,458 / 6 is chosen because it requires carrying at every step except the last, forcing students to see the carrying process repeatedly. The deliberate error at 14 / 6 = 3 is pedagogically critical — this is the most common error in short division. Students who choose a multiple that is too large produce an answer that is too high for that column and cascade errors through the remaining digits. The think-aloud explicitly models the self-monitoring question: "Is my multiple bigger than the number? If so, go down one." The verification step (multiply back) teaches students to self-check — a habit that prevents errors from persisting.
 
-**MISCONCEPTIONS:**
+MISCONCEPTIONS:
 • Misconception: "After 7 / 6 = 1 r 1, the next step is 4 / 6, not 14 / 6."
   Why: Students forget to carry the remainder. They see the next digit as standalone rather than combined with the carried remainder.
   Impact: This produces completely wrong answers. For 7,458 / 6: without carrying, the student gets 1 (from 7/6) then gets stuck at 4/6 (can't divide), potentially writing 0 or skipping.
@@ -227,14 +230,14 @@ This is the core worked example of the lesson. 7,458 / 6 is chosen because it re
   Impact: The quotient digit is too large, and when they subtract, they'd get a negative remainder — but most students just write a wrong digit and move on.
   Quick correction: "Always CHECK: is your multiple BIGGER than the number? 18 is bigger than 14, so 3 is too much. Go down to 2: 6 times 2 equals 12. Does 12 fit in 14? Yes — with remainder 2."
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who are writing along on their whiteboards — excellent! They're actively processing.
 • Students who look confused at the carrying step — this is the key misconception area. Plan to give these students extra attention during CFU.
 • Readiness signal: students following along and some nodding at the verification step.
 
 [Maths: Launch — Explicit Instruction (I Do) | VTLM 2.0: Explicit Explanation & Modelling]`;
 
-const NOTES_CFU1 = `**SAY:**
+const NOTES_CFU1 = `SAY:
 • "Your turn. On your whiteboards, work out 5,376 divided by 4 using the bus stop method."
 • "Set up your bus stop. Work through each digit. Carry any remainders. You have 45 seconds."
 • "Remember: divisor on the left, dividend inside, answer on top."
@@ -246,14 +249,14 @@ const NOTES_CFU1 = `**SAY:**
 • "16 divided by 4 equals 4 exactly."
 • "Answer: 1,344. Check: 1,344 times 4 equals 5,376."
 
-**DO:**
+DO:
 • Display the question slide. Students work on whiteboards for 45 seconds.
 • Circulate quickly — look for: correct bus stop layout, carrying digits visible, answer on top.
 • After time: "Boards up!" Scan for correct answer (1,344).
 • Click to reveal the worked solution.
 • Cold call 1-2 students: "What did you carry after dividing 5 by 4?"
 
-**CFU CHECKPOINT:**
+CFU CHECKPOINT:
 Technique: Show Me Boards + Cold Call
 Script:
 • "Hold up your boards. I'm looking for 1,344 with carrying shown."
@@ -264,10 +267,10 @@ PIVOT: Most likely errors:
   - Answer of 1,094 (forgot to carry): Reteach carrying with the first two digits. "5 / 4 = 1 r 1. That remainder 1 makes the next number 13, not 3."
   - Answer wrong in the last digit (e.g., 1,346): Check if they carried correctly to the last column.
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 This CFU uses Show Me Boards because it gives whole-class visibility of working AND answers simultaneously. The problem 5,376 / 4 requires carrying at every step (5/4 = 1 r1, 13/4 = 3 r1, 17/4 = 4 r1, 16/4 = 4), providing a thorough check of SC2. Cold calling after boards up pushes beyond just getting the right answer — it checks whether students can EXPLAIN the carrying process. Students who produce 1,344 without being able to explain what they carried are pattern-matching, not understanding.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who produce the correct answer quickly and confidently — these students are ready for We Do without scaffolding.
 • Students who get 1,344 but took a long time — they understand the process but lack fluency. More practice needed.
 • Students who get a wrong answer — check WHERE the error occurred. Is it a carrying error (SC2) or a division fact error (fluency)?
@@ -275,7 +278,7 @@ This CFU uses Show Me Boards because it gives whole-class visibility of working 
 
 [Maths: Monitor Progress | VTLM 2.0: Monitor Progress (CFU)]`;
 
-const NOTES_WEDO1 = `**SAY:**
+const NOTES_WEDO1 = `SAY:
 • "Let's work through this together. 8,694 divided by 3."
 • "Set up your bus stop. Divisor 3 on the left, 8,694 inside."
 • "Work each digit on your whiteboards. I'll give you 45 seconds, then we'll check together."
@@ -287,16 +290,16 @@ const NOTES_WEDO1 = `**SAY:**
 • "Answer: 2,898."
 • "Check: 2,898 times 3. 2,900 times 3 is 8,700, minus 2 times 3 is 6. 8,700 minus 6 is 8,694. Correct!"
 
-**DO:**
+DO:
 • Display the question slide. Students work on whiteboards.
 • After 45 seconds, click to reveal and work through the solution step by step.
 • Point to each carrying step on the slide — ensure the small superscript digits are visible.
 • Highlight the pattern: "Notice how we kept carrying 2 each time. That's a coincidence here — it won't always be the same remainder."
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 Problem Pair 1 is a clean division (no final remainder). 8,694 / 3 requires carrying at every step except the last, reinforcing the carrying procedure from the I Do. The answer 2,898 has a satisfying pattern that students may notice. This problem is used with withReveal — students attempt on whiteboards before the solution is shown, creating a low-stakes assessment moment. The verification step (multiply back) is modelled again to reinforce the self-checking habit.
 
-**ENABLING & EXTENDING:**
+ENABLING & EXTENDING:
 ENABLING PROMPT:
 • Task: Provide a bus stop template with place value columns pre-drawn. The first step is completed: "8 / 3 = 2 r 2" with the 2 carried. Students complete the remaining digits.
 • Extra Notes: Seat enabling students near the front. Check their first carry is correct before they proceed.
@@ -305,7 +308,7 @@ EXTENDING PROMPT:
 • Task: After solving 8,694 / 3, students verify by multiplying 2,898 x 3 on their whiteboards using the column method. Then they try: "What is 8,695 / 3? How is it different?"
 • Extra Notes: 8,695 / 3 = 2,898 r 1. The extending question introduces the remainder concept naturally.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who get 2,898 quickly — they're fluent. Move them to extending.
 • Students who stumble at 26 / 3 — they may not know that 3 x 8 = 24. This is a fluency gap, not a conceptual one.
 • Students who forget to carry — redirect: "What's left over? Where does it go?"
@@ -313,7 +316,7 @@ EXTENDING PROMPT:
 
 [Maths: Explore — Guided Practice (We Do) | VTLM 2.0: Scaffold Practice]`;
 
-const NOTES_WEDO2 = `**SAY:**
+const NOTES_WEDO2 = `SAY:
 • "This time, we'll have a remainder at the END. 4,537 divided by 8."
 • "Set up your bus stop. Work through each digit. When you finish, you'll have a remainder. Keep it!"
 • "You have 60 seconds — this one's trickier."
@@ -330,17 +333,17 @@ const NOTES_WEDO2 = `**SAY:**
 • "Way 3: 567.125. We can continue dividing: 1.000 divided by 8 = 0.125."
 • "All three are correct — the question tells you which form to use."
 
-**DO:**
+DO:
 • Display the question slide. Students work on whiteboards for 60 seconds.
 • Click to reveal. Work through each step with colour-coding.
 • At the "4 / 8" step, pause: "This is a common tripping point. When the first digit is smaller than the divisor, we write 0 and carry the entire digit."
 • After reaching remainder 1, display all three forms side by side.
 • For the decimal: briefly show continuing the division with a decimal point.
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 Problem Pair 2 introduces TWO critical concepts: (1) what happens when the first digit of the dividend is smaller than the divisor (4 < 8), and (2) expressing the final remainder three ways. The "first digit smaller" situation is a common sticking point — students either skip the digit, start from the second digit, or get confused. The approach of writing 0 and carrying is shown explicitly but note that the leading zero can be dropped in the final answer (567, not 0567). The three forms of remainder expression are a key SC3 target. The fraction form (remainder/divisor = 1/8) is the most commonly confused — students sometimes write remainder/dividend (1/4537) by mistake.
 
-**MISCONCEPTIONS:**
+MISCONCEPTIONS:
 • Misconception: "When the first digit is smaller than the divisor, skip it."
   Why: Students think "I can't divide 4 by 8, so I'll start at 45." This sometimes gives the right answer but shows poor understanding of the algorithm.
   Impact: When this happens in the middle of a problem (not just the first digit), students skip digits entirely and get wrong answers.
@@ -351,7 +354,7 @@ Problem Pair 2 introduces TWO critical concepts: (1) what happens when the first
   Impact: Produces nonsensical tiny fractions instead of the correct fractional part.
   Quick correction: "The fraction is REMAINDER over DIVISOR. Think: the remainder is still waiting to be divided BY the divisor. 1 is still waiting to be divided by 8. So it's 1/8."
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who write 567.1 instead of 567.125 — they may not know how to continue dividing with the decimal.
 • Students who skip the leading zero and start at 45 — correct their layout even if they get the right answer. The habit will cause errors with more complex problems.
 • Students who write 1/4537 as the fraction — immediately correct: "Remainder over DIVISOR."
@@ -359,7 +362,7 @@ Problem Pair 2 introduces TWO critical concepts: (1) what happens when the first
 
 [Maths: Explore — Guided Practice (We Do) | VTLM 2.0: Scaffold Practice]`;
 
-const NOTES_HINGE = `**SAY:**
+const NOTES_HINGE = `SAY:
 • "Hinge question time. I need to know if you're ready for independent work."
 • "Look at this problem: 456 divided by 7. Four students have attempted it. Only ONE has the correct working. Which one?"
 • "Study each option carefully. Look at the carrying digits, the quotient digits, and the final remainder."
@@ -370,13 +373,13 @@ const NOTES_HINGE = `**SAY:**
 • Option B explanation (if correct): "456 / 7. 4 / 7 = 0 r 4. Carry 4 to make 45. 45 / 7 = 6 r 3. Carry 3 to make 36. 36 / 7 = 5 r 1. Answer: 65 r 1."
 • Debrief each distractor to surface and correct the specific misconception it represents.
 
-**DO:**
+DO:
 • Display the hinge question with four options. Allow 15 seconds.
 • "Show me fingers — 1, 2, 3, or 4." Scan the room.
 • Click to reveal. Work through the correct solution step by step.
 • Address each distractor: explain what error each one made.
 
-**CFU CHECKPOINT:**
+CFU CHECKPOINT:
 Technique: Finger Voting (1-4)
 Script:
 • "Hold up your fingers for the correct option. Ready... show me!"
@@ -387,17 +390,17 @@ PIVOT: Most likely error patterns:
   - Students choosing the "wrong multiple" option: They may accept that a wrong quotient digit is fine. Reteach: "Always check: quotient digit times divisor — is the product LESS THAN or EQUAL to the number? If it's more, the digit is too big."
 Re-check with: "What is 456 / 7? Work it out on your board." Boards up.
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 The hinge question tests diagnostic ability — can students identify correct vs incorrect short division working? This is a higher-order skill than performing the division themselves, as it requires understanding WHY each step works. Each distractor represents a specific common misconception: forgetting to carry, choosing a multiple that's too large, mishandling the first digit when it's smaller than the divisor, and/or expressing the remainder incorrectly. Finger voting ensures rapid whole-class scanning. Students who identify the correct working can reliably self-monitor their own division.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who hold up fingers uncertainly — they may be guessing. Ask them to verify on their whiteboard.
 • Students who choose quickly and confidently but choose the WRONG option — they may have the misconception themselves. Note for targeted support during You Do.
 • Readiness signal: fast, confident finger holds for the correct answer.
 
 [Maths: Monitor Progress — Hinge Question | VTLM 2.0: Monitor Progress (CFU)]`;
 
-const NOTES_YOUDO = `**SAY:**
+const NOTES_YOUDO = `SAY:
 • "You're ready. Time to practise independently."
 • "You have 6 problems on your worksheet. They increase in difficulty."
 • "Problems 1-4 are clean divisions or divisions with simple remainders."
@@ -405,26 +408,26 @@ const NOTES_YOUDO = `**SAY:**
 • "Work in silence. Show all your working — bus stop layout, carrying digits, and final answer."
 • "You have 10 minutes."
 
-**DO:**
-• Distribute SR1 worksheet (Short Division Practice).
+DO:
+• Distribute the Session 3 Worksheet.
 • Set a visible timer for 10 minutes.
 • Circulate — visit struggling students first, then move to extending students.
 • Conference briefly with 2-3 students: "Talk me through your carrying here."
-• For extending students who finish early, direct them to EXT1 (Repeating Decimals Investigation).
+• For extending students who finish early, direct them to the Session 3 Extension (Repeating Decimals Investigation).
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 The You Do provides independent practice across the full difficulty range. Problems 1-2 are clean divisions (no final remainder), Problems 3-4 have remainders expressed as whole numbers, and Problems 5-6 require remainder expression as fractions and decimals. This progression allows every student to experience success on at least the first two problems before encountering increased difficulty. The instruction to "show all working" prevents students from just writing answers — their working reveals whether they understand the carrying process (SC2) and can self-check.
 
-**ENABLING & EXTENDING:**
+ENABLING & EXTENDING:
 ENABLING PROMPT:
 • Task: Students complete Problems 1-4 only. Provide a laminated bus stop template with place value columns marked. The first problem has the bus stop pre-drawn with the first step completed.
 • Extra Notes: Circulate to enabling students after 2 minutes to check Problem 1 before they proceed.
 
 EXTENDING PROMPT:
-• Task: After completing all 6 problems, students attempt EXT1 — the Repeating Decimals Investigation. They explore what happens when dividing by 3, 6, 7, and 9, looking for repeating decimal patterns.
-• Extra Notes: Distribute EXT1 to extending students when they finish the main worksheet. The investigation is self-contained.
+• Task: After completing all 6 problems, students attempt the Session 3 Extension — the Repeating Decimals Investigation. They explore what happens when dividing by 3, 6, 7, and 9, looking for repeating decimal patterns.
+• Extra Notes: Distribute Session 3 Extension to extending students when they finish the main worksheet. The investigation is self-contained.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who skip the carrying digits — remind: "I need to see every carry. They're tiny but important."
 • Students who express remainders as fractions incorrectly (remainder/dividend instead of remainder/divisor) — this is the most common SC3 error.
 • Students who struggle with Problem 5-6 — these require converting remainder to decimal. It's OK if enabling students don't reach these.
@@ -432,22 +435,22 @@ EXTENDING PROMPT:
 
 [Maths: Summarise — Independent Practice (You Do) | VTLM 2.0: Supported Application]`;
 
-const NOTES_EXIT = `**SAY:**
+const NOTES_EXIT = `SAY:
 • "Pens down on the worksheet. Exit ticket time — three questions."
 • "Work silently and independently. No looking at your worksheet or your neighbour."
 • "Question 1 is a clean division. Question 2 has a remainder — express it three ways. Question 3 is error analysis — find and fix the mistake."
 • "You have 4 minutes."
 
-**DO:**
+DO:
 • Display the exit ticket slide. Students write answers in maths books or on the back of the worksheet.
 • Set a timer for 4 minutes. Circulate silently — observe but don't help.
 • Collect responses or note answers as students hold up books.
 • After collection: briefly share Q1 answer. "9,636 / 4 = 2,409. Quick check: 2,409 x 4 = 9,636."
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 The exit ticket assesses all three SCs. Q1 (clean division: 9,636 / 4) targets SC1 and SC2 — correct layout and carrying. The answer 2,409 includes a 0 in the tens column (40/4=0 r0, then 36/4=9), which tests whether students handle zero quotient digits correctly. Q2 (3,527 / 6) targets SC3 — expressing the remainder three ways (587 r 5, 587 5/6, 587.833...). Q3 (error analysis) targets deeper understanding — students must identify WHERE an error occurred in a worked solution and explain what went wrong. Sort responses into three groups: (1) Q1 wrong — need reteaching of basic algorithm, (2) Q1 right but Q2 partially right — need help with remainder expression, (3) all correct — ready for next session.
 
-**WATCH FOR:**
+WATCH FOR:
 • Q1: Students who get 2,409 wrong often stumble on the 0 — they may write 249 (dropping the tens digit when there's no remainder to carry but the digit divides evenly).
 • Q2: Students who express remainder as 5/3527 instead of 5/6. Mark these for immediate feedback.
 • Q3: Students who can't find the error — they may have the same misconception. This is valuable diagnostic data.
@@ -455,23 +458,23 @@ The exit ticket assesses all three SCs. Q1 (clean division: 9,636 / 4) targets S
 
 [Maths: Summarise — Exit Ticket (Stage 5) | VTLM 2.0: Monitor Progress & Feedback]`;
 
-const NOTES_RESOURCES = `**SAY:**
+const NOTES_RESOURCES = `SAY:
 • "Here are the printable resources for today's lesson. If you're a teacher using this deck, click any link to open the PDF."
-• "SR1 is the practice worksheet — 8 problems with bus stop grids. SR2 is the answer key showing all three remainder forms. EXT1 is the repeating decimals investigation for extending students."
+• "Session 3 Worksheet is the practice sheet with 8 problems and bus stop grids. Session 3 Answer Key shows all three remainder forms. Session 3 Extension is the repeating decimals investigation for extending students."
 
-**DO:**
+DO:
 • Display the slide briefly. Teachers can click hyperlinks to open PDFs.
 • This slide is primarily for teacher preparation — students don't need to see it during the lesson.
 
-**TEACHER NOTES:**
-All PDFs are in the same folder as this PPTX file. Hyperlinks are relative — they work when the PPTX is opened from the lesson folder. Print SR1 before the lesson (one per student). Print EXT1 for extending students only (typically 3-5 copies). SR2 is for teacher reference — do not distribute to students.
+TEACHER NOTES:
+All PDFs are in the same folder as this PPTX file. Hyperlinks are relative — they work when the PPTX is opened from the lesson folder. Print Session 3 Worksheet before the lesson (one per student). Print Session 3 Extension for extending students only (typically 3-5 copies). Session 3 Answer Key is for teacher reference — do not distribute to students.
 
-**WATCH FOR:**
+WATCH FOR:
 • N/A — this is a teacher-facing slide.
 
 [Maths: Planning — Preparation | VTLM 2.0: Planning]`;
 
-const NOTES_CLOSING = `**SAY:**
+const NOTES_CLOSING = `SAY:
 • "Let's review our success criteria."
 • "SC1: I can set out a short division problem correctly using the bus stop layout. Thumbs up, sideways, or down."
 • Pause and scan. "Great — most thumbs up."
@@ -482,17 +485,17 @@ const NOTES_CLOSING = `**SAY:**
 • "Turn to your partner: What is the ONE mistake you want to make sure you NEVER make in short division? 30 seconds."
 • Take 2-3 responses. "Great awareness. Tomorrow — Session 4, we put all four processes together."
 
-**DO:**
+DO:
 • Display the closing slide with SC and takeaways listed.
 • Run thumbs up/sideways/down for each SC in turn.
 • Allow 30 seconds for the Turn & Talk about common mistakes.
 • Listen for students mentioning carrying errors, remainder expression, or checking — all indicate metacognitive awareness.
 • Close with acknowledgement of effort.
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 The closing slide reviews all three SC and uses self-assessment to snapshot confidence levels. Students who self-assess as "thumbs down" on SC1 have a critical gap — they can't even set up the problem. SC2 thumbs-down indicates carrying issues — the most common error. SC3 thumbs-down is acceptable at this point — expressing remainders as fractions and decimals is the most cognitively demanding skill. The Turn & Talk about mistakes they want to avoid is deliberately framed to make error-awareness a positive metacognitive habit rather than a source of shame. The preview of Session 4 (combining all four processes) provides closure and anticipation.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who show thumbs-down on SC1 — this is a fundamental gap requiring 1:1 conferencing before next session.
 • Students who show thumbs-up on everything — verify against exit ticket data.
 • The Turn & Talk: listen for "forgetting to carry" — this indicates SC2 awareness.
@@ -1214,7 +1217,7 @@ async function build() {
         const ox = 0.5 + col * 4.7;
         const oy = CONTENT_TOP + 0.55 + row * 1.75;
         const ow = 4.4;
-        const oh = 1.6;
+        const oh = 1.45;
 
         addCard(s, ox, oy, ow, oh, { strip: C.MUTED });
 
@@ -1368,26 +1371,14 @@ async function build() {
   exitTicketSlide(pres, [
     "Solve: 9,636 / 4. Show all working using the bus stop method.",
     "Solve: 3,527 / 6. Express your remainder as: (a) r__, (b) a fraction, (c) a decimal.",
-    "Error Analysis: A student solved 2,538 / 7 and got 362 r 4. The correct answer is 362 r 4. Check their working: is 362 x 7 + 4 = 2,538? If not, find and fix the error.",
+    "Error Analysis: A student solved 2,538 / 7 and got 362 r 4. Check their answer: is 362 x 7 + 4 = 2,538? Explain how you know.",
   ], NOTES_EXIT, FOOTER);
 
   // ── SLIDE 18: Resources Slide ──────────────────────────────────────────
   addResourceSlide(pres, [
-    {
-      name: "SR1 — Short Division Practice",
-      fileName: "SR1_Short_Division_Practice.pdf",
-      description: "8 problems (4 clean, 4 with remainders) with bus stop gridlines. One per student.",
-    },
-    {
-      name: "SR2 — Short Division Answers",
-      fileName: "SR2_Short_Division_Answers.pdf",
-      description: "Answer key with all 3 remainder forms. Teacher reference only.",
-    },
-    {
-      name: "EXT1 — Division Investigation: Repeating Decimals",
-      fileName: "EXT1_Division_Investigation.pdf",
-      description: "Investigate which divisors create repeating decimals. Extending students.",
-    },
+    RESOURCES.worksheet,
+    RESOURCES.answerKey,
+    RESOURCES.extension,
   ], { C, FONT_H, FONT_B }, FOOTER, NOTES_RESOURCES);
 
   // ── SLIDE 19: Closing ─────────────────────────────────────────────────
@@ -1403,7 +1394,7 @@ async function build() {
 
   // ── Write PPTX ──────────────────────────────────────────────────────────
   if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
-  const outPath = `${OUT_DIR}/4Proc_Lesson3_Short_Division.pptx`;
+  const outPath = `${OUT_DIR}/${LESSON.pptxFileName}`;
   await pres.writeFile({ fileName: outPath });
   console.log("PPTX written to " + outPath);
 
@@ -1417,12 +1408,12 @@ async function build() {
 // ── PDF: SR1 — Short Division Practice ──────────────────────────────────────
 
 async function generateWorksheet() {
-  const doc = createPdf({ title: "Short Division Practice" });
+  const doc = createPdf({ title: RESOURCES.worksheet.name });
 
-  let y = addPdfHeader(doc, "Short Division Practice", {
-    subtitle: "SR1 — Supporting Resource",
+  let y = addPdfHeader(doc, RESOURCES.worksheet.name, {
+    subtitle: "Independent Practice",
     color: C.PRIMARY,
-    lessonInfo: "Session 3 of 4 | Four Processes Review | Year 5/6 Maths",
+    lessonInfo: FOOTER,
   });
 
   y = addTipBox(doc, "Use the bus stop method for every problem. Show your working clearly: divisor on the left, dividend inside, answer on top. Write carried remainders as small digits next to the next number.", y, { color: C.SECONDARY });
@@ -1517,20 +1508,20 @@ async function generateWorksheet() {
     color: C.ACCENT,
   });
 
-  addPdfFooter(doc, "Session 3 of 4 | Four Processes Review | Year 5/6 Maths");
-  await writePdf(doc, OUT_DIR + "/SR1_Short_Division_Practice.pdf");
-  console.log("  SR1 worksheet written.");
+  addPdfFooter(doc, FOOTER);
+  await writePdf(doc, `${OUT_DIR}/${RESOURCES.worksheet.fileName}`);
+  console.log(`  ${RESOURCES.worksheet.name} written.`);
 }
 
 // ── PDF: SR2 — Short Division Answers ───────────────────────────────────────
 
 async function generateAnswerKey() {
-  const doc = createPdf({ title: "Short Division Practice — Answer Key" });
+  const doc = createPdf({ title: RESOURCES.answerKey.name });
 
-  let y = addPdfHeader(doc, "Short Division Practice — Answer Key", {
-    subtitle: "SR2 — Teacher Reference",
+  let y = addPdfHeader(doc, RESOURCES.answerKey.name, {
+    subtitle: "Teacher Reference",
     color: C.PRIMARY,
-    lessonInfo: "Session 3 of 4 | Four Processes Review | Year 5/6 Maths",
+    lessonInfo: FOOTER,
     showNameDate: false,
   });
 
@@ -1644,19 +1635,19 @@ async function generateAnswerKey() {
   });
 
   addPdfFooter(doc, "Teacher Reference — Do Not Distribute to Students");
-  await writePdf(doc, OUT_DIR + "/SR2_Short_Division_Answers.pdf");
-  console.log("  SR2 answer key written.");
+  await writePdf(doc, `${OUT_DIR}/${RESOURCES.answerKey.fileName}`);
+  console.log(`  ${RESOURCES.answerKey.name} written.`);
 }
 
 // ── PDF: EXT1 — Division Investigation: Repeating Decimals ──────────────────
 
 async function generateExtendingPdf() {
-  const doc = createPdf({ title: "Repeating Decimals Investigation" });
+  const doc = createPdf({ title: RESOURCES.extension.name });
 
-  let y = addPdfHeader(doc, "Division Investigation: Repeating Decimals", {
-    subtitle: "EXT1 — Extending Challenge",
+  let y = addPdfHeader(doc, RESOURCES.extension.name, {
+    subtitle: "Extending Challenge",
     color: C.ACCENT,
-    lessonInfo: "Session 3 of 4 | Four Processes Review | Year 5/6 Maths",
+    lessonInfo: FOOTER,
   });
 
   y = addSectionHeading(doc, "The Big Question", y, { color: C.ACCENT });
@@ -1734,9 +1725,9 @@ async function generateExtendingPdf() {
   y = addBodyText(doc, "The number 142857 is called a 'cyclic number.' Multiply it by 1, 2, 3, 4, 5, and 6. What do you notice about the results? Can you explain the connection to 1/7?", y);
   y = addLinedArea(doc, y + 5, 5);
 
-  addPdfFooter(doc, "Session 3 of 4 | Four Processes Review | Year 5/6 Maths — Extending Investigation");
-  await writePdf(doc, OUT_DIR + "/EXT1_Division_Investigation.pdf");
-  console.log("  EXT1 extending investigation written.");
+  addPdfFooter(doc, `${FOOTER} - Extending Investigation`);
+  await writePdf(doc, `${OUT_DIR}/${RESOURCES.extension.fileName}`);
+  console.log(`  ${RESOURCES.extension.name} written.`);
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────

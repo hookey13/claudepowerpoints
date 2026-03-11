@@ -1129,7 +1129,7 @@ a clear direction, not a menu.
 SLIDE TEACHER NOTES TEMPLATE (apply to every slide):
 ──────────────────────────────────────────────────────
 
-**SAY:**
+SAY:
 - [Write `SAY:` as teacher cue bullets, not polished script prose. Each bullet
   should sound like something a teacher could say immediately in class. Keep it
   concise, natural, and easy to deliver - one idea per bullet.]
@@ -1150,8 +1150,10 @@ SLIDE TEACHER NOTES TEMPLATE (apply to every slide):
 - [Cut empty management filler, but do allow light connectors when they improve
   flow. "Okay, try this one." is fine. "Today we will now begin our exploration
   of..." is not.]
+- [Leave one blank line before the next section header so the notes stay easy
+  to scan in PowerPoint presenter view, especially on iPad.]
 
-**SAY VOICE - AVOID / PREFER:**
+SAY VOICE - AVOID / PREFER:
 - Avoid: formal launch prose like "Today we will explore equivalent number
   sentences and discover how they can be used to identify unknown values."
   Prefer: "Today we're looking at equivalent number sentences. If both sides
@@ -1165,7 +1167,7 @@ SLIDE TEACHER NOTES TEMPLATE (apply to every slide):
   expressions are equivalent."
   Prefer: "Quick check - same value or not? Thumbs up or down."
 
-**SAY VOICE - BEFORE / AFTER EXAMPLES:**
+SAY VOICE - BEFORE / AFTER EXAMPLES:
 - Title / launch before: "Welcome to our Algebra unit on finding unknown values.
   Over six sessions we'll learn how to use number properties to crack equations."
   After: "We're starting algebra today. Our job is to find the missing value and
@@ -1179,14 +1181,14 @@ SLIDE TEACHER NOTES TEMPLATE (apply to every slide):
   After: "Quick check. 6 x 4 and 48 divided by 2 - same value or not? Thumbs up
   or down."
 
-**DO:**
+DO:
 - [Physical action the teacher takes - e.g., "Point to the worked example on screen"]
 - [What to draw attention to - e.g., "Circle the operation sign before students begin"]
 - [Manipulative or resource instruction - e.g., "Distribute whiteboards now"]
 - [Movement cue - e.g., "Circulate to the back-left table group first - they struggled yesterday"]
 - [Timing note - e.g., "Allow 90 seconds for whiteboard response"]
 
-**CFU CHECKPOINT:**  <- CONDITIONAL: include on slides where a Check for Understanding occurs.
+CFU CHECKPOINT:  <- CONDITIONAL: include on slides where a Check for Understanding occurs.
                        Omit on slides with no CFU (e.g., pure title slides, transitions).
 
 Technique: [Name the specific CFU technique - e.g., "Show Me Boards with Justification."
@@ -1221,17 +1223,18 @@ PIVOT (if <80% demonstrate understanding):
   problem: 3 + 4 × 2. If ≥80% now correct, proceed. If still below, pause
   the lesson and use the worked example from Slide X as a second reteach."]
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 [Background information the teacher needs to understand WHY this slide exists
 and how it fits into the lesson. This is not for students — it is professional
 knowledge for the teacher. Include: the pedagogical rationale for this activity,
 how it connects to the previous and next slide, which part of the DECIDE framework
 this slide serves, any relevant research (brief), and vocabulary or content
-knowledge the teacher should have at their fingertips. If this slide pulls in
+knowledge the teacher should have at their fingertips. Keep this tight: usually
+1-2 short sentences, not a long briefing paragraph. If this slide pulls in
 content from a previous lesson or session, state that explicitly so the teacher
 can see the spiral. Tag the checklist alignment and VTLM 2.0 element.]
 
-**ENABLING & EXTENDING:**  ← CONDITIONAL: include on slides where students are
+ENABLING & EXTENDING:  ← CONDITIONAL: include on slides where students are
                              practising (We Do and You Do stages). Omit on I Do
                              modelling slides, title slides, review slides, and
                              transitions. The agent decides which slides warrant
@@ -1253,7 +1256,7 @@ EXTENDING PROMPT (for students working above the lesson target):
 • Extra Notes: [Optional — brief practical tip for the teacher. Only include if
   it genuinely helps. Omit if the task speaks for itself.]
 
-**MISCONCEPTIONS:**  ← CONDITIONAL: include on slides where the content has known
+MISCONCEPTIONS:  ← CONDITIONAL: include on slides where the content has known
                        misconceptions that a teacher (especially a less experienced one)
                        needs to understand BEFORE teaching. Omit on slides where there
                        are no significant content misconceptions (e.g., review slides,
@@ -1276,7 +1279,7 @@ Format each misconception as:
   Impact: [What goes wrong in later learning if this isn't corrected]
   Quick correction: [1-2 sentence teacher move to address it]]
 
-**SENSITIVITY ADVISORY:**  ← CONDITIONAL: include on slides where the content
+SENSITIVITY ADVISORY:  ← CONDITIONAL: include on slides where the content
                             touches sensitive topics (death, abuse, trauma, family
                             disruption, mental health, suicide, violence). The agent
                             decides which slides warrant this section.
@@ -1291,7 +1294,7 @@ Format each misconception as:
   acknowledge their feelings privately, do not require them to continue
   the activity, and follow the school's wellbeing referral process."]]
 
-**WATCH FOR:**
+WATCH FOR:
 • [Specific, observable student error during THIS slide's activity — not a
   general misconception, but something you can SEE in real-time. E.g.,
   "Students writing '5 + 3 = 53' — they are concatenating rather than adding.
@@ -1584,12 +1587,12 @@ from the LI/SC slide are the reference point for this reflection.
 **What must appear in the teacher notes (SAY/DO):**
 
 The closing slide teacher notes must explicitly guide the teacher to:
-- **SAY:** Reference the specific success criteria by name/number
-- **SAY:** Ask students to self-assess ("Look at our three success criteria.
+- SAY: Reference the specific success criteria by name/number
+- SAY: Ask students to self-assess ("Look at our three success criteria.
   Give me a thumbs up, sideways, or down for each one.")
-- **DO:** Describe the reflection routine (e.g., "Display SC on slide. Read
+- DO: Describe the reflection routine (e.g., "Display SC on slide. Read
   each criterion aloud. Students show thumbs for each.")
-- **TEACHER NOTES:** Note what to do with the self-assessment data (e.g.,
+- TEACHER NOTES: Note what to do with the self-assessment data (e.g.,
   "Students showing thumbs-down on SC2 may need the enabling scaffold in
   tomorrow's lesson" or "If most students are amber on SC3, consider
   revisiting this in tomorrow's Fluency or Daily Review")
@@ -2472,45 +2475,47 @@ SLIDE [NUMBER]: [SLIDE TITLE]
 Visual Content: [What appears on the slide face — the student-facing content]
 
 Presenter Notes:
-─────────────────────────────
-**SAY:**
-• [Key talking point 1 — accompanies what's on the slide]
-• [Key talking point 2]
-• [Key question to ask + expected response]
+-----------------------------
+SAY:
+- [Key talking point 1 - accompanies what's on the slide]
+- [Key talking point 2]
+- [Key question to ask + expected response]
 
-**DO:**
-• [Action 1]
-• [Action 2]
-• [Action 3]
+DO:
+- [Action 1]
+- [Action 2]
+- [Action 3]
 
-**CFU CHECKPOINT:**  ← only on slides with a Check for Understanding
-Technique: [Named technique — varied across the lesson]
+CFU CHECKPOINT:  <- only on slides with a Check for Understanding
+Technique: [Named technique - varied across the lesson]
 Script:
-• [Precise script for running the check]
-• [What to look for in student responses]
-PROCEED: [Direction if ≥80% understand]
+- [Precise script for running the check]
+- [What to look for in student responses]
+PROCEED: [Direction if >=80% understand]
 PIVOT: [ONE most likely misconception + different reteach approach + re-check]
 
-**TEACHER NOTES:**
-[Pedagogical rationale, spiral connections, content knowledge]
+TEACHER NOTES:
+[Pedagogical rationale, spiral connections, content knowledge. Keep this tight: 1-2 short sentences, not a long briefing paragraph.]
 
-**ENABLING & EXTENDING:**  ← only on We Do / You Do practice slides
+ENABLING & EXTENDING:  <- only on We Do / You Do practice slides
 ENABLING PROMPT:
-• Task: [Specific prerequisite task, 6–12 months behind]
-• Extra Notes: [Optional — brief practical tip if helpful]
+- Task: [Specific prerequisite task, 6-12 months behind]
+- Extra Notes: [Optional - brief practical tip if helpful]
 EXTENDING PROMPT:
-• Task: [Specific next-step task, 6–12 months ahead]
-• Extra Notes: [Optional — brief practical tip if helpful]
+- Task: [Specific next-step task, 6-12 months ahead]
+- Extra Notes: [Optional - brief practical tip if helpful]
 
-**MISCONCEPTIONS:**  ← only on slides where content demands it
-• Misconception: [What students believe]
+MISCONCEPTIONS:  <- only on slides where content demands it
+- Misconception: [What students believe]
   Why: [Cognitive reason]
   Impact: [Effect on later learning]
   Quick correction: [Teacher move]
 
-**WATCH FOR:**
-• [Observable error + why it happens + correction strategy]
-• [Readiness signal — what success looks like on this slide]
+WATCH FOR:
+- [Observable error + why it happens + correction strategy]
+- [Readiness signal - what success looks like on this slide]
+
+[Leave one blank line between sections. Do not use markdown bold in note headers.]
 
 [One short meta tag]
 ─────────────────────────────

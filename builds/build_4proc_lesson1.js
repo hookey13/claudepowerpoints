@@ -8,6 +8,7 @@
 const pptxgen = require("pptxgenjs");
 const fs = require("fs");
 const { createTheme } = require("../themes/factory");
+const { UNIT, LESSONS } = require("./configs/four_processes");
 const {
   createPdf, writePdf, addPdfHeader, addSectionHeading,
   addBodyText, addProblem, addTipBox, addPdfFooter,
@@ -16,7 +17,9 @@ const {
 } = require("../themes/pdf_helpers");
 
 // ── Theme ─────────────────────────────────────────────────────────────────────
-const T = createTheme("numeracy", "grade56", 0);
+const LESSON = LESSONS[1];
+const RESOURCES = LESSON.resources;
+const T = createTheme(UNIT.subject, UNIT.yearLevel, UNIT.variant);
 const {
   C, FONT_H, FONT_B,
   titleSlide, liSlide, contentSlide, cfuSlide, closingSlide,
@@ -27,43 +30,43 @@ const {
   SAFE_BOTTOM, CONTENT_TOP, STAGE_COLORS,
 } = T;
 
-const OUT_DIR = "output/4Proc_Lesson1_Addition_Subtraction";
-const FOOTER = "Session 1 of 4 | Four Processes Review | Year 5/6 Maths";
+const OUT_DIR = LESSON.outDir;
+const FOOTER = LESSON.footer;
 
 // ── Teacher notes ─────────────────────────────────────────────────────────────
 
-const NOTES_TITLE = `**SAY:**
+const NOTES_TITLE = `SAY:
 • "Welcome to our Four Processes Review week. Over four sessions we'll sharpen our skills with addition, subtraction, multiplication and division — the four building blocks of all maths."
 • "Today we focus on vertical addition and vertical subtraction. You've learned these before — today is about getting faster, more accurate, and spotting the mistakes that catch people out."
 • "By the end of today, you'll be confident setting out and solving multi-digit addition and subtraction problems vertically."
 
-**DO:**
+DO:
 • Display the title slide as students settle. Ensure mini-whiteboards, markers and erasers are on every desk.
 • Direct attention to the session number: "This is Session 1 of 4 — addition and subtraction today, multiplication and division later in the week."
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 This is a review week, not initial instruction. Students have been taught vertical addition (with regrouping/carrying) and vertical subtraction (with trading/borrowing) in prior terms. The purpose of this lesson is threefold: (1) rebuild automaticity through fluency practice, (2) surface and correct common misconceptions that have crept in since initial instruction, and (3) build proficiency through graduated independent practice. The I Do phase is shorter than in a new-content lesson because the algorithms are not new — instead, the think-alouds deliberately model the self-monitoring strategies (estimation, column-by-column checking) that distinguish proficient from mechanical application.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who groan or say "we already know this" — reframe: "Knowing it and being FAST and ACCURATE are different things. Today we're aiming for both."
 • Students who look anxious — they may have gaps from initial instruction. Note for closer monitoring during I Do.
 • Readiness signal: students settling quickly with materials ready.
 
 [Maths: Planning | VTLM 2.0: Planning]`;
 
-const NOTES_DR1 = `**SAY:**
+const NOTES_DR1 = `SAY:
 • "Let's warm up with some review from a different strand. We're looking at divisibility tests — quick tricks to check if a large number is divisible by a smaller one."
 • "Look at this example: Is 89,472 divisible by 3?"
 • "Here's the test: add all the digits. 8 + 9 + 4 + 7 + 2 = 30. Is 30 divisible by 3? Yes — 30 divided by 3 is 10. So 89,472 IS divisible by 3, which means it's a multiple of 3."
 • "Now your turn. Use the divisibility test to check the numbers on the board. Work on your whiteboards."
 
-**DO:**
+DO:
 • Display the slide. Walk through the worked example (89,472) step by step.
 • Set 60 seconds for students to test the practice numbers on their whiteboards.
 • After 60 seconds: "Boards up — show me your answers."
 • Check and discuss: emphasise the digit-sum strategy.
 
-**CFU CHECKPOINT:**
+CFU CHECKPOINT:
 Technique: Show Me Boards
 Script:
 • "Hold up your boards. I'm looking for the digit sum and your YES/NO conclusion. Ready… show me!"
@@ -71,28 +74,28 @@ Script:
 PROCEED: If >=80% correct, move to DR Slide 2.
 PIVOT: If students struggle with the digit-sum rule, model a second example slowly: "Let's try 123. 1 + 2 + 3 = 6. Is 6 divisible by 3? Yes, because 3 x 2 = 6. So 123 is a multiple of 3." Then retry with 457: "4 + 5 + 7 = 16. Is 16 divisible by 3? No — 3 x 5 = 15, 3 x 6 = 18, 16 is in between. So 457 is NOT a multiple of 3."
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 Daily Review spirals content from a different strand — here, multiplication and division via divisibility tests. The divisibility rule for 3 (digit sum divisible by 3) is one of the most useful and commonly forgotten. By revisiting it in the review context, students maintain their number-sense toolkit. The digit-sum approach also reinforces mental addition — students must add multiple single digits — which connects to today's addition focus. The large number (89,472) is deliberately chosen to look intimidating but produce a clean digit sum (30), showing students that the test works even for numbers too large to divide directly.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who try to divide 89,472 by 3 directly instead of using the digit-sum test — redirect: "There's a shortcut. Add the digits first."
 • Students who add digits incorrectly — this is an addition error, which is relevant to today's main content. Note these students for monitoring during I Do.
 • Readiness signal: fast, confident digit-sum calculations with correct conclusions.
 
 [Maths: Daily Review | VTLM 2.0: Retention & Recall]`;
 
-const NOTES_DR2 = `**SAY:**
+const NOTES_DR2 = `SAY:
 • "Now let's review finding unknowns using multiplication and division."
 • "When you see a missing number in a multiplication or division equation, you need to think about the INVERSE operation to find it."
 • "For example: ___ x 7 = 63. Think: what times 7 gives 63? Or: 63 divided by 7 = 9. So the missing number is 9."
 • "Work through the problems on your whiteboards. You have 90 seconds."
 
-**DO:**
+DO:
 • Display the slide with 6 missing-number equations.
 • Allow 90 seconds. Circulate and check working.
 • After time: "Let's check. Call out your answers..." Go through each one.
 
-**CFU CHECKPOINT:**
+CFU CHECKPOINT:
 Technique: Show Me Boards
 Script:
 • "Boards up for all six answers. Ready… show me!"
@@ -100,40 +103,40 @@ Script:
 PROCEED: If >=80% correct on most problems, move to Fluency.
 PIVOT: If students struggle, model the inverse operation explicitly: "96 divided by ___ = 12. Think: what number times 12 gives 96? 12 x 8 = 96. So the missing number is 8." Re-check with a simpler example: "___ x 5 = 45."
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 DR Slide 2 targets the inverse relationship between multiplication and division, a prerequisite skill for the entire Four Processes unit. Finding unknowns requires flexible thinking — students must determine which operation to use based on the structure of the equation. This skill transfers directly to checking addition and subtraction work (using the inverse to verify answers). The six problems include both multiplication and division formats to ensure students can work both directions. Numbers are chosen from the harder tables (7, 8, 9, 12) to maintain challenge.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who guess-and-check rather than using the inverse — this works but is slow. Encourage: "What's the inverse operation? Can you find the answer in one step?"
 • Students who confuse which number to divide by — help them identify: "What numbers do you KNOW? What's missing?"
 • Readiness signal: students completing all six within 60 seconds.
 
 [Maths: Daily Review | VTLM 2.0: Retention & Recall]`;
 
-const NOTES_FLUENCY = `**SAY:**
+const NOTES_FLUENCY = `SAY:
 • "Fluency sprint time! You have 60 seconds to solve as many addition and subtraction problems as you can."
 • "These are all single-step mental calculations — no setting out required. Just write the answers."
 • "Some are additions, some are subtractions. Read carefully."
 • "Ready? Pencils up… GO."
 • After 60 seconds: "Pens down. Let's check. Call out your answer for number 1…"
 
-**DO:**
+DO:
 • Display the slide. Students work silently for exactly 60 seconds.
 • Time precisely. Say "GO" to start and "STOP" to end.
 • Read answers aloud quickly — students self-mark.
 • Ask: "Who got 10 or more correct? 15 or more? All 16?"
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 The fluency sprint focuses on single-step additions and subtractions that activate the mental computation pathways students will rely on during the vertical algorithm. Problems include bridging tens (e.g., 47 + 8, 63 - 7) and bridging hundreds (e.g., 198 + 5, 304 - 8) — these are the exact sub-skills that underpin column-by-column processing in the vertical algorithm. A student who can't fluently add 8 + 5 = 13 will struggle to recognise when regrouping is needed in the ones column. The 60-second format normalises speed alongside accuracy and builds automaticity.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who freeze at subtraction problems but are fine with addition — they may have a subtraction fact fluency gap. Note for targeted monitoring during the subtraction I Do.
 • Students who complete very few problems — they may be counting on fingers. This is a fluency gap that will slow their vertical algorithm work. Consider providing a number facts reference card during You Do.
 • Readiness signal: most students completing 10+ problems in 60 seconds.
 
 [Maths: Fluency | VTLM 2.0: Retention & Recall]`;
 
-const NOTES_LISC = `**SAY:**
+const NOTES_LISC = `SAY:
 • Read from slide: "We are learning to use vertical addition and subtraction algorithms accurately so we can solve multi-digit problems with confidence."
 • "Let's look at our three success criteria."
 • Read SC1: "I can set out addition and subtraction problems vertically with digits aligned in the correct place value columns."
@@ -142,22 +145,22 @@ const NOTES_LISC = `**SAY:**
 • Read SC3: "I can apply the vertical subtraction algorithm including trading — or borrowing — when a top digit is smaller than the bottom digit."
 • "SC1 is the foundation everyone needs. SC2 and SC3 are the two algorithms we're reviewing today."
 
-**DO:**
+DO:
 • Display the slide. Point to the LI as you read it.
 • Point to each SC in turn. Pause after each one briefly.
 • Leave this slide visible for 20 seconds so students can read and internalise.
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 The LI explicitly names both algorithms and their purpose (solving multi-digit problems with confidence). "With confidence" is deliberate — this is review, so the goal is not just understanding but fluency and accuracy. SC1 (place value alignment) is separated out because misalignment is the single most common cause of errors in vertical algorithms — students who skip this step will make place value errors regardless of whether they understand regrouping and trading. SC2 and SC3 target the two algorithms independently, acknowledging that students often master addition regrouping before subtraction trading. The SCs are ordered by typical difficulty progression.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who look bored at the LI — this is review content, so some students may disengage. The I Do slides will re-engage them through error-spotting and estimation strategies.
 • Students who look worried at SC3 (subtraction with trading) — trading across zeros is a common anxiety point. Reassure: "We'll go step by step."
 • Readiness signal: students nodding at SC1 and SC2, attentive at SC3.
 
 [Maths: Planning — Curriculum Alignment | VTLM 2.0: Planning]`;
 
-const NOTES_IDO_ADD = `**SAY:**
+const NOTES_IDO_ADD = `SAY:
 • "Watch me work through this addition step by step. I'm going to think aloud so you can hear exactly what's going on in my head."
 • "First, before I even start: I'm going to ESTIMATE. 4,738 is close to 4,700. 2,695 is close to 2,700. So my answer should be near 7,400. I'll check this at the end."
 • "Now I set it out vertically. Most important rule: digits must be ALIGNED by place value. Ones under ones, tens under tens, hundreds under hundreds."
@@ -169,17 +172,17 @@ const NOTES_IDO_ADD = `**SAY:**
 • "My answer is 7,433. Let me check against my estimate: I predicted about 7,400. 7,433 is close to 7,400. That makes sense."
 • "Self-check complete. 4,738 + 2,695 = 7,433."
 
-**DO:**
+DO:
 • Display the slide showing the vertical algorithm with place value columns.
 • Point to each column as you work through it. Use a pointer or your finger to trace right-to-left.
 • Write the carried digits visibly above each column (these are shown on the slide in a different colour).
 • After completing: point to the estimate and the answer side by side.
 • Pause 5 seconds for students to absorb the complete working.
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 This I Do models three critical metacognitive strategies: (1) estimating before calculating — this creates a reasonableness check that catches major errors, (2) verbalising the right-to-left direction — many errors come from students who add left-to-right and then try to "fix" regrouping retroactively, (3) the self-monitoring check ("more than 9, so I carry") — this internal dialogue is what proficient students do automatically but struggling students skip. The deliberate "temptation" moment ("I'm tempted to write 13…") names the exact error students make and models the correction in real time. The numbers are chosen to require regrouping in EVERY column (8+5=13, 3+9+1=13, 7+6+1=14) so students see the carry process repeated consistently.
 
-**MISCONCEPTIONS:**
+MISCONCEPTIONS:
 • Misconception: Not carrying the regrouped ten — writing 13 instead of 3 with a carry.
   Why: Students process each column independently without considering that two-digit results must be decomposed. They see 8 + 5 = 13 and write "13" in the ones column.
   Impact: The answer will be wildly wrong — digits will overflow their columns and place values will be corrupted.
@@ -190,14 +193,14 @@ This I Do models three critical metacognitive strategies: (1) estimating before 
   Impact: They won't know whether to regroup because they haven't processed the columns to the right yet. They may get a correct answer sometimes (when no regrouping is needed) but fail when regrouping occurs.
   Quick correction: "We ALWAYS start at the ones. Why? Because we need to know if we're carrying before we can add the next column."
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who nod along mechanically — they may be going through the motions without processing the think-aloud. Engage: "Why did I start from the right?"
 • Students who look confused at the carry — they may need the physical regrouping model (base-10 blocks) to understand what the carried 1 represents.
 • Readiness signal: students mouthing "carry the 1" along with you.
 
 [Maths: Launch — Explicit Instruction (I Do) | VTLM 2.0: Explicit Explanation & Modelling]`;
 
-const NOTES_IDO_SUB = `**SAY:**
+const NOTES_IDO_SUB = `SAY:
 • "Now subtraction. This one is deliberately tricky because it involves zeros — and zeros are where most mistakes happen."
 • "8,003 minus 2,457. Let me estimate first: 8,000 minus 2,500 is about 5,500. My answer should be near there."
 • "I set it out vertically. Digits aligned. Now I start from the RIGHT — the ones."
@@ -209,16 +212,16 @@ const NOTES_IDO_SUB = `**SAY:**
 • "Now I can subtract: Ones: 13 - 7 = 6. Tens: 9 - 5 = 4. Hundreds: 9 - 4 = 5. Thousands: 7 - 2 = 5."
 • "Answer: 5,546. Check against estimate: I said about 5,500. 5,546 is close. Confirmed."
 
-**DO:**
+DO:
 • Display the slide showing the subtraction with the trading chain across zeros highlighted.
 • Trace the trading chain slowly: 8 becomes 7, zero becomes 10 then 9, zero becomes 10 then 9, 3 becomes 13.
 • Use the colour coding on the slide — original digits in one colour, traded digits in another.
 • After completing: compare answer to estimate. "5,546 versus my estimate of 5,500 — makes sense."
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 This is the hardest variant of vertical subtraction: trading across consecutive zeros. The number 8,003 is deliberately chosen because it forces a chain trade through TWO zeros — the single most common error context in subtraction. Many students panic when they can't borrow from the adjacent column and don't know to "keep going left." The think-aloud models the complete chain trade and — critically — the renaming check: "7 thousands, 9 hundreds, 9 tens, 13 ones is still 8,003." This verification step prevents the misconception that trading "changes" the number. The estimation strategy is modelled again to reinforce it as a habit, not a one-off.
 
-**MISCONCEPTIONS:**
+MISCONCEPTIONS:
 • Misconception: Subtracting the smaller digit from the larger regardless of position (e.g., in the ones column, doing 7 - 3 = 4 instead of recognising that 3 - 7 requires trading).
   Why: Students see two digits and subtract the smaller from the larger automatically, ignoring which is the top number and which is the bottom.
   Impact: The answer will be wrong in every column where the top digit is smaller. This is the most common subtraction error.
@@ -234,14 +237,14 @@ This is the hardest variant of vertical subtraction: trading across consecutive 
   Impact: Any subtraction from a number with internal zeros will be incorrect.
   Quick correction: "If the column you need to borrow from is 0, keep going left until you find a non-zero digit. Then trade back one column at a time. Every zero becomes 9 (except the last one, which becomes 10 minus what you trade away)."
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who look lost during the chain trade — this is the hardest part. If many students look confused, pause and re-demonstrate on the board with a simpler example: 400 - 156.
 • Students who say "you can't do 3 minus 7" — affirm: "Correct! In this column, you can't. That's your signal to TRADE."
 • Readiness signal: students following the chain trade with visible understanding (nodding, tracing the path).
 
 [Maths: Launch — Explicit Instruction (I Do) | VTLM 2.0: Explicit Explanation & Modelling]`;
 
-const NOTES_CFU_SMB = `**SAY:**
+const NOTES_CFU_SMB = `SAY:
 • "Show Me Boards time. Here's your problem: 3,567 + 4,876."
 • "Set it out vertically on your whiteboard. Solve it step by step."
 • "You have 45 seconds. Start from the ones column. Show all your carrying."
@@ -250,14 +253,14 @@ const NOTES_CFU_SMB = `**SAY:**
 • "Ones: 7 + 6 = 13. Write 3, carry 1. Tens: 6 + 7 = 13, plus 1 = 14. Write 4, carry 1. Hundreds: 5 + 8 = 13, plus 1 = 14. Write 4, carry 1. Thousands: 3 + 4 = 7, plus 1 = 8."
 • "The answer is 8,443."
 
-**DO:**
+DO:
 • Display the question slide. Students work on whiteboards for 45 seconds.
 • Circulate quickly — look for alignment errors, missing carries, left-to-right processing.
 • After time: "Boards up!" Scan for correct answer (8,443).
 • Click to reveal the worked solution on the next slide.
 • Address any common errors you observed during circulation.
 
-**CFU CHECKPOINT:**
+CFU CHECKPOINT:
 Technique: Show Me Boards
 Script:
 • "Set it out vertically and solve. When I say GO, hold up your board. Ready… GO!"
@@ -265,10 +268,10 @@ Script:
 PROCEED: If >=80% show correct answer with working, move to We Do.
 PIVOT: Most likely error: answer of 7,433 (forgot to carry from the hundreds column) or 8,343 (carry error in tens). If many students show errors, model the problem step-by-step on the board: "Let's do this together. Ones: 7 + 6 = ?" Use cold calls for each column. Then re-check with a simpler problem: 256 + 378.
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 This CFU tests whether students can independently apply the addition algorithm with regrouping after watching the I Do. The numbers are chosen to require regrouping in three consecutive columns (7+6=13, 6+7+1=14, 5+8+1=14) — mirroring the I Do example's difficulty. Show Me Boards is the ideal technique here because it gives whole-class data in seconds — the teacher can scan 25+ boards in one glance and identify whether the class is ready for We Do or needs reteaching. The 45-second time limit creates mild pressure that reveals whether students can execute the algorithm fluently or need to count on fingers.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who get 8,443 with no visible carrying — they may be calculating mentally, which is fine, but ask one student: "Where did you carry?" to check they understand the process.
 • Students who set the problem out with misaligned columns — this is an SC1 issue. Prompt: "Are your ones under ones?"
 • Students who get a 5-digit answer (like 18,443) — they may be concatenating rather than adding. This is a fundamental misunderstanding.
@@ -276,7 +279,7 @@ This CFU tests whether students can independently apply the addition algorithm w
 
 [Maths: Monitor Progress | VTLM 2.0: Monitor Progress (CFU)]`;
 
-const NOTES_WEDO_ADD = `**SAY:**
+const NOTES_WEDO_ADD = `SAY:
 • "Now a bigger number. Work with me: 24,536 + 18,789."
 • "On your whiteboards, set this out vertically. Line up your place values carefully — we've got 5-digit numbers now."
 • "Before you start calculating: estimate. 24,500 + 18,800 is about 43,300. Your answer should be near that."
@@ -289,13 +292,13 @@ const NOTES_WEDO_ADD = `**SAY:**
 • "Ten-thousands: 2 + 1 = 3, plus 1 = 4."
 • "Answer: 43,325. Check: my estimate was 43,300. Very close. Confirmed."
 
-**DO:**
+DO:
 • Display the question slide. Students work on whiteboards for 60 seconds.
 • Circulate — visit students who struggled in the CFU first.
 • After boards up: click to reveal the worked solution.
 • Walk through each column, pausing at each carry to confirm.
 
-**CFU CHECKPOINT:**
+CFU CHECKPOINT:
 Technique: Show Me Boards
 Script:
 • "Boards up! I'm looking for 43,325 with carries shown. Ready… show me!"
@@ -303,10 +306,10 @@ Script:
 PROCEED: If >=80% correct, move to We Do Problem 2 (subtraction).
 PIVOT: If students struggle with the 5-digit number, the issue is likely tracking carries across more columns. Model a shorter version first: "Let's try 2,453 + 1,878." Then scale back up. Emphasise: "The algorithm is the SAME regardless of how many digits. Start at the ones, carry when needed."
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 This We Do scales up from the 4-digit I Do to a 5-digit problem. The pedagogical purpose is threefold: (1) test that students can generalise the algorithm to larger numbers, (2) require sustained concentration (carries in 4 consecutive columns), (3) reinforce the estimation-before-calculation habit. The numbers are chosen so that regrouping occurs in every column except the ten-thousands — this maximises the opportunity to practise carrying. The estimation check (43,325 vs 43,300) demonstrates that even with large numbers, estimation provides a useful reasonableness check.
 
-**ENABLING & EXTENDING:**
+ENABLING & EXTENDING:
 ENABLING PROMPT:
 • Task: Provide these students with a place value grid on their whiteboard (TTh | Th | H | T | O) drawn in advance. They write each digit in its grid square before starting the algorithm. The grid enforces alignment — the most common error for struggling students.
 • Extra Notes: Seat enabling students where you can check their grid setup before they start calculating.
@@ -315,7 +318,7 @@ EXTENDING PROMPT:
 • Task: "After solving the addition, create your own 5-digit addition problem that requires carrying in EVERY column including the ten-thousands (producing a 6-digit answer). Solve it and verify with estimation."
 • Extra Notes: Example: 87,654 + 23,456 = 111,110. This forces students to handle the case where the final column also requires carrying.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who misalign the 5-digit numbers (e.g., writing 18,789 under 24,536 starting from the left instead of aligning the ones) — redirect: "Always line up from the RIGHT. Ones under ones."
 • Students who get the algorithm correct but forget to estimate — prompt: "What should the answer be ROUGHLY?"
 • Students who produce a 4-digit answer — they likely missed the ten-thousands column. Check: "How many digits should a 5-digit plus 5-digit answer have?"
@@ -323,7 +326,7 @@ EXTENDING PROMPT:
 
 [Maths: Explore — Guided Practice (We Do) | VTLM 2.0: Scaffold Practice]`;
 
-const NOTES_WEDO_SUB = `**SAY:**
+const NOTES_WEDO_SUB = `SAY:
 • "Subtraction turn. This one has zeros — just like the I Do. Work through it on your whiteboards: 7,004 minus 3,258."
 • "Before calculating: estimate. 7,000 minus 3,300 is about 3,700."
 • "Start from the ones. Remember: if the top digit is smaller, you need to TRADE."
@@ -335,13 +338,13 @@ const NOTES_WEDO_SUB = `**SAY:**
 • "Now: Ones: 14 - 8 = 6. Tens: 9 - 5 = 4. Hundreds: 9 - 2 = 7. Thousands: 6 - 3 = 3."
 • "Answer: 3,746. Estimate was 3,700. Close. Confirmed."
 
-**DO:**
+DO:
 • Display the question slide. Students work for 60 seconds on whiteboards.
 • Circulate — prioritise students who looked confused during the I Do subtraction.
 • After boards up: click to reveal the worked solution.
 • Trace the trading chain on the revealed slide.
 
-**CFU CHECKPOINT:**
+CFU CHECKPOINT:
 Technique: Show Me Boards
 Script:
 • "Boards up — looking for 3,746 with trading shown. Show me!"
@@ -353,10 +356,10 @@ PIVOT: Most likely errors:
   If many students show the flip error, re-model emphatically: "STOP. Which number did we START with? 7,004. Which are we TAKING AWAY? 3,258. The top number is what we have. The bottom number is what we remove. If the top is smaller, we MUST trade."
   If carry chain errors, model 7,004 with the trading chain step by step.
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 This We Do deliberately parallels the I Do subtraction (8,003 - 2,457) by featuring trading across zeros in a slightly different configuration (7,004 vs 8,003). The pedagogical purpose is to test whether students can independently execute the chain-trading process they observed. The zero-trading problem is the highest-difficulty subtraction variant because it requires students to chain trades across multiple columns — each step depends on the previous one. Students who get this right have strong procedural understanding. Students who get it wrong provide diagnostic information about exactly where in the chain their understanding breaks down.
 
-**ENABLING & EXTENDING:**
+ENABLING & EXTENDING:
 ENABLING PROMPT:
 • Task: Before tackling 7,004 - 3,258, have enabling students practise the trading chain on a simpler number first: "Rename 7,004 as ___ thousands, ___ hundreds, ___ tens, ___ ones without changing the total." Once they correctly rename it as 6 thousands, 9 hundreds, 9 tens, 14 ones, they proceed with the subtraction.
 • Extra Notes: This separates the trading process from the subtraction, reducing cognitive load.
@@ -365,7 +368,7 @@ EXTENDING PROMPT:
 • Task: "Create a subtraction problem where the top number has THREE consecutive zeros (e.g., _0,00_ - _,___). Solve it and explain the trading chain in words."
 • Extra Notes: Example: 50,003 - 27,458. This extends the chain to three zeros and a 5-digit context.
 
-**WATCH FOR:**
+WATCH FOR:
 • The "flip" error (subtracting small from large regardless of position) — this is the #1 subtraction misconception. If you see it, address it immediately and publicly.
 • Students who trade from the thousands but forget to continue the chain through the zeros — they may borrow 1 from 7 but then get stuck at the zeros.
 • Students who get 3,746 but can't explain the trading — they may be following the algorithm mechanically. Ask: "What did the 7 become? Why?"
@@ -373,7 +376,7 @@ EXTENDING PROMPT:
 
 [Maths: Explore — Guided Practice (We Do) | VTLM 2.0: Scaffold Practice]`;
 
-const NOTES_HINGE = `**SAY:**
+const NOTES_HINGE = `SAY:
 • "Hinge question. This tells me if you're ready for independent practice."
 • "Look at the four subtraction problems on the screen. Each one shows a completed vertical subtraction. Only ONE is correct. The other three have common mistakes."
 • "On your whiteboards, write A, B, C, or D — whichever you think is correct."
@@ -384,14 +387,14 @@ const NOTES_HINGE = `**SAY:**
 • "B: They traded but forgot to reduce the hundreds column — borrowed from 6 but left it as 6 instead of changing to 5."
 • "D: They made a subtraction fact error in the tens column — 12 minus 8 is 4, not 5."
 
-**DO:**
+DO:
 • Display the question slide with four completed subtraction problems.
 • Allow 20 seconds. Students write their choice on whiteboards.
 • "Boards up!" Scan quickly.
 • Click to reveal the correct answer and error explanations.
 • For each incorrect option, name the specific error.
 
-**CFU CHECKPOINT:**
+CFU CHECKPOINT:
 Technique: Show Me Boards (Letter Choice)
 Script:
 • "Write A, B, C, or D on your board. Ready… show me!"
@@ -403,23 +406,23 @@ PIVOT: Most likely error patterns:
   - Students choosing D: They may not check basic subtraction facts. Model: "Count: 12 - 8. Count back from 12: 11, 10, 9, 8, 7, 6, 5, 4. That's 4, not 5."
   Re-check with: "What is 503 - 267? Solve it on your boards — 30 seconds."
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 The hinge question assesses students' ability to not just perform subtraction but critically evaluate subtraction working — a higher-order skill. Each distractor embodies a specific, named misconception: A = the flip error (subtracting small from large), B = forgetting to reduce after trading, D = basic subtraction fact error. The correct option C requires students to verify that every step is correct, including trading annotations. This diagnostic format reveals not just whether students CAN subtract but whether they can SPOT errors — a transferable self-checking skill. The hinge format (one question, whole-class data, immediate decision) is the most efficient CFU technique at this point in the lesson.
 
-**MISCONCEPTIONS:**
+MISCONCEPTIONS:
 • Misconception: Selecting A — not recognising the "flip" error.
   Why: Students who habitually subtract small from large won't see this as an error because it matches their own practice.
   Impact: These students will make the flip error consistently in their own work without self-correcting.
   Quick correction: "The rule is simple: TOP minus BOTTOM, always. If the top is smaller, you TRADE. You never flip them."
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who choose B — they may understand trading conceptually but not track the column reduction carefully. These students need practice with the annotation system (crossing out and rewriting).
 • Students who can't decide and keep changing their answer — they may not have a systematic checking strategy. Model: "Check one column at a time, left to right."
 • Readiness signal: fast, confident choice of C with ability to explain why A, B, D are wrong.
 
 [Maths: Monitor Progress — Hinge Question | VTLM 2.0: Monitor Progress (CFU)]`;
 
-const NOTES_YOUDO = `**SAY:**
+const NOTES_YOUDO = `SAY:
 • "You're ready. Time for independent practice."
 • Read from slide: "You have 6 problems — 3 addition with regrouping, 3 subtraction with trading. They get harder as you go."
 • "Use your worksheet. Set each problem out vertically. Show ALL your working — carries for addition, trading annotations for subtraction."
@@ -427,49 +430,49 @@ const NOTES_YOUDO = `**SAY:**
 • "You have 10 minutes. If you finish early, check your work using the inverse operation: for addition, subtract one number from your answer. For subtraction, add the answer to the bottom number."
 • "Work silently and independently. This is YOUR practice time."
 
-**DO:**
-• Distribute SR1 worksheet (Addition & Subtraction Practice).
+DO:
+• Distribute the Session 1 Worksheet.
 • Set a visible timer for 10 minutes.
 • Circulate — visit enabling students first (students who struggled with We Do), then extending students.
 • Conference briefly with 2–3 students: "Talk me through your trading for this one."
 • After 8 minutes: "Two minutes remaining. If you haven't started Problem 6, skip to it now — it's the hardest."
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 The You Do provides 6 problems of graduated difficulty: Problems 1–3 are addition with increasing regrouping demand (single carry, double carry, triple carry), Problems 4–6 are subtraction with increasing trading complexity (simple trade, trade across one zero, trade across two zeros). This gradient ensures enabling students can experience success on Problems 1 and 4 while extending students are challenged by Problems 3 and 6. The instruction to estimate before calculating reinforces the metacognitive habit modelled in I Do. The inverse-operation check (for early finishers) introduces a self-verification strategy that doesn't require teacher input — students become independent self-assessors.
 
-**ENABLING & EXTENDING:**
+ENABLING & EXTENDING:
 ENABLING PROMPT:
 • Task: Students who struggle should begin with Problems 1 and 4 only (the simplest of each type). Provide a place value grid template. If they complete these two correctly, move to Problems 2 and 5.
 • Extra Notes: Seat enabling students where you can quickly check their column alignment before they start calculating. The place value grid is the most impactful scaffold — most errors trace back to misalignment.
 
 EXTENDING PROMPT:
-• Task: After completing all 6 problems, students take the EXT1 Investigation (Palindromic Number Investigation). The PDF is self-contained with instructions, examples, and recording space. They explore what happens when you add a number to its reverse (e.g., 4,738 + 8,374) and investigate whether the process always produces a palindrome.
-• Extra Notes: Distribute the EXT1 PDF to extending students when they finish the main task. This investigation requires addition fluency and introduces a fascinating pattern — some numbers reach a palindrome in one step, others take many steps, and some (like 196) may never reach one.
+• Task: After completing all 6 problems, students take the Session 1 Extension (Palindromic Number Investigation). The PDF is self-contained with instructions, examples, and recording space. They explore what happens when you add a number to its reverse (e.g., 4,738 + 8,374) and investigate whether the process always produces a palindrome.
+• Extra Notes: Distribute the Session 1 Extension to extending students when they finish the main task. This investigation requires addition fluency and introduces a fascinating pattern — some numbers reach a palindrome in one step, others take many steps, and some (like 196) may never reach one.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who skip the estimation step — prompt: "Where's your estimate? Write it FIRST."
 • Students who set problems out horizontally instead of vertically — redirect immediately. This lesson is specifically about the vertical algorithm.
 • Students who get stuck on subtraction trading — whisper: "Is the top digit big enough? If not, where will you trade from?"
-• Students who finish very quickly — check their work for accuracy before giving the EXT1 investigation. Speed without accuracy is not the goal.
+• Students who finish very quickly — check their work for accuracy before giving the Session 1 Extension. Speed without accuracy is not the goal.
 • Readiness signal: students working silently through problems with visible estimates and working shown.
 
 [Maths: Summarise — Independent Practice (You Do) | VTLM 2.0: Supported Application]`;
 
-const NOTES_EXIT = `**SAY:**
+const NOTES_EXIT = `SAY:
 • "Pens down on the worksheet. Time for your exit ticket — three questions."
 • "Question 1 is addition. Question 2 is subtraction. Question 3 is error analysis — you need to spot a mistake."
 • "Work silently and independently. No looking at your worksheet or your neighbour."
 • "You have 4 minutes."
 
-**DO:**
+DO:
 • Display the exit ticket slide. Students write answers in their maths books or on paper.
 • Set a timer for 4 minutes. Circulate silently — observe but don't help.
 • Collect responses or note answers as students hold up books.
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 The exit ticket assesses all three SCs. Q1 (addition: 6,485 + 3,847) targets SC1 and SC2 — students must align correctly and regroup. Q2 (subtraction: 9,002 - 4,536) targets SC1 and SC3 — requires trading across zeros. Q3 (error analysis: spot the mistake in a worked subtraction) targets metacognitive awareness — can students identify the flip error or a trading error in someone else's work? Q3 is the highest-level question because it requires understanding the algorithm well enough to evaluate it, not just execute it. Sort responses into three groups after class: (1) Q1 wrong — need reteaching of addition regrouping, (2) Q1 right but Q2 wrong — addition is secure but subtraction trading needs work, (3) Q1 and Q2 right but Q3 wrong — can execute but can't yet evaluate.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who rush Q1 and Q2 but spend all their time on Q3 — reassure: "Q3 is meant to be tricky. If you're stuck, re-do the subtraction yourself and compare."
 • Students who answer Q2 as 5,534 or similar — the flip error again. Track these students for tomorrow's enabling group.
 • Students who can't identify the error in Q3 — they may make the same error themselves. This is diagnostic gold.
@@ -477,23 +480,23 @@ The exit ticket assesses all three SCs. Q1 (addition: 6,485 + 3,847) targets SC1
 
 [Maths: Summarise — Exit Ticket (Stage 5) | VTLM 2.0: Monitor Progress & Feedback]`;
 
-const NOTES_RESOURCES = `**SAY:**
+const NOTES_RESOURCES = `SAY:
 • "Here are the printable resources for today's lesson. If you're a teacher using this deck, click any link to open the PDF."
-• "SR1 is the practice worksheet with 6 problems. SR2 is the answer key. EXT1 is the palindromic number investigation for extending students."
+• "Session 1 Worksheet is the practice sheet with 6 problems. Session 1 Answer Key is for teacher reference. Session 1 Extension is the palindromic number investigation for extending students."
 
-**DO:**
+DO:
 • Display the slide briefly. Teachers can click hyperlinks to open PDFs.
 • This slide is primarily for teacher preparation — students don't need to see it during the lesson.
 
-**TEACHER NOTES:**
-All PDFs are in the same folder as this PPTX file. Hyperlinks are relative — they work when the PPTX is opened from the lesson folder. Print SR1 before the lesson (one per student). Print EXT1 for extending students only (typically 3–5 copies). SR2 is for teacher reference — do not distribute to students during the lesson.
+TEACHER NOTES:
+All PDFs are in the same folder as this PPTX file. Hyperlinks are relative — they work when the PPTX is opened from the lesson folder. Print Session 1 Worksheet before the lesson (one per student). Print Session 1 Extension for extending students only (typically 3–5 copies). Session 1 Answer Key is for teacher reference — do not distribute to students during the lesson.
 
-**WATCH FOR:**
+WATCH FOR:
 • N/A — this is a teacher-facing slide.
 
 [Maths: Planning — Preparation | VTLM 2.0: Planning]`;
 
-const NOTES_CLOSING = `**SAY:**
+const NOTES_CLOSING = `SAY:
 • "Let's look back at our success criteria."
 • Read from slide: "SC1: I can set out addition and subtraction problems vertically with digits aligned in the correct place value columns."
 • "Thumbs up, sideways, or down for SC1." Pause and scan. "Good — most thumbs up."
@@ -504,16 +507,16 @@ const NOTES_CLOSING = `**SAY:**
 • "Turn to your partner: What is the ONE mistake you need to watch out for when doing vertical subtraction? 30 seconds."
 • "Next session: multiplication and division. Well done today — you've reviewed two of the four processes."
 
-**DO:**
+DO:
 • Display the closing slide with SCs listed. Read each SC aloud.
 • Run thumbs up/sideways/down for each SC in turn. Scan and mentally note students who are down on SC2 or SC3.
 • Allow 30 seconds for the Turn & Talk. Listen to 2–3 pairs.
 • Close with a brief acknowledgement of effort.
 
-**TEACHER NOTES:**
+TEACHER NOTES:
 The closing slide reviews all three SCs. Students who self-assess as "thumbs down" on SC2 should be noted — if they can't yet regroup confidently, they may also struggle with multiplication (which involves repeated regrouping) later in the week. Students down on SC3 are expected — subtraction with trading, especially across zeros, is the most difficult algorithm in this lesson. The Turn & Talk about "one mistake to watch out for" forces metacognitive reflection on the error types discussed during the lesson. Listen for students who name specific errors (the flip error, forgetting to reduce after trading, chain trading across zeros) — these students have internalised the misconception framework.
 
-**WATCH FOR:**
+WATCH FOR:
 • Students who show thumbs-down on SC1 (alignment) — this is a critical foundation gap. They need a place value grid template for all future vertical algorithm work.
 • Students who show thumbs-up on all three but got exit ticket questions wrong — flag for closer monitoring next session. Self-assessment may not match performance.
 • The Turn & Talk: listen for students who name "subtracting the smaller from the bigger" — this shows they've identified the key misconception.
@@ -1389,7 +1392,7 @@ async function build() {
       { label: "Next:", text: "Set out vertically. Align place values carefully." },
       { label: "Then:", text: "Solve Problems 1-6. Show all carrying and trading." },
       { label: "Check:", text: "Use the inverse operation to verify your answers." },
-      { label: "Challenge:", text: "Finished? Take the EXT1 investigation sheet." },
+      { label: "Challenge:", text: "Finished? Take the Session 1 Extension." },
     ];
     steps.forEach((st, i) => {
       const sy = CONTENT_TOP + 0.08 + i * 0.44;
@@ -1446,7 +1449,7 @@ async function build() {
     });
 
     // Worksheet reference and timer — below SC card
-    addTextOnShape(s, "Use your SR1 Worksheet", {
+    addTextOnShape(s, "Use your Session 1 Worksheet", {
       x: 0.5, y: CONTENT_TOP + 3.0, w: 2.6, h: 0.32, rectRadius: 0.08,
       fill: { color: C.SECONDARY },
     }, {
@@ -1470,21 +1473,9 @@ async function build() {
 
   // ── SLIDE 18: Resources ─────────────────────────────────────────────────
   addResourceSlide(pres, [
-    {
-      name: "SR1 — Addition & Subtraction Practice",
-      fileName: "SR1_Addition_Subtraction_Practice.pdf",
-      description: "6 problems (3 addition, 3 subtraction) with gridlines. One per student.",
-    },
-    {
-      name: "SR2 — Answer Key",
-      fileName: "SR2_Addition_Subtraction_Answers.pdf",
-      description: "Answer key for SR1 with worked solutions. Teacher reference only.",
-    },
-    {
-      name: "EXT1 — Palindromic Number Investigation",
-      fileName: "EXT1_Extending_Investigation.pdf",
-      description: "Self-contained investigation: adding numbers to their reverse. For extending students.",
-    },
+    RESOURCES.worksheet,
+    RESOURCES.answerKey,
+    RESOURCES.extension,
   ], { C, FONT_H, FONT_B }, FOOTER, NOTES_RESOURCES);
 
   // ── SLIDE 19: Closing ───────────────────────────────────────────────────
@@ -1500,7 +1491,7 @@ async function build() {
 
   // ── Write PPTX ──────────────────────────────────────────────────────────
   if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
-  await pres.writeFile({ fileName: OUT_DIR + "/4Proc_Lesson1_Addition_Subtraction.pptx" });
+  await pres.writeFile({ fileName: `${OUT_DIR}/${LESSON.pptxFileName}` });
   console.log("PPTX written to " + OUT_DIR);
 
   // ── Generate companion PDFs ──────────────────────────────────────────────
@@ -1513,12 +1504,12 @@ async function build() {
 // ── PDF: SR1 — Addition & Subtraction Practice ──────────────────────────────
 
 async function generateWorksheet() {
-  const doc = createPdf({ title: "Addition & Subtraction Practice" });
+  const doc = createPdf({ title: RESOURCES.worksheet.name });
 
-  let y = addPdfHeader(doc, "Vertical Addition & Subtraction Practice", {
-    subtitle: "SR1 — Supporting Resource",
+  let y = addPdfHeader(doc, RESOURCES.worksheet.name, {
+    subtitle: "Independent Practice",
     color: C.PRIMARY,
-    lessonInfo: "Session 1 of 4 | Four Processes Review | Year 5/6 Maths",
+    lessonInfo: FOOTER,
   });
 
   y = addTipBox(doc, "Remember: (1) ESTIMATE before calculating. (2) Set out VERTICALLY — align digits by place value. (3) Start from the ONES column. (4) Addition: carry when >= 10. Subtraction: trade when the top digit is smaller.", y, { color: C.SECONDARY });
@@ -1596,20 +1587,20 @@ async function generateWorksheet() {
   y = addBodyText(doc, "For addition: subtract one number from your answer. You should get the other number.", y);
   y = addBodyText(doc, "For subtraction: add your answer to the bottom number. You should get the top number.", y);
 
-  addPdfFooter(doc, "Session 1 of 4 | Four Processes Review | Year 5/6 Maths");
-  await writePdf(doc, OUT_DIR + "/SR1_Addition_Subtraction_Practice.pdf");
-  console.log("  SR1 worksheet written.");
+  addPdfFooter(doc, FOOTER);
+  await writePdf(doc, `${OUT_DIR}/${RESOURCES.worksheet.fileName}`);
+  console.log(`  ${RESOURCES.worksheet.name} written.`);
 }
 
 // ── PDF: SR2 — Answer Key ────────────────────────────────────────────────────
 
 async function generateAnswerKey() {
-  const doc = createPdf({ title: "Addition & Subtraction — Answer Key" });
+  const doc = createPdf({ title: RESOURCES.answerKey.name });
 
-  let y = addPdfHeader(doc, "Addition & Subtraction — Answer Key", {
-    subtitle: "SR2 — Teacher Reference",
+  let y = addPdfHeader(doc, RESOURCES.answerKey.name, {
+    subtitle: "Teacher Reference",
     color: C.PRIMARY,
-    lessonInfo: "Session 1 of 4 | Four Processes Review | Year 5/6 Maths",
+    lessonInfo: FOOTER,
     showNameDate: false,
   });
 
@@ -1722,26 +1713,27 @@ async function generateAnswerKey() {
 
   y = addProblem(doc, "Q3", "Spot the mistake: 703 - 258 = 555", y, {
     writeLines: [
-      { label: "Error:", answer: "The student subtracted the smaller from the larger in the ones (8-3=5) instead of trading. They also did 5-0=5 in the tens without trading from the hundreds. This is the 'flip' error — they subtracted the smaller digit from the larger regardless of position." },
+      { label: "Error:", answer: "The student used the 'flip' error - subtracting the smaller digit from the larger regardless of place value." },
+      { label: "Details:", answer: "They did 8-3=5 in the ones and 5-0=5 in the tens instead of trading from the hundreds." },
       { label: "Correct working:", answer: "Chain trade: 7H->6H, 0T->9T, 3O->13O. Then 13-8=5, 9-5=4, 6-2=4. Answer: 445." },
     ],
     color: C.ALERT,
   });
 
   addPdfFooter(doc, "Teacher Reference — Do Not Distribute to Students");
-  await writePdf(doc, OUT_DIR + "/SR2_Addition_Subtraction_Answers.pdf");
-  console.log("  SR2 answer key written.");
+  await writePdf(doc, `${OUT_DIR}/${RESOURCES.answerKey.fileName}`);
+  console.log(`  ${RESOURCES.answerKey.name} written.`);
 }
 
 // ── PDF: EXT1 — Palindromic Number Investigation ─────────────────────────────
 
 async function generateExtendingPdf() {
-  const doc = createPdf({ title: "Palindromic Number Investigation" });
+  const doc = createPdf({ title: RESOURCES.extension.name });
 
-  let y = addPdfHeader(doc, "Palindromic Number Investigation", {
-    subtitle: "EXT1 — Extending Challenge",
+  let y = addPdfHeader(doc, RESOURCES.extension.name, {
+    subtitle: "Extending Challenge",
     color: C.ACCENT,
-    lessonInfo: "Session 1 of 4 | Four Processes Review | Year 5/6 Maths",
+    lessonInfo: FOOTER,
   });
 
   y = addSectionHeading(doc, "What is a Palindromic Number?", y, { color: C.ACCENT });
@@ -1853,9 +1845,9 @@ async function generateExtendingPdf() {
   y = addBodyText(doc, "- Carry accurately (SC2) — regrouping errors compound with each step.", y);
   y = addBodyText(doc, "- Check your work (estimation) — a quick reasonableness check catches errors early.", y);
 
-  addPdfFooter(doc, "Session 1 of 4 | Four Processes Review | Year 5/6 Maths — Extending Investigation");
-  await writePdf(doc, OUT_DIR + "/EXT1_Extending_Investigation.pdf");
-  console.log("  EXT1 extending investigation written.");
+  addPdfFooter(doc, `${FOOTER} - Extending Investigation`);
+  await writePdf(doc, `${OUT_DIR}/${RESOURCES.extension.fileName}`);
+  console.log(`  ${RESOURCES.extension.name} written.`);
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
