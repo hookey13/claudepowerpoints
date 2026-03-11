@@ -108,6 +108,8 @@ Console warnings during build = layout bugs. Fix before shipping.
 - Palette uses semantic keys: PRIMARY, SECONDARY, ACCENT, ALERT, SUCCESS, BG_DARK, BG_LIGHT, BG_CARD, CHARCOAL, WHITE, MUTED. Backward-compatible aliases exist (C.NAVY, C.CREAM, C.TEAL).
 - White text on coloured fills. Dark text on light fills. NEVER same colour for text and its background.
 - White icons need a coloured circle background on light surfaces.
+- Student-facing instruction cards and prompt panels must start large enough for classroom viewing. For sparse prompts, target roughly 16-17 for the header and 14-15.5 for body lines, then shrink only if needed. Do not default to 12pt body text in roomy dialogue/instruction boxes.
+- Prefer the shared `addInstructionCard` theme helper for left-hand "On your whiteboards" / "With your partner" cards and any similar sparse student-instruction panel so sizing is density-aware by default.
 - `withReveal(buildFn, revealFn)` creates duplicate slide pairs for click-to-reveal. Use for CFU answers, We Do solutions, hinge questions. Do NOT use for I Do, exit tickets, or titles.
 - Every lesson with companion PDFs gets a resource slide via `addResourceSlide()` from `pdf_helpers.js`.
 - Output goes to `output/<LessonFolder>/` - PPTX at the root, companion PDFs in a `resources-session{N}/` subfolder where `N` is the session number within that week's sequence.

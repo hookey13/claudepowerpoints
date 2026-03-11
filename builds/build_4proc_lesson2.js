@@ -25,7 +25,7 @@ const {
   titleSlide, liSlide, contentSlide, cfuSlide, closingSlide,
   workedExSlide, exitTicketSlide, addStageBadge,
   withReveal,
-  addTopBar, addBadge, addTitle, addCard, addFooter, addTextOnShape,
+  addTopBar, addBadge, addTitle, addCard, addInstructionCard, addFooter, addTextOnShape,
   iconToBase64Png, getContrastColor,
   SAFE_BOTTOM, CONTENT_TOP, STAGE_COLORS,
 } = T;
@@ -456,12 +456,13 @@ WATCH FOR:
 
 const NOTES_RESOURCES = `SAY:
 - "Here are the printable resources for today. Click any link to open the PDF."
+- "Session 2 Enabling Scaffold is the supported version with pre-drawn vertical and lattice frames."
 
 DO:
 - Display the slide briefly. Teachers can click hyperlinks to open PDFs.
 
 TEACHER NOTES:
-All PDFs are in the resources-session2 folder alongside this PPTX. Print the worksheet before the lesson (one per student). The answer key is teacher reference only. The extension is for extending students (3-5 copies).
+All PDFs are in the resources-session2 folder alongside this PPTX. Print the worksheet before the lesson (one per student). Print a small set of Session 2 Enabling Scaffold copies for students who need the layout drawn for them. The answer key is teacher reference only. The extension is for extending students (3-5 copies).
 
 WATCH FOR:
 - N/A — teacher-facing slide.
@@ -1190,16 +1191,15 @@ async function build() {
         fill: { color: C.PRIMARY },
       }, { fontSize: 48, fontFace: FONT_H, color: C.WHITE, bold: true });
 
-      // Instructions
-      addCard(s, 0.5, CONTENT_TOP + 1.7, 9, 1.5, { strip: C.ALERT });
-      s.addText([
-        { text: "On your whiteboards:", options: { bold: true, breakLine: true, fontSize: 16, color: C.ALERT } },
-        { text: "Set it up vertically. Start from the ones.", options: { breakLine: true, fontSize: 14, color: C.CHARCOAL } },
-        { text: "Show ALL your carries.", options: { breakLine: true, fontSize: 14, color: C.CHARCOAL } },
-        { text: "45 seconds — then boards up!", options: { fontSize: 14, color: C.ALERT, bold: true } },
+      addInstructionCard(s, [
+        { text: "On your whiteboards:", role: "header" },
+        { text: "Set it up vertically. Start from the ones." },
+        { text: "Show ALL your carries." },
+        { text: "45 seconds — then boards up!", role: "emphasis" },
       ], {
-        x: 0.75, y: CONTENT_TOP + 1.85, w: 8.5, h: 1.2,
-        fontFace: FONT_B, margin: 0, valign: "top",
+        x: 0.5, y: CONTENT_TOP + 1.7, w: 9, h: 1.5,
+        strip: C.ALERT,
+        headerColor: C.ALERT,
       });
 
       // Reminder
@@ -1270,16 +1270,14 @@ async function build() {
         fill: { color: C.PRIMARY },
       }, { fontSize: 44, fontFace: FONT_H, color: C.WHITE, bold: true });
 
-      // Instructions
-      addCard(s, 0.5, CONTENT_TOP + 1.5, 4.5, 2.0, { strip: C.SECONDARY });
-      s.addText([
-        { text: "With your partner:", options: { bold: true, breakLine: true, fontSize: 14, color: C.SECONDARY } },
-        { text: "One writes, one checks carries.", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "Talk through each step aloud.", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "60 seconds — then boards up!", options: { fontSize: 12, color: C.ALERT, bold: true } },
+      addInstructionCard(s, [
+        { text: "With your partner:", role: "header" },
+        { text: "One writes, one checks carries." },
+        { text: "Talk through each step aloud." },
+        { text: "60 seconds — then boards up!", role: "emphasis" },
       ], {
-        x: 0.75, y: CONTENT_TOP + 1.65, w: 4.0, h: 1.6,
-        fontFace: FONT_B, margin: 0, valign: "top",
+        x: 0.5, y: CONTENT_TOP + 1.5, w: 4.5, h: 2.0,
+        strip: C.SECONDARY,
       });
 
       // Reminder card
@@ -1426,18 +1424,18 @@ async function build() {
       addTitle(s, "Complete the Lattice: 56 x 38", { color: C.ALERT });
 
       // Instructions on left
-      addCard(s, 0.5, CONTENT_TOP + 0.05, 4.5, 2.8, { strip: C.ALERT });
-      s.addText([
-        { text: "On your whiteboards:", options: { bold: true, breakLine: true, fontSize: 14, color: C.ALERT } },
-        { text: "1. Draw a 2x2 lattice grid", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "2. Write 5, 6 across top; 3, 8 down right", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "3. Multiply into each cell (split tens/ones)", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "4. Add along diagonals", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "", options: { breakLine: true, fontSize: 6 } },
-        { text: "60 seconds — then boards up!", options: { fontSize: 13, color: C.ALERT, bold: true } },
+      addInstructionCard(s, [
+        { text: "On your whiteboards:", role: "header" },
+        { text: "1. Draw a 2x2 lattice grid" },
+        { text: "2. Write 5, 6 across top; 3, 8 down right" },
+        { text: "3. Multiply into each cell (split tens/ones)" },
+        { text: "4. Add along diagonals" },
+        { text: "", role: "spacer" },
+        { text: "60 seconds — then boards up!", role: "emphasis" },
       ], {
-        x: 0.7, y: CONTENT_TOP + 0.15, w: 4.1, h: 2.6,
-        fontFace: FONT_B, margin: 0, valign: "top",
+        x: 0.5, y: CONTENT_TOP + 0.05, w: 4.5, h: 2.8,
+        strip: C.ALERT,
+        headerColor: C.ALERT,
       });
 
       // Empty lattice grid on right
@@ -1498,19 +1496,17 @@ async function build() {
         fill: { color: C.BG_DARK },
       }, { fontSize: 14, fontFace: FONT_H, color: C.WHITE, bold: true });
 
-      // Instructions
-      addCard(s, 0.5, CONTENT_TOP + 0.55, 4.5, 2.8, { strip: C.SECONDARY });
-      s.addText([
-        { text: "With your partner:", options: { bold: true, breakLine: true, fontSize: 14, color: C.SECONDARY } },
-        { text: "1. Draw a 2x2 lattice grid", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "2. Write 8, 4 across top; 5, 7 down right", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "3. Multiply into each cell", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "4. Add along diagonals", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "", options: { breakLine: true, fontSize: 6 } },
-        { text: "60 seconds — boards up!", options: { fontSize: 13, color: C.ALERT, bold: true } },
+      addInstructionCard(s, [
+        { text: "With your partner:", role: "header" },
+        { text: "1. Draw a 2x2 lattice grid" },
+        { text: "2. Write 8, 4 across top; 5, 7 down right" },
+        { text: "3. Multiply into each cell" },
+        { text: "4. Add along diagonals" },
+        { text: "", role: "spacer" },
+        { text: "60 seconds — boards up!", role: "emphasis" },
       ], {
-        x: 0.7, y: CONTENT_TOP + 0.65, w: 4.1, h: 2.5,
-        fontFace: FONT_B, margin: 0, valign: "top",
+        x: 0.5, y: CONTENT_TOP + 0.55, w: 4.5, h: 2.8,
+        strip: C.SECONDARY,
       });
 
       // Large number display
@@ -1623,11 +1619,7 @@ async function build() {
   ], NOTES_EXIT, FOOTER);
 
   // ── SLIDE 18: Resources ───────────────────────────────────────────────
-  addResourceSlide(pres, [
-    RESOURCES.worksheet,
-    RESOURCES.answerKey,
-    RESOURCES.extension,
-  ], { C, FONT_H, FONT_B }, FOOTER, NOTES_RESOURCES);
+  addResourceSlide(pres, Object.values(RESOURCES), { C, FONT_H, FONT_B }, FOOTER, NOTES_RESOURCES);
 
   // ── SLIDE 19: Closing ─────────────────────────────────────────────────
   closingSlide(pres,
@@ -1648,6 +1640,7 @@ async function build() {
   // ── Generate companion PDFs ────────────────────────────────────────────
   await generateWorksheet();
   await generateAnswerKey();
+  await generateEnablingPdf();
   await generateExtendingPdf();
   console.log("All PDFs generated.");
 }
@@ -1825,6 +1818,104 @@ async function generateAnswerKey() {
 }
 
 // ── PDF: Session 2 Extension ────────────────────────────────────────────────
+
+function drawPdfLatticeGrid(doc, x, y, cellSize, topDigits, sideDigits, opts) {
+  const o = opts || {};
+  const rows = sideDigits.length;
+  const cols = topDigits.length;
+  const gridW = cols * cellSize;
+  const gridH = rows * cellSize;
+
+  doc.save();
+  doc.lineWidth(1.5).strokeColor("#1B3A6B");
+
+  for (let r = 0; r < rows; r += 1) {
+    for (let c = 0; c < cols; c += 1) {
+      const cx = x + c * cellSize;
+      const cy = y + r * cellSize;
+      doc.rect(cx, cy, cellSize, cellSize).stroke();
+      doc.moveTo(cx, cy + cellSize).lineTo(cx + cellSize, cy).stroke();
+
+      const product = o.products && o.products[r] && o.products[r][c];
+      if (product) {
+        doc.font("Sans-Bold").fontSize(16).fillColor("#1B3A6B");
+        doc.text(String(product.tens), cx + 6, cy + 6, { width: 18, align: "center" });
+        doc.fillColor("#0F7F8C");
+        doc.text(String(product.ones), cx + cellSize - 24, cy + cellSize - 22, { width: 18, align: "center" });
+      }
+    }
+  }
+
+  doc.font("Sans-Bold").fontSize(14).fillColor("#2D3142");
+  topDigits.forEach((digit, index) => {
+    doc.text(String(digit), x + index * cellSize, y - 18, { width: cellSize, align: "center" });
+  });
+  sideDigits.forEach((digit, index) => {
+    doc.text(String(digit), x + gridW + 6, y + index * cellSize + 16, { width: 16, align: "center" });
+  });
+  doc.restore();
+
+  return y + gridH;
+}
+
+async function generateEnablingPdf() {
+  const doc = createPdf({ title: RESOURCES.enabling.name });
+
+  let y = addPdfHeader(doc, RESOURCES.enabling.name, {
+    subtitle: "Supported Practice",
+    color: C.SECONDARY,
+    lessonInfo: FOOTER,
+  });
+
+  y = addTipBox(doc, "Use this page for students who need the multiplication structure drawn for them. The vertical section pre-labels the partial products. The lattice section already has the grid and diagonals in place.", y, { color: C.SECONDARY });
+
+  y = addSectionHeading(doc, "1. Vertical Multiplication Frames", y, { color: C.PRIMARY });
+  y = addBodyText(doc, "Students complete only these supported problems first. The second partial-product line already reminds them to start with a placeholder zero.", y);
+
+  y = addProblem(doc, 1, "324 x 15", y, {
+    writeLines: [
+      { label: "Estimate:" },
+      { label: "Partial product 1 (x5):" },
+      { label: "Partial product 2 (x10 - start with 0): 0" },
+      { label: "Final sum:" },
+    ],
+    color: C.PRIMARY,
+  });
+
+  y = addProblem(doc, 2, "478 x 32", y, {
+    writeLines: [
+      { label: "Estimate:" },
+      { label: "Partial product 1 (x2):" },
+      { label: "Partial product 2 (x30 - start with 0): 0" },
+      { label: "Final sum:" },
+    ],
+    color: C.SECONDARY,
+  });
+
+  y = addSectionHeading(doc, "2. Lattice Starter Grids", y, { color: C.ACCENT });
+  y = addBodyText(doc, "These grids already show the frame, diagonals, and outside digits. Problem 3 models the first cell so students can see where the tens and ones go.", y);
+
+  doc.fontSize(11).font("Sans-Bold").fillColor("#0F7F8C");
+  doc.text("Problem 3: 56 x 38", 50, y + 2);
+  let bottomY = drawPdfLatticeGrid(doc, 70, y + 26, 46, [5, 6], [3, 8], {
+    products: [
+      [{ tens: 1, ones: 5 }, null],
+      [null, null],
+    ],
+  });
+  doc.fontSize(10).font("Sans").fillColor("#2D3142");
+  doc.text("Add along diagonals: ________________________________", 50, bottomY + 10);
+
+  doc.fontSize(11).font("Sans-Bold").fillColor("#0F7F8C");
+  doc.text("Problem 4: 84 x 57", 300, y + 2);
+  bottomY = drawPdfLatticeGrid(doc, 320, y + 26, 46, [8, 4], [5, 7]);
+  doc.fontSize(10).font("Sans").fillColor("#2D3142");
+  doc.text("Add along diagonals: ______________________", 300, bottomY + 10);
+
+  addPdfFooter(doc, FOOTER);
+  await writePdf(doc, `${OUT_DIR}/${RESOURCES.enabling.fileName}`);
+  console.log(`  ${RESOURCES.enabling.name} written.`);
+}
 
 async function generateExtendingPdf() {
   const doc = createPdf({ title: RESOURCES.extension.name });

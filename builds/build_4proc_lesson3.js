@@ -460,14 +460,14 @@ WATCH FOR:
 
 const NOTES_RESOURCES = `SAY:
 • "Here are the printable resources for today's lesson. If you're a teacher using this deck, click any link to open the PDF."
-• "Session 3 Worksheet is the practice sheet with 8 problems and bus stop grids. Session 3 Answer Key shows all three remainder forms. Session 3 Extension is the repeating decimals investigation for extending students."
+• "Session 3 Worksheet is the practice sheet with 8 problems and bus stop grids. Session 3 Answer Key shows all three remainder forms. Session 3 Enabling Scaffold gives the bus stop layout with the first carry step modelled. Session 3 Extension is the repeating decimals investigation for extending students."
 
 DO:
 • Display the slide briefly. Teachers can click hyperlinks to open PDFs.
 • This slide is primarily for teacher preparation — students don't need to see it during the lesson.
 
 TEACHER NOTES:
-All PDFs are in the same folder as this PPTX file. Hyperlinks are relative — they work when the PPTX is opened from the lesson folder. Print Session 3 Worksheet before the lesson (one per student). Print Session 3 Extension for extending students only (typically 3-5 copies). Session 3 Answer Key is for teacher reference — do not distribute to students.
+All PDFs are in the same folder as this PPTX file. Hyperlinks are relative — they work when the PPTX is opened from the lesson folder. Print Session 3 Worksheet before the lesson (one per student). Print a small set of Session 3 Enabling Scaffold copies for students who need the first carry step shown. Print Session 3 Extension for extending students only (typically 3-5 copies). Session 3 Answer Key is for teacher reference — do not distribute to students.
 
 WATCH FOR:
 • N/A — this is a teacher-facing slide.
@@ -1375,11 +1375,7 @@ async function build() {
   ], NOTES_EXIT, FOOTER);
 
   // ── SLIDE 18: Resources Slide ──────────────────────────────────────────
-  addResourceSlide(pres, [
-    RESOURCES.worksheet,
-    RESOURCES.answerKey,
-    RESOURCES.extension,
-  ], { C, FONT_H, FONT_B }, FOOTER, NOTES_RESOURCES);
+  addResourceSlide(pres, Object.values(RESOURCES), { C, FONT_H, FONT_B }, FOOTER, NOTES_RESOURCES);
 
   // ── SLIDE 19: Closing ─────────────────────────────────────────────────
   closingSlide(pres,
@@ -1401,6 +1397,7 @@ async function build() {
   // ── Generate companion PDFs ────────────────────────────────────────────
   await generateWorksheet();
   await generateAnswerKey();
+  await generateEnablingPdf();
   await generateExtendingPdf();
   console.log("All PDFs generated.");
 }
@@ -1640,6 +1637,98 @@ async function generateAnswerKey() {
 }
 
 // ── PDF: EXT1 — Division Investigation: Repeating Decimals ──────────────────
+
+function drawPdfBusStop(doc, x, y, divisor, digits, opts) {
+  const o = opts || {};
+  const cellW = o.cellW || 42;
+  const barX = x + 24;
+  const lineY = y + 20;
+
+  doc.save();
+  doc.font("Sans-Bold").fontSize(18).fillColor("#2D3142");
+  doc.text(String(divisor), x, y + 10, { width: 18, align: "center" });
+  doc.moveTo(barX, lineY).lineTo(barX + digits.length * cellW, lineY).lineWidth(1.5).strokeColor("#1B3A6B").stroke();
+  doc.moveTo(barX, y + 2).lineTo(barX, y + 54).lineWidth(1.5).strokeColor("#1B3A6B").stroke();
+
+  digits.forEach((digit, index) => {
+    const dx = barX + index * cellW;
+    doc.font("Sans-Bold").fontSize(18).fillColor("#2D3142");
+    doc.text(String(digit), dx + 6, y + 24, { width: 24, align: "center" });
+
+    if (o.quotient && o.quotient[index] != null && o.quotient[index] !== "") {
+      doc.fillColor("#0F7F8C");
+      doc.text(String(o.quotient[index]), dx + 6, y - 2, { width: 24, align: "center" });
+    }
+
+    if (o.carries) {
+      const carry = o.carries.find((entry) => entry.index === index);
+      if (carry) {
+        doc.font("Sans-Bold").fontSize(10).fillColor("#C94030");
+        doc.text(String(carry.value), dx + 1, y + 6, { width: 14, align: "center" });
+      }
+    }
+  });
+  doc.restore();
+
+  return y + 66;
+}
+
+async function generateEnablingPdf() {
+  const doc = createPdf({ title: RESOURCES.enabling.name });
+
+  let y = addPdfHeader(doc, RESOURCES.enabling.name, {
+    subtitle: "Supported Practice",
+    color: C.SECONDARY,
+    lessonInfo: FOOTER,
+  });
+
+  y = addTipBox(doc, "Use this scaffold when students need the bus stop already drawn and the first carry step modelled before they continue independently.", y, { color: C.SECONDARY });
+
+  y = addSectionHeading(doc, "1. Model The First Carry", y, { color: C.PRIMARY });
+  y = addBodyText(doc, "In short division, the remainder is carried to the next column. The small red number shows what is being carried forward.", y);
+
+  doc.fontSize(11).font("Sans-Bold").fillColor("#1B3A6B");
+  doc.text("Worked start: 936 / 4", 50, y + 2);
+  let bottomY = drawPdfBusStop(doc, 70, y + 20, 4, [9, 3, 6], {
+    quotient: [2, "", ""],
+    carries: [{ index: 1, value: 1 }],
+  });
+  doc.fontSize(10).font("Sans").fillColor("#2D3142");
+  doc.text("9 ÷ 4 = 2 remainder 1. Write the 2 above the 9. Carry the 1 to make 13 in the next column.", 50, bottomY + 2, { width: 470 });
+  y = bottomY + 26;
+
+  y = addSectionHeading(doc, "2. Try These Supported Problems", y, { color: C.ACCENT });
+  y = addBodyText(doc, "Finish the bus stop from the first carry onward. Students complete Problems 1-4 only before moving to the full worksheet.", y);
+
+  doc.fontSize(11).font("Sans-Bold").fillColor("#0F7F8C");
+  doc.text("Problem 1: 5,184 / 3", 50, y + 2);
+  bottomY = drawPdfBusStop(doc, 70, y + 20, 3, [5, 1, 8, 4]);
+  doc.fontSize(10).font("Sans").fillColor("#2D3142");
+  doc.text("Write each quotient digit above the correct column. Carry the remainder in small writing.", 50, bottomY + 4, { width: 220 });
+
+  doc.fontSize(11).font("Sans-Bold").fillColor("#0F7F8C");
+  doc.text("Problem 2: 6,347 / 8", 290, y + 2);
+  bottomY = drawPdfBusStop(doc, 310, y + 20, 8, [6, 3, 4, 7], {
+    quotient: [0, "", "", ""],
+    carries: [{ index: 1, value: 6 }],
+  });
+  doc.fontSize(10).font("Sans").fillColor("#2D3142");
+  doc.text("First step shown: 6 ÷ 8 = 0 remainder 6. Carry the 6 to make 63 in the next column.", 290, bottomY + 4, { width: 220 });
+  y = bottomY + 28;
+
+  y = addProblem(doc, 3, "After solving 6,347 / 8, record the answer three ways.", y, {
+    writeLines: [
+      { label: "Whole number with remainder:" },
+      { label: "Mixed number:" },
+      { label: "Decimal:" },
+    ],
+    color: C.ACCENT,
+  });
+
+  addPdfFooter(doc, FOOTER);
+  await writePdf(doc, `${OUT_DIR}/${RESOURCES.enabling.fileName}`);
+  console.log(`  ${RESOURCES.enabling.name} written.`);
+}
 
 async function generateExtendingPdf() {
   const doc = createPdf({ title: RESOURCES.extension.name });

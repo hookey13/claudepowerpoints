@@ -12,6 +12,7 @@ const { UNIT, LESSONS } = require("./configs/four_processes");
 const {
   createPdf, writePdf, addPdfHeader, addSectionHeading,
   addBodyText, addProblem, addTipBox, addPdfFooter,
+  addPvChartPdf,
   addWriteLine, addStepInstructions, addLinedArea,
   addTwoColumnOrganiser, addResourceSlide,
 } = require("../themes/pdf_helpers");
@@ -25,7 +26,7 @@ const {
   titleSlide, liSlide, contentSlide, cfuSlide, closingSlide,
   workedExSlide, exitTicketSlide, addStageBadge,
   withReveal,
-  addTopBar, addBadge, addTitle, addCard, addFooter, addTextOnShape,
+  addTopBar, addBadge, addTitle, addCard, addInstructionCard, addFooter, addTextOnShape,
   iconToBase64Png, getContrastColor,
   SAFE_BOTTOM, CONTENT_TOP, STAGE_COLORS,
 } = T;
@@ -482,14 +483,14 @@ WATCH FOR:
 
 const NOTES_RESOURCES = `SAY:
 • "Here are the printable resources for today's lesson. If you're a teacher using this deck, click any link to open the PDF."
-• "Session 1 Worksheet is the practice sheet with 6 problems. Session 1 Answer Key is for teacher reference. Session 1 Extension is the palindromic number investigation for extending students."
+• "Session 1 Worksheet is the practice sheet with 6 problems. Session 1 Answer Key is for teacher reference. Session 1 Enabling Scaffold supports place value alignment and trading. Session 1 Extension is the palindromic number investigation for extending students."
 
 DO:
 • Display the slide briefly. Teachers can click hyperlinks to open PDFs.
 • This slide is primarily for teacher preparation — students don't need to see it during the lesson.
 
 TEACHER NOTES:
-All PDFs are in the same folder as this PPTX file. Hyperlinks are relative — they work when the PPTX is opened from the lesson folder. Print Session 1 Worksheet before the lesson (one per student). Print Session 1 Extension for extending students only (typically 3–5 copies). Session 1 Answer Key is for teacher reference — do not distribute to students during the lesson.
+All PDFs are in the same folder as this PPTX file. Hyperlinks are relative — they work when the PPTX is opened from the lesson folder. Print Session 1 Worksheet before the lesson (one per student). Print a small set of Session 1 Enabling Scaffold copies for students who need place value alignment support or a trading model. Print Session 1 Extension for extending students only (typically 3–5 copies). Session 1 Answer Key is for teacher reference — do not distribute to students during the lesson.
 
 WATCH FOR:
 • N/A — this is a teacher-facing slide.
@@ -1097,21 +1098,19 @@ async function build() {
         x: 0.5, y: CONTENT_TOP - 0.05, w: 4.5, h: 0.42, rectRadius: 0.08,
         fill: { color: C.BG_DARK },
       }, {
-        fontSize: 14, fontFace: FONT_H, color: getContrastColor(C.BG_DARK), bold: true,
+        fontSize: 16, fontFace: FONT_H, color: getContrastColor(C.BG_DARK), bold: true,
       });
 
-      // Instructions card (left)
-      addCard(s, 0.5, CONTENT_TOP + 0.55, 4.5, 2.8, { strip: C.SECONDARY });
-      s.addText([
-        { text: "On your whiteboards:", options: { bold: true, breakLine: true, fontSize: 14, color: C.SECONDARY } },
-        { text: "1. Write your estimate", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "2. Set out vertically — align place values", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "3. Add right to left — carry when >= 10", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "4. Check answer against estimate", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "60 seconds — then boards up!", options: { fontSize: 12, color: C.ALERT, bold: true } },
+      addInstructionCard(s, [
+        { text: "On your whiteboards:", role: "header" },
+        { text: "1. Write your estimate" },
+        { text: "2. Set out vertically — align place values" },
+        { text: "3. Add right to left — carry when >= 10" },
+        { text: "4. Check answer against estimate" },
+        { text: "60 seconds — then boards up!", role: "emphasis" },
       ], {
-        x: 0.7, y: CONTENT_TOP + 0.7, w: 4.1, h: 2.4,
-        fontFace: FONT_B, margin: 0, valign: "top",
+        x: 0.5, y: CONTENT_TOP + 0.55, w: 4.5, h: 2.8,
+        strip: C.SECONDARY,
       });
 
       // Large number display (right side)
@@ -1180,22 +1179,21 @@ async function build() {
         x: 0.5, y: CONTENT_TOP - 0.05, w: 5, h: 0.42, rectRadius: 0.08,
         fill: { color: C.BG_DARK },
       }, {
-        fontSize: 13, fontFace: FONT_H, color: getContrastColor(C.BG_DARK), bold: true,
+        fontSize: 14, fontFace: FONT_H, color: getContrastColor(C.BG_DARK), bold: true,
       });
 
       // Instructions card (left)
-      addCard(s, 0.5, CONTENT_TOP + 0.55, 4.5, 2.8, { strip: C.SECONDARY });
-      s.addText([
-        { text: "On your whiteboards:", options: { bold: true, breakLine: true, fontSize: 14, color: C.SECONDARY } },
-        { text: "1. Write your estimate", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "2. Set out vertically", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "3. Start from the ones — TRADE if needed", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "4. If a column is 0, go LEFT until non-zero", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "5. Show ALL your trading annotations", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "60 seconds — show your trading!", options: { fontSize: 12, color: C.ALERT, bold: true } },
+      addInstructionCard(s, [
+        { text: "On your whiteboards:", role: "header" },
+        { text: "1. Write your estimate" },
+        { text: "2. Set out vertically" },
+        { text: "3. Start from the ones — TRADE if needed" },
+        { text: "4. If a column is 0, go LEFT until non-zero" },
+        { text: "5. Show ALL your trading annotations" },
+        { text: "60 seconds — show your trading!", role: "emphasis" },
       ], {
-        x: 0.7, y: CONTENT_TOP + 0.65, w: 4.1, h: 2.5,
-        fontFace: FONT_B, margin: 0, valign: "top",
+        x: 0.5, y: CONTENT_TOP + 0.55, w: 4.5, h: 2.8,
+        strip: C.SECONDARY,
       });
 
       // Large number display (right side)
@@ -1472,11 +1470,7 @@ async function build() {
   ], NOTES_EXIT, FOOTER);
 
   // ── SLIDE 18: Resources ─────────────────────────────────────────────────
-  addResourceSlide(pres, [
-    RESOURCES.worksheet,
-    RESOURCES.answerKey,
-    RESOURCES.extension,
-  ], { C, FONT_H, FONT_B }, FOOTER, NOTES_RESOURCES);
+  addResourceSlide(pres, Object.values(RESOURCES), { C, FONT_H, FONT_B }, FOOTER, NOTES_RESOURCES);
 
   // ── SLIDE 19: Closing ───────────────────────────────────────────────────
   closingSlide(pres,
@@ -1497,6 +1491,7 @@ async function build() {
   // ── Generate companion PDFs ──────────────────────────────────────────────
   await generateWorksheet();
   await generateAnswerKey();
+  await generateEnablingPdf();
   await generateExtendingPdf();
   console.log("All PDFs generated.");
 }
@@ -1723,6 +1718,87 @@ async function generateAnswerKey() {
   addPdfFooter(doc, "Teacher Reference — Do Not Distribute to Students");
   await writePdf(doc, `${OUT_DIR}/${RESOURCES.answerKey.fileName}`);
   console.log(`  ${RESOURCES.answerKey.name} written.`);
+}
+
+// ── PDF: Session 1 Enabling Scaffold ─────────────────────────────────────────
+
+async function generateEnablingPdf() {
+  const doc = createPdf({ title: RESOURCES.enabling.name });
+
+  let y = addPdfHeader(doc, RESOURCES.enabling.name, {
+    subtitle: "Supported Practice",
+    color: C.SECONDARY,
+    lessonInfo: FOOTER,
+  });
+
+  y = addTipBox(doc, "Use this scaffold when students need the place value columns drawn for them or need a visible rename-across-zeros model before subtracting.", y, { color: C.SECONDARY });
+
+  y = addSectionHeading(doc, "1. Line Up The Digits First", y, { color: C.PRIMARY });
+  y = addBodyText(doc, "Write each number into the grid from the ones column backwards. Students should complete only Problems 1 and 4 first, then move on once the setup is correct.", y);
+
+  doc.fontSize(11).font("Sans-Bold").fillColor("#1B3A6B");
+  doc.text("Top number", 50, y + 2);
+  let chart = addPvChartPdf(doc, y + 18, ["TTh", "Th", "H", "T", "O"], {
+    color: C.PRIMARY,
+    cellW: 78,
+    valH: 34,
+  });
+  y = chart.bottomY + 12;
+
+  doc.fontSize(11).font("Sans-Bold").fillColor("#1B3A6B");
+  doc.text("Bottom number", 50, y + 2);
+  chart = addPvChartPdf(doc, y + 18, ["TTh", "Th", "H", "T", "O"], {
+    color: C.PRIMARY,
+    cellW: 78,
+    valH: 34,
+  });
+  y = chart.bottomY + 14;
+
+  y = addProblem(doc, 1, "24,536 + 18,789", y, {
+    writeLines: [
+      { label: "Estimate:" },
+      { label: "Add the ones column first:" },
+      { label: "Then continue column by column:" },
+      { label: "Answer:" },
+    ],
+    color: C.PRIMARY,
+  });
+
+  y = addSectionHeading(doc, "2. Rename Across Zeros Before You Subtract", y, { color: C.ALERT });
+  y = addBodyText(doc, "Model the rename first so students can SEE where the traded value goes. Then they solve the subtraction underneath.", y);
+
+  doc.fontSize(11).font("Sans-Bold").fillColor("#C94030");
+  doc.text("Start with 7,004", 50, y + 2);
+  chart = addPvChartPdf(doc, y + 18, ["Th", "H", "T", "O"], {
+    color: C.ALERT,
+    cellW: 88,
+    valH: 36,
+    values: [7, 0, 0, 4],
+  });
+  y = chart.bottomY + 10;
+
+  doc.fontSize(11).font("Sans-Bold").fillColor("#C94030");
+  doc.text("Rename to 6 thousands, 9 hundreds, 9 tens, 14 ones", 50, y + 2);
+  chart = addPvChartPdf(doc, y + 18, ["Th", "H", "T", "O"], {
+    color: C.ALERT,
+    cellW: 88,
+    valH: 36,
+    values: [6, 9, 9, 14],
+  });
+  y = chart.bottomY + 14;
+
+  y = addProblem(doc, 2, "Now solve 7,004 - 3,258 using the renamed chart.", y, {
+    writeLines: [
+      { label: "Cross off and rename if needed:" },
+      { label: "Subtract each column:" },
+      { label: "Answer:" },
+    ],
+    color: C.ALERT,
+  });
+
+  addPdfFooter(doc, FOOTER);
+  await writePdf(doc, `${OUT_DIR}/${RESOURCES.enabling.fileName}`);
+  console.log(`  ${RESOURCES.enabling.name} written.`);
 }
 
 // ── PDF: EXT1 — Palindromic Number Investigation ─────────────────────────────

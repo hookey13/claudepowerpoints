@@ -11,7 +11,7 @@ const { validateContrast } = require("./contrast");
  * @param {string}   FONT_H        - heading font name
  * @param {string}   FONT_B        - body font name
  * @param {Function} cardShadowFn  - zero-arg factory that returns a fresh card shadow object
- * @returns {object} { addTopBar, addBadge, addTitle, addCard, addFooter, addIconCircle, addTextOnShape }
+ * @returns {object} { addTopBar, addBadge, addTitle, addCard, addInstructionCard, addFooter, addIconCircle, addTextOnShape }
  */
 function createElements(C, FONT_H, FONT_B, cardShadowFn) {
 
@@ -46,12 +46,14 @@ function createElements(C, FONT_H, FONT_B, cardShadowFn) {
       x: o.x || 0.5,
       y: o.y || 0.65,
       w: o.w || 9.0,
-      h: o.h || 0.55,
+      h: o.h || 0.62,
       fontSize: o.fontSize || 26,
       fontFace: FONT_H,
       color: o.color || C.PRIMARY,
       bold: true,
       margin: 0,
+      fit: o.fit || "shrink",
+      shrinkText: o.shrinkText != null ? o.shrinkText : true,
     });
   }
 
@@ -66,6 +68,76 @@ function createElements(C, FONT_H, FONT_B, cardShadowFn) {
     if (o.strip) {
       slide.addShape("rect", { x, y, w: 0.07, h, fill: { color: o.strip } });
     }
+  }
+
+  function addInstructionCard(slide, items, opts) {
+    const o = opts || {};
+    const x = o.x != null ? o.x : 0.5;
+    const y = o.y != null ? o.y : 1.3;
+    const w = o.w || 4.5;
+    const h = o.h || 2.4;
+    const padX = o.padX != null ? o.padX : 0.2;
+    const padY = o.padY != null ? o.padY : 0.14;
+    const textW = o.textW || (w - padX * 2);
+    const textH = o.textH || (h - padY * 2);
+    const contentItems = (items || []).filter((item) => item && item.role !== "spacer");
+    const bodyItems = contentItems.filter((item) => !item.role || item.role === "body");
+    const longestBody = bodyItems.reduce((best, item) => Math.max(best, String(item.text || "").length), 0);
+    const bodyCount = Math.max(bodyItems.length, 1);
+
+    let bodyFontSize = o.bodyFontSize;
+    if (!bodyFontSize) {
+      if (bodyCount <= 3 && longestBody <= 40) bodyFontSize = 15;
+      else if (bodyCount <= 4 && longestBody <= 48) bodyFontSize = 14.5;
+      else if (bodyCount <= 5 && longestBody <= 56) bodyFontSize = 14;
+      else bodyFontSize = 13.5;
+    }
+
+    const headerFontSize = o.headerFontSize || Math.min(bodyFontSize + 2.5, 17.5);
+    const emphasisFontSize = o.emphasisFontSize || Math.min(bodyFontSize + 1, 15.5);
+
+    addCard(slide, x, y, w, h, {
+      strip: o.strip,
+      fill: o.fill,
+      shadow: o.shadow,
+    });
+
+    const textRuns = [];
+    (items || []).forEach((item, index) => {
+      const role = item && item.role ? item.role : "body";
+      const fontSize = item && item.fontSize ? item.fontSize
+        : role === "header" ? headerFontSize
+        : role === "emphasis" ? emphasisFontSize
+        : role === "spacer" ? 5
+        : bodyFontSize;
+      const color = item && item.color ? item.color
+        : role === "header" ? (o.headerColor || o.strip || C.PRIMARY)
+        : role === "emphasis" ? (o.emphasisColor || C.ALERT)
+        : (o.bodyColor || C.CHARCOAL);
+      const breakLine = item && item.breakLine != null ? item.breakLine : index < (items || []).length - 1;
+      textRuns.push({
+        text: role === "spacer" ? "" : String((item && item.text) || ""),
+        options: {
+          bold: role === "header" || role === "emphasis" || Boolean(item && item.bold),
+          italic: Boolean(item && item.italic),
+          breakLine,
+          fontSize,
+          color,
+        },
+      });
+    });
+
+    slide.addText(textRuns, {
+      x: x + padX,
+      y: y + padY,
+      w: textW,
+      h: textH,
+      fontFace: o.fontFace || FONT_B,
+      margin: 0,
+      valign: o.valign || "top",
+      fit: o.fit || "shrink",
+      paraSpaceAfter: o.paraSpaceAfter != null ? o.paraSpaceAfter : 1,
+    });
   }
 
   function addFooter(slide, text) {
@@ -125,10 +197,12 @@ function createElements(C, FONT_H, FONT_B, cardShadowFn) {
       color:    to.color,
       bold:     to.bold,
       italic:   to.italic,
+      fit:      to.fit || "shrink",
+      shrinkText: to.shrinkText != null ? to.shrinkText : true,
     });
   }
 
-  return { addTopBar, addBadge, addTitle, addCard, addFooter, addIconCircle, addTextOnShape };
+  return { addTopBar, addBadge, addTitle, addCard, addInstructionCard, addFooter, addIconCircle, addTextOnShape };
 }
 
 module.exports = { createElements };

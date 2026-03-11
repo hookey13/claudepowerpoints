@@ -25,7 +25,7 @@ const {
   titleSlide, liSlide, contentSlide, cfuSlide, closingSlide,
   workedExSlide, exitTicketSlide, addStageBadge,
   withReveal,
-  addTopBar, addBadge, addTitle, addCard, addFooter, addTextOnShape,
+  addTopBar, addBadge, addTitle, addCard, addInstructionCard, addFooter, addTextOnShape,
   iconToBase64Png, getContrastColor,
   SAFE_BOTTOM, CONTENT_TOP, STAGE_COLORS,
 } = T;
@@ -272,12 +272,13 @@ Sort responses:
 
 const NOTES_RESOURCES = `SAY:
 - "Here are the printable resources. Click any link to open the PDF."
+- "Session 4 Enabling Scaffold is the keyword and operation-choice support sheet."
 
 DO:
 - Display briefly. Teacher-facing slide.
 
 TEACHER NOTES:
-All PDFs are in the resources-session4 folder. Print the worksheet before the lesson (one per student). Answer key is teacher reference. Extension is for extending students only.
+All PDFs are in the resources-session4 folder. Print the worksheet before the lesson (one per student). Print a small set of Session 4 Enabling Scaffold copies for students who need operation-identification support. Answer key is teacher reference. Extension is for extending students only.
 
 [Maths: Planning | VTLM 2.0: Planning]`;
 
@@ -580,18 +581,17 @@ async function build() {
         fontSize: 14, fontFace: FONT_B, color: C.CHARCOAL, margin: 0, valign: "middle",
       });
 
-      addCard(s, 0.5, CONTENT_TOP + 1.1, 4.5, 2.5, { strip: C.SECONDARY });
-      s.addText([
-        { text: "With your partner:", options: { bold: true, breakLine: true, fontSize: 14, color: C.SECONDARY } },
-        { text: "1. What operation is this?", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "2. Set up the calculation.", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "3. Solve it. Show working.", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "4. Check — does the answer make sense?", options: { breakLine: true, fontSize: 12, color: C.CHARCOAL } },
-        { text: "", options: { breakLine: true, fontSize: 6 } },
-        { text: "90 seconds — boards up!", options: { fontSize: 13, color: C.ALERT, bold: true } },
+      addInstructionCard(s, [
+        { text: "With your partner:", role: "header" },
+        { text: "1. What operation is this?" },
+        { text: "2. Set up the calculation." },
+        { text: "3. Solve it. Show working." },
+        { text: "4. Check — does the answer make sense?" },
+        { text: "", role: "spacer" },
+        { text: "90 seconds — boards up!", role: "emphasis" },
       ], {
-        x: 0.75, y: CONTENT_TOP + 1.25, w: 4.0, h: 2.2,
-        fontFace: FONT_B, margin: 0, valign: "top",
+        x: 0.5, y: CONTENT_TOP + 1.1, w: 4.5, h: 2.5,
+        strip: C.SECONDARY,
       });
 
       addTextOnShape(s, "48 boxes x 36 pens = ?", {
@@ -686,11 +686,7 @@ async function build() {
   ], NOTES_EXIT, FOOTER);
 
   // ── SLIDE 13: Resources ────────────────────────────────────────────────
-  addResourceSlide(pres, [
-    RESOURCES.worksheet,
-    RESOURCES.answerKey,
-    RESOURCES.extension,
-  ], { C, FONT_H, FONT_B }, FOOTER, NOTES_RESOURCES);
+  addResourceSlide(pres, Object.values(RESOURCES), { C, FONT_H, FONT_B }, FOOTER, NOTES_RESOURCES);
 
   // ── SLIDE 14: Closing ──────────────────────────────────────────────────
   closingSlide(pres,
@@ -711,6 +707,7 @@ async function build() {
   // ── Generate companion PDFs ────────────────────────────────────────────
   await generateWorksheet();
   await generateAnswerKey();
+  await generateEnablingPdf();
   await generateExtension();
   console.log("All PDFs generated.");
 }
@@ -882,6 +879,68 @@ async function generateAnswerKey() {
 }
 
 // ── PDF: Session 4 Extension ────────────────────────────────────────────────
+
+async function generateEnablingPdf() {
+  const doc = createPdf({ title: RESOURCES.enabling.name });
+
+  let y = addPdfHeader(doc, RESOURCES.enabling.name, {
+    subtitle: "Supported Practice",
+    color: C.SECONDARY,
+    lessonInfo: FOOTER,
+  });
+
+  y = addTipBox(doc, "Use this page when students need help deciding which operation a story problem is asking for. The organiser slows the task down before the calculation starts.", y, { color: C.SECONDARY });
+
+  y = addSectionHeading(doc, "1. Keyword Reference Card", y, { color: C.PRIMARY });
+  y = addBodyText(doc, "Cover the worksheet until the student has matched the words to the likely operation. Remind them that the words are clues, not a substitute for understanding the whole story.", y);
+
+  y = addTwoColumnOrganiser(doc, "Words in the problem", "Likely operation", y, {
+    color: C.PRIMARY,
+    rows: 4,
+    rowH: 42,
+    leftContent: [
+      "altogether, total, combined, in all",
+      "left, difference, how many more, fewer",
+      "each, groups of, rows of, per",
+      "share equally, split into, each group, quotient",
+    ],
+    rightContent: [
+      "Addition (+)",
+      "Subtraction (-)",
+      "Multiplication (x)",
+      "Division (/)",
+    ],
+  });
+
+  y = addSectionHeading(doc, "2. Read -> Choose -> Solve", y, { color: C.ACCENT });
+  y = addBodyText(doc, "Students write the operation first, then the number sentence, then solve. This changes the task from 'just calculate' to 'identify and justify'.", y);
+
+  y = addProblem(doc, 1, "A school orders 48 boxes of pens. Each box has 36 pens. What is the total number of pens?", y, {
+    writeLines: [
+      { label: "Key words / clue phrase:" },
+      { label: "This is _____ because:" },
+      { label: "Number sentence:" },
+      { label: "Working:" },
+      { label: "Answer:" },
+    ],
+    color: C.ACCENT,
+  });
+
+  y = addProblem(doc, 2, "A theatre has 1,856 seats. 1,289 seats are filled. How many seats are empty?", y, {
+    writeLines: [
+      { label: "Key words / clue phrase:" },
+      { label: "This is _____ because:" },
+      { label: "Number sentence:" },
+      { label: "Working:" },
+      { label: "Answer:" },
+    ],
+    color: C.ALERT,
+  });
+
+  addPdfFooter(doc, FOOTER);
+  await writePdf(doc, `${OUT_DIR}/${RESOURCES.enabling.fileName}`);
+  console.log(`  ${RESOURCES.enabling.name} written.`);
+}
 
 async function generateExtension() {
   const doc = createPdf({ title: RESOURCES.extension.name });

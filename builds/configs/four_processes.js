@@ -18,6 +18,7 @@ const LESSONS = {
     resources: {
       worksheet: makeSessionResource(1, "Worksheet", "6 problems (3 addition, 3 subtraction) with gridlines. One per student."),
       answerKey: makeSessionResource(1, "Answer Key", "Worked solutions for worksheet and exit ticket. Teacher reference only."),
+      enabling: makeSessionResource(1, "Enabling Scaffold", "Place value alignment grids and trading prompts for students who need support."),
       extension: makeSessionResource(1, "Extension", "Palindromic number investigation. For extending students."),
     },
   },
@@ -29,6 +30,7 @@ const LESSONS = {
     resources: {
       worksheet: makeSessionResource(2, "Worksheet", "4 vertical + 3 lattice problems with grid format. One per student."),
       answerKey: makeSessionResource(2, "Answer Key", "Full worked answers for worksheet and exit ticket. Teacher reference only."),
+      enabling: makeSessionResource(2, "Enabling Scaffold", "Pre-drawn multiplication layouts and lattice frames with partial support."),
       extension: makeSessionResource(2, "Extension", "Multiplying by 11 - discover the shortcut pattern. Extending resource."),
     },
   },
@@ -40,6 +42,7 @@ const LESSONS = {
     resources: {
       worksheet: makeSessionResource(3, "Worksheet", "8 problems (4 clean, 4 with remainders) with bus stop gridlines. One per student."),
       answerKey: makeSessionResource(3, "Answer Key", "Answer key with all 3 remainder forms. Teacher reference only."),
+      enabling: makeSessionResource(3, "Enabling Scaffold", "Bus stop templates with the first carry step completed for supported students."),
       extension: makeSessionResource(3, "Extension", "Investigate which divisors create repeating decimals. Extending students."),
     },
   },
@@ -51,6 +54,7 @@ const LESSONS = {
     resources: {
       worksheet: makeSessionResource(4, "Worksheet", "8 worded problems (2 each of +, -, x, /). One per student."),
       answerKey: makeSessionResource(4, "Answer Key", "Full answers with operation identification. Teacher reference only."),
+      enabling: makeSessionResource(4, "Enabling Scaffold", "Keyword cue cards and operation-matching support for worded problems."),
       extension: makeSessionResource(4, "Extension", "Multi-step worded problems requiring 2-3 operations. Extending students."),
     },
   },
