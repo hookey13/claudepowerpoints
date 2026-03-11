@@ -1,8 +1,8 @@
 "use strict";
 
-// War Horse Unit — Lesson 18: Chapter 15 — No Man's Land
-// Week 4, Grade 5/6 Literacy
-// Chapter 15: Joey alone in No Man's Land — literary devices, perspective, conjunctions
+// War Horse Unit -- Lesson 18: Chapter 15 -- No Man's Land
+// Week 4, Session 3, Grade 5/6 Literacy
+// Chapter 15: Joey alone in No Man's Land -- literary devices, perspective, conjunctions
 
 const pptxgen = require("pptxgenjs");
 const fs = require("fs");
@@ -50,549 +50,506 @@ const ANSWER_KEY_PDF_PATH = path.join(OUT_DIR, ANSWER_KEY_RESOURCE.fileName);
 const REFERENCE_PDF_PATH = path.join(OUT_DIR, REFERENCE_RESOURCE.fileName);
 fs.mkdirSync(RES_DIR, { recursive: true });
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
 // Teacher Notes
-// ─────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
 
 const NOTES_TITLE = `SAY:
-\u2022 Welcome back to War Horse \u2014 we\u2019re continuing with Chapter 15 today
-\u2022 Last lesson was incredibly emotional \u2014 Topthorn died, Friedrich was injured. Today Joey is completely alone for the first time
-\u2022 This chapter is one of the most powerfully written in the whole book. Morpurgo uses almost every literary device we\u2019ve studied to put us inside Joey\u2019s experience
-\u2022 We\u2019ll be reading Chapter 15, studying the devices Morpurgo uses, and then doing some sentence-level writing with conjunctions
-\u2022 By the end of the lesson you\u2019ll be able to name and explain five different literary devices and use \u201Cbecause\u201D, \u201Cbut\u201D and \u201Cso\u201D to extend a sentence
+- Welcome back to War Horse -- we are continuing with Chapter 15 today
+- Last lesson was emotional -- Topthorn died, Friedrich was injured. Today Joey is completely alone for the first time
+- This chapter is one of the most powerfully written in the book. Morpurgo uses almost every literary device we have studied to put us inside Joey's experience
+- We will read Chapter 15, study the devices Morpurgo uses, and then do some sentence-level writing with conjunctions
 
 DO:
-\u2022 Have copies of War Horse on desks, bookmarked at Chapter 15 (p. 118)
-\u2022 Display title slide as students settle
-\u2022 Gauge the mood \u2014 some students may still be processing Topthorn\u2019s death from the previous lesson
-\u2022 Set a calm, focused tone \u2014 this is an intense chapter but the lesson is designed to be engaging without being stressful
+- Have copies of War Horse on desks, bookmarked at Chapter 15 (p. 118)
+- Display title slide as students settle
+- Set a calm, focused tone -- this is an intense chapter
 
 SENSITIVITY ADVISORY:
-Joey is alone, injured, and terrified in a war zone. He is surrounded by explosions, dead bodies, and barbed wire. Some students may find this confronting, especially those with personal connections to war, loss, or separation anxiety. Monitor for signs of distress. Remind students that Joey survives \u2014 this is not a death scene. The previous lesson dealt with Topthorn\u2019s death, so emotional residue may carry over. Frame the chapter as Joey\u2019s courage and resilience, not his suffering.
+- What it is: Joey is alone, injured, and terrified in a war zone. He encounters explosions, barbed wire, and the terror of no man's land.
+- Framing language: "This chapter shows Joey at his bravest. He is scared but he keeps going."
+- Watch for: Students who are still processing Topthorn's death from last lesson, or who have personal connections to war, loss, or separation
+- Protocol: If a student becomes distressed, acknowledge their feelings privately. Remind students that Joey survives -- this is not a death scene.
 
 TEACHER NOTES:
-This is Lesson 18 of 25, the third lesson of Week 4. Chapter 15 is a literary goldmine \u2014 Morpurgo deploys simile, metaphor, onomatopoeia, personification, and repetition in concentrated form. This makes it ideal for explicit teaching of narrative devices, which connects directly to students\u2019 own narrative writing. The sentence-level focus on conjunctions (\u201Cbecause\u201D, \u201Cbut\u201D, \u201Cso\u201D) reinforces complex sentence construction \u2014 a skill that strengthens narrative writing fluency. VTLM 2.0: Establishing Purpose and Relevance.
+Lesson 18 of 25, third session of Week 4. Chapter 15 deploys simile, metaphor, onomatopoeia, personification, and repetition in concentrated form -- ideal for explicit teaching of narrative devices that connect to students' own writing.
 
 WATCH FOR:
-\u2022 Students who are emotionally affected by the content \u2014 validate their feelings, remind them that Joey survives
-\u2022 Students who were absent last lesson and need a brief recap of Chapter 14 events
-\u2022 Anxiety levels \u2014 keep the energy warm and supportive
+- Students emotionally affected by the content -- validate feelings, remind them Joey survives
+- Students absent last lesson who need a brief recap of Chapter 14
 
 [General: Title | VTLM 2.0: Establishing Purpose and Relevance]`;
 
 const NOTES_LI_SC = `SAY:
-\u2022 Read the learning intention once so students hear the full destination for today.
-\u2022 Name the two linked strands: analysing Morpurgo's craft in Chapter 15 and extending sentences clearly with because, but, and so.
-\u2022 Read the success criteria together. Ask: Which of these feels most challenging? [Take 2\u20133 responses]
+- Read the learning intention from the slide
+- We have two connected strands today: analysing Morpurgo's craft in Chapter 15 and extending sentences clearly with because, but and so
+- Read the success criteria together. Ask: Which of these feels most challenging? [Take 2-3 responses]
 
 DO:
-\u2022 Choral read the LI, then the SCs.
-\u2022 Keep the LI/SC introduction brisk
-\u2022 Highlight SC2 (conjunctions) and SC3 (perspective) as the two biggest focuses today
+- Choral read the LI, then the SCs
+- Keep the LI/SC introduction brisk -- 90 seconds maximum
 
 TEACHER NOTES:
-The single LI keeps the lesson focused: literary analysis of Chapter 15 plus sentence-level writing transfer. SC1 focuses on literary devices, SC2 on conjunction sentence building, and SC3 on perspective. This keeps the lesson coherent while still honouring how rich the chapter is. The conjunction focus connects naturally to narrative writing - students need varied sentence structures in their own stories. VTLM 2.0: Clear Learning Intention with Visible Success Criteria.
+SC1 focuses on literary devices, SC2 on conjunction sentence building, SC3 on perspective. The conjunction focus connects naturally to narrative writing -- students need varied sentence structures in their own stories.
 
 WATCH FOR:
-\u2022 Students who only attend to the device work or only to the writing - remind them the LI deliberately connects both.
-\u2022 Students who are strong readers but weaker writers (or vice versa) - the lesson gives both groups opportunities to shine
+- Students who only attend to the device work or only to the writing -- remind them the LI connects both
+- Students who seem confident on all three -- probe: "Can you name a literary device right now?"
 
 [General: Learning Intention | VTLM 2.0: Clear Learning Intention]`;
 
 const NOTES_VOCAB_MURKY = `SAY:
-\u2022 Our first vocabulary word today is \u201Cmurky\u201D
-\u2022 Choral read: murky
-\u2022 Murky is an adjective \u2014 it means dark, gloomy, and hard to see through. Think of water you can\u2019t see the bottom of, or a night where the fog makes everything unclear
-\u2022 In Chapter 15, Morpurgo writes about murky conditions \u2014 Joey can barely see where he\u2019s going. The battlefield is covered in smoke, mud, and darkness
-\u2022 Listen to the example: \u201CThe murky water of the shell crater hid everything beneath its surface.\u201D
-\u2022 Quick check: thumbs up if murky means clear and bright, thumbs down if it means dark and hard to see through [thumbs down]
+- Read this word with me: murky [students repeat]
+- Murky means dark, gloomy, and hard to see through. Think of water you can't see the bottom of, or a night where fog makes everything unclear
+- In Chapter 15, conditions are murky -- Joey can barely see where he is going
+- Quick check: thumbs up if murky means clear and bright, thumbs down if it means dark and hard to see through [thumbs down]
 
 DO:
-\u2022 Display word, choral read, define, example
-\u2022 Emphasise the sensory quality \u2014 murky is a word you can FEEL. It\u2019s heavy, uncertain, unsettling
-\u2022 Connect to the chapter: murky describes the world Joey is stumbling through
+- Display word, choral read, define, example
+- Emphasise the sensory quality -- murky is a word you can feel
+- Connect to the chapter: murky describes the world Joey is stumbling through
 
 TEACHER NOTES:
-\u201CMurky\u201D is a Tier 2 word that appears in the chapter and carries significant atmospheric weight. Pre-teaching it before reading ensures students can process the descriptions without stopping to decode vocabulary. The word also has metaphorical potential \u2014 Joey\u2019s future is murky, his understanding of the war is murky. This semantic richness makes it worth explicit teaching. VTLM 2.0: Building Vocabulary and Background Knowledge.
+"Murky" is a Tier 2 word with significant atmospheric weight. Pre-teaching it before reading ensures students can process descriptions without stopping to decode vocabulary.
 
 MISCONCEPTIONS:
-\u2022 Misconception: \u201CMurky\u201D only means dirty water
+- Misconception: "Murky" only means dirty water
   Why: Students often encounter the word in the context of ponds or rivers
   Impact: Limits their ability to apply the word to non-water contexts (murky night, murky atmosphere)
-  Quick correction: \u201CMurky can describe any situation where things are hard to see or understand \u2014 murky fog, murky darkness, even murky intentions\u201D
+  Quick correction: "Murky can describe any situation where things are hard to see or understand -- murky fog, murky darkness, even murky intentions"
 
 WATCH FOR:
-\u2022 Students who confuse \u201Cmurky\u201D with \u201Cmucky\u201D (dirty) \u2014 clarify: murky is about visibility, mucky is about cleanliness
-\u2022 Students who can\u2019t generate their own example \u2014 provide a sentence frame: \u201CThe ___ was so murky that ___\u201D
+- Students who confuse "murky" with "mucky" (dirty) -- clarify: murky is about visibility, mucky is about cleanliness
+- Students who can't generate their own example -- provide a sentence frame: "The ___ was so murky that ___"
 
-[General: I Do \u2014 Vocabulary | VTLM 2.0: Building Vocabulary and Background Knowledge]`;
+[General: I Do -- Vocabulary | VTLM 2.0: Building Vocabulary and Background Knowledge]`;
 
 const NOTES_VOCAB_VAGUE = `SAY:
-\u2022 Second vocabulary word: \u201Cvague\u201D
-\u2022 Choral read: vague
-\u2022 Vague is also an adjective \u2014 it means unclear, not definite, hard to pin down. Something vague lacks detail or precision
-\u2022 In Chapter 15, things are vague for Joey \u2014 shapes in the darkness, sounds he can\u2019t identify, directions he can\u2019t be sure of
-\u2022 Listen: \u201CJoey could only make out vague shapes in the distance through the smoke and mist.\u201D
-\u2022 Ask: How is \u201Cvague\u201D different from \u201Cmurky\u201D? [Murky is about the environment being hard to see through; vague is about the thing itself being unclear. You see through murky fog and what you see is vague]
+- Second vocabulary word: vague [students repeat]
+- Vague means unclear, not definite, hard to pin down. Something vague lacks detail or precision
+- In Chapter 15, things are vague for Joey -- shapes in the darkness, sounds he can't identify
+- Ask: How is "vague" different from "murky"? [Murky is about the environment being hard to see through; vague is about the thing itself being unclear]
 
 DO:
-\u2022 Display word, choral read, define, example
-\u2022 Draw the distinction between murky (the medium) and vague (the object) \u2014 this sharpens both words
-\u2022 Ask 2\u20133 students to use \u201Cvague\u201D in a sentence about today\u2019s chapter
+- Display word, choral read, define, example
+- Draw the distinction between murky (the medium) and vague (the object)
+- Ask 2-3 students to use "vague" in a sentence about today's chapter
 
 TEACHER NOTES:
-Teaching \u201Cvague\u201D alongside \u201Cmurky\u201D creates a productive comparison. Both relate to unclear perception, but operate differently: murky describes the environment or conditions, while vague describes what is perceived. This semantic distinction develops vocabulary precision \u2014 a hallmark of sophisticated writing. Students who can distinguish between near-synonyms write with greater specificity. VTLM 2.0: Building Vocabulary and Background Knowledge.
+Teaching "vague" alongside "murky" creates a productive comparison. Both relate to unclear perception but operate differently: murky describes conditions, vague describes what is perceived.
 
 WATCH FOR:
-\u2022 Students who treat \u201Cvague\u201D and \u201Cmurky\u201D as identical \u2014 reinforce the distinction
-\u2022 Students who use \u201Cvague\u201D only about people (\u201Che was being vague\u201D) \u2014 extend to visual and physical contexts
+- Students who treat "vague" and "murky" as identical -- reinforce the distinction
+- Students who use "vague" only about people ("he was being vague") -- extend to visual and physical contexts
 
-[General: I Do \u2014 Vocabulary | VTLM 2.0: Building Vocabulary and Background Knowledge]`;
-
-const NOTES_INCIDENTAL = `SAY:
-\u2022 Chapter 15 is packed with rich vocabulary. Here are the incidental words you\u2019ll encounter as we read
-\u2022 You don\u2019t need to memorise definitions for all of these \u2014 but I want you to notice them as we read and use context clues to work out meanings
-\u2022 Some of these are powerful words for your own narrative writing: \u201Cinexorably\u201D, \u201Csapped\u201D, \u201Cpulsated\u201D, \u201Cgingerly\u201D
-\u2022 Ask: Can anyone already define one of these words? [Take 1\u20132 quick responses]
-\u2022 We\u2019ll come back to any words that trip you up during reading
-
-DO:
-\u2022 Read through the list at a brisk pace \u2014 don\u2019t stop to define each one
-\u2022 Point out 2\u20133 high-value words for narrative writing (inexorably, sapped, gingerly, pulsated)
-\u2022 Encourage students to jot down any unfamiliar words during reading
-
-TEACHER NOTES:
-The incidental vocabulary list serves two purposes: it primes students to expect challenging words (reducing frustration during reading), and it signals which words are worth attending to. Not defining them here is deliberate \u2014 encountering them in context and using inference strategies is itself a comprehension skill. The words chosen are predominantly Tier 2 (general academic) with high transfer value to students\u2019 own narrative writing. VTLM 2.0: Building Vocabulary and Background Knowledge.
-
-WATCH FOR:
-\u2022 Students who are anxious about the number of unfamiliar words \u2014 reassure: context will help, and they won\u2019t be tested on all of them
-\u2022 Strong readers who already know many \u2014 challenge them to notice HOW Morpurgo uses each word for effect
-
-[General: Vocabulary Preview | VTLM 2.0: Building Vocabulary and Background Knowledge]`;
+[General: I Do -- Vocabulary | VTLM 2.0: Building Vocabulary and Background Knowledge]`;
 
 const NOTES_READING_INTRO = `SAY:
-\u2022 Chapter 15 picks up right where we left off. Remember: Topthorn has died, Friedrich has been injured. Joey is now completely alone
-\u2022 This is the first time in the entire book that Joey has no companion \u2014 no Albert, no Topthorn, no Friedrich, no Emilie. He is utterly alone on a battlefield
-\u2022 Today\u2019s reading is Student Read Aloud. I\u2019ll select readers for short passages, and we\u2019ll pause at three key moments to discuss
-\u2022 As you listen, pay attention to the LANGUAGE Morpurgo uses. This chapter is incredibly rich with literary devices \u2014 similes, metaphors, personification, onomatopoeia, repetition. Your job is to notice them
-\u2022 Pages 118 to 126 \u2014 open your books now
+- Chapter 15 picks up right where we left off. Topthorn has died, Friedrich has been injured. Joey is now completely alone
+- Today's reading is Student Read Aloud. I will select readers, and we will pause at three key moments to discuss
+- As you listen, pay attention to the language Morpurgo uses -- similes, metaphors, personification, onomatopoeia, repetition. Your job is to notice them
+- Pages 118 to 126 -- open your books now
 
 DO:
-\u2022 Give students 30 seconds to find p. 118
-\u2022 Select first reader \u2014 choose a confident, expressive reader for the opening section (the tank scene is dramatic)
-\u2022 Plan reader rotations: change every half-page or at natural pause points
-\u2022 Have pause point slides ready to display at the right moments
+- Give students 30 seconds to find p. 118
+- Select first reader -- choose a confident, expressive reader for the opening (the tank scene is dramatic)
+- Plan reader rotations: change every half-page or at natural pause points
 
 SENSITIVITY ADVISORY:
-The chapter describes Joey running through a battlefield at night. He encounters dead bodies, barbed wire that cuts his leg, explosions, and the terror of being alone in No Man\u2019s Land. While the narration is through Joey\u2019s animal perspective (which creates some emotional distance), the content is still confronting. Monitor student reactions. If any student appears distressed, allow them to step back from reading and follow along silently. Frame Joey\u2019s journey as one of courage and survival, not suffering.
+- What it is: The chapter describes Joey running through a battlefield at night -- explosions, barbed wire, injury, isolation
+- Framing language: "This chapter shows Joey's courage and determination to survive"
+- Watch for: Student distress, especially those with personal connections to war or loss
+- Protocol: Allow distressed students to follow along silently. Frame as courage and survival, not suffering.
 
 TEACHER NOTES:
-Student Read Aloud is chosen deliberately for this chapter. The dramatic, sensory prose benefits from being heard aloud \u2014 the rhythm, the repetition, the building tension all come alive when spoken. Selecting confident readers for the most dramatic passages ensures the text is delivered with appropriate expression while supporting less confident readers who can listen and follow. Three pause points create natural comprehension checkpoints without breaking the narrative flow. VTLM 2.0: Structured Reading Practice.
+Student Read Aloud is chosen deliberately -- the dramatic prose benefits from being heard aloud. Three pause points create natural comprehension checkpoints.
 
 WATCH FOR:
-\u2022 Readers who rush through dramatic passages \u2014 coach: \u201CSlow down at the commas. Let the tension build.\u201D
-\u2022 Students who lose their place \u2014 use finger tracking
-\u2022 Emotional responses to the battlefield descriptions \u2014 normalise these: \u201CIf this makes you feel tense or sad, that\u2019s Morpurgo\u2019s writing doing exactly what it\u2019s supposed to do\u201D
+- Readers who rush dramatic passages -- coach: "Slow down at the commas. Let the tension build"
+- Emotional responses to battlefield descriptions -- normalise: "That is Morpurgo's writing doing what it is supposed to do"
 
 [General: Reading Launch | VTLM 2.0: Structured Reading Practice]`;
 
 const NOTES_PAUSE1 = `SAY:
-\u2022 Stop here. Let\u2019s look at this quote carefully
-\u2022 \u201CAnd then exhaustion finally overtook me, sapped the strength from my legs and forced me to lie down and sleep.\u201D
-\u2022 What\u2019s happening in this moment? [Joey has been running, he\u2019s utterly exhausted, he collapses]
-\u2022 Ask: What\u2019s unusual about the way Morpurgo describes exhaustion here? Think about what exhaustion is DOING in this sentence [Exhaustion is described as if it\u2019s a person \u2014 it \u201Covertook\u201D him, \u201Csapped\u201D his strength, \u201Cforced\u201D him. These are human actions]
-\u2022 That\u2019s personification \u2014 giving human qualities to something non-human. Exhaustion becomes a character in the sentence, almost like an enemy that defeats Joey
+- Stop here. Read this quote carefully: "And then exhaustion finally overtook me, sapped the strength from my legs and forced me to lie down and sleep."
+- What is happening in this moment? [Joey has been running, he is utterly exhausted, he collapses]
+- Ask: What is unusual about the way Morpurgo describes exhaustion here? Think about what exhaustion is DOING in this sentence [Exhaustion is described as if it is a person -- it "overtook" him, "sapped" his strength, "forced" him. These are human actions]
+- That is personification -- giving human qualities to something non-human. Exhaustion becomes a character that defeats Joey
 
 DO:
-\u2022 Display the quote, read aloud slowly with expression
-\u2022 Give 15 seconds of think time before taking responses
-\u2022 Use Cold Call for initial responses, then open to volunteers for the literary device identification
-\u2022 Write \u201CPERSONIFICATION\u201D on the board and circle the key verbs: overtook, sapped, forced
+- Display the quote, read aloud slowly with expression
+- Give 15 seconds of think time before taking responses
+- Use Cold Call for initial responses, then open to volunteers for the literary device identification
 
 TEACHER NOTES:
-This is the first pause point and introduces personification in context. The power of this example is that exhaustion becomes an antagonist \u2014 it acts upon Joey with agency and force. This connects to the broader narrative technique of using language to create tension and empathy. Students should understand that personification doesn\u2019t just make writing \u201Cpretty\u201D \u2014 it changes how we experience the emotion. Writing tip for students\u2019 own narratives: personification makes abstract emotions (fear, exhaustion, loneliness) feel physical and immediate. VTLM 2.0: Teacher-Led Discussion / Comprehension Check.
+This is the first pause point and introduces personification in context. The power of this example is that exhaustion becomes an antagonist -- it acts upon Joey with agency and force.
 
 WATCH FOR:
-\u2022 Students who identify the quote as a simile (no comparison word) or metaphor (it\u2019s not saying exhaustion IS something else) \u2014 clarify: personification specifically gives human traits to non-human things
-\u2022 Students who can\u2019t see the personification \u2014 ask: \u201CCan exhaustion actually grab you and force you? Can it make decisions? Those are human actions\u201D
+- Students who identify the quote as a simile (no comparison word) or metaphor (it is not saying exhaustion IS something else) -- clarify: personification specifically gives human traits to non-human things
+- Students who can't see the personification -- ask: "Can exhaustion actually grab you and force you? Those are human actions"
 
 [General: Pause Point 1 | VTLM 2.0: Teacher-Led Discussion]`;
 
 const NOTES_PAUSE1_REVEAL = `SAY:
-\u2022 Here\u2019s what\u2019s happening: Joey has run until his body simply cannot go any further. Exhaustion is personified as a force that physically defeats him
-\u2022 Notice the three verbs: \u201Covertook\u201D \u2014 like a pursuer catching up; \u201Csapped\u201D \u2014 draining his energy; \u201Cforced\u201D \u2014 leaving him no choice
-\u2022 This is personification at its most powerful. Morpurgo makes exhaustion feel like a physical enemy
-\u2022 Think about how you could use this in your own narrative writing: instead of \u201CI was tired,\u201D you could write \u201CExhaustion grabbed me and dragged me to the ground\u201D
+- Joey has run until his body cannot go any further. Exhaustion is personified as a force that physically defeats him
+- Notice the three verbs: "overtook" -- like a pursuer; "sapped" -- draining energy; "forced" -- no choice
+- Think about how you could use this in your own writing: instead of "I was tired," you could write "Exhaustion grabbed me and dragged me to the ground"
 
 DO:
-\u2022 Reveal the answer card and read through the analysis
-\u2022 Pause on the narrative writing connection \u2014 this is directly transferable
-\u2022 Continue reading from where you left off
+- Reveal the answer card and read through the analysis
+- Pause on the narrative writing connection -- directly transferable
+- Continue reading from where you left off
 
 [General: Pause Point 1 Reveal | VTLM 2.0: Teacher-Led Discussion]`;
 
 const NOTES_PAUSE2 = `SAY:
-\u2022 Pause here. Look at this line: \u201C\u2026and moving towards the darker more silent world ahead of me.\u201D
-\u2022 What\u2019s going on? Where is Joey heading? [Away from the fighting, towards quiet \u2014 but also towards the unknown]
-\u2022 Ask: What does \u201Cdarker more silent world\u201D suggest? [It could mean the quieter part of the battlefield, but it also sounds like death. Silence and darkness are often associated with death in literature]
-\u2022 Is Morpurgo just describing the physical landscape, or is there something deeper here? [Both \u2014 the physical landscape mirrors Joey\u2019s emotional state. He\u2019s moving away from chaos but towards uncertainty]
+- Pause here. "...and moving towards the darker more silent world ahead of me."
+- What is going on? Where is Joey heading? [Away from the fighting, towards quiet -- but also towards the unknown]
+- Ask: What does "darker more silent world" suggest? [It could mean the quieter part of the battlefield, but it also sounds like death. Silence and darkness are often associated with death]
 
 DO:
-\u2022 Display quote, read with a slow, quiet tone
-\u2022 Use Think-Pair-Share: 30 seconds think, 60 seconds pair talk, then share
-\u2022 Push students beyond literal interpretation \u2014 this is a metaphorical landscape
-\u2022 Accept multiple valid interpretations
+- Display quote, read with a slow, quiet tone
+- Use Think-Pair-Share: 30 seconds think, 60 seconds pair talk, then share
+- Push students beyond literal interpretation -- this is a metaphorical landscape
+
+CFU CHECKPOINT:
+Technique: Think-Pair-Share
+
+Script:
+- "Think for 30 seconds: what could 'darker more silent world' mean beyond just the physical darkness?"
+- "Now share with your partner for 60 seconds"
+- "Hands down -- I am going to select pairs to share"
+- Scan for: students who offer both literal and symbolic readings
+
+PROCEED (>=80%): Most pairs identify at least the literal meaning and attempt a deeper reading. Move to Pause Point 3.
+PIVOT (<80%): Most likely issue -- students stuck on the literal only. Reteach: "When an author uses words like 'world' instead of 'place,' they are often signalling something bigger. What feelings do darkness and silence give you?" Re-check with a quick thumbs: "Could this phrase be about more than just geography?"
 
 TEACHER NOTES:
-This pause point develops inferential reading. The phrase \u201Cdarker more silent world\u201D operates on two levels: literal (the quieter side of the battlefield) and symbolic (potential death, isolation, the unknown). Morpurgo\u2019s genius is that both readings work simultaneously. Students who can hold dual meanings are developing sophisticated literary comprehension. This connects to LI4: identifying how perspective shapes understanding. Joey doesn\u2019t know where he\u2019s going \u2014 and neither do we. VTLM 2.0: Higher-Order Questioning / Comprehension.
+This pause point develops inferential reading. The phrase operates on two levels: literal (quieter battlefield) and symbolic (death, isolation, the unknown).
 
 WATCH FOR:
-\u2022 Students who only offer the literal reading \u2014 prompt: \u201CWhat else could \u2018darker more silent\u2019 mean beyond just the physical darkness?\u201D
-\u2022 Students who jump to \u201Che\u2019s going to die\u201D \u2014 gently redirect: \u201CWe don\u2019t know that yet. What we know is that the language creates a feeling of uncertainty\u201D
+- Students stuck on the literal only -- prompt: "What else could 'darker more silent' mean beyond just the physical darkness?"
+- Students who jump to "he is going to die" -- redirect: "The language creates a feeling of uncertainty"
 
 [General: Pause Point 2 | VTLM 2.0: Higher-Order Questioning]`;
 
 const NOTES_PAUSE2_REVEAL = `SAY:
-\u2022 Joey is moving away from the fighting but into complete uncertainty. He doesn\u2019t know what lies ahead
-\u2022 The phrase \u201Cdarker more silent world\u201D works on two levels: the literal landscape and the emotional journey
-\u2022 This is a moment of transition \u2014 Joey is leaving one kind of danger (explosions, tanks) and entering another (isolation, injury, the unknown)
-\u2022 Notice how Morpurgo uses the word \u201Cworld\u201D \u2014 not \u201Cplace\u201D or \u201Carea.\u201D World suggests something vast, all-encompassing, overwhelming
+- Joey is moving away from the fighting but into complete uncertainty
+- The phrase "darker more silent world" works on two levels: the literal landscape and the emotional journey
+- Notice how Morpurgo uses the word "world" -- not "place" or "area." World suggests something vast and overwhelming
 
 DO:
-\u2022 Reveal the answer card
-\u2022 Highlight the dual-level reading \u2014 literal and symbolic
-\u2022 Continue reading towards the chapter\u2019s climax
+- Reveal the answer card
+- Highlight the dual-level reading -- literal and symbolic
+- Continue reading towards the chapter's climax
 
 [General: Pause Point 2 Reveal | VTLM 2.0: Higher-Order Questioning]`;
 
 const NOTES_PAUSE3 = `SAY:
-\u2022 Final pause. \u201CThis was what the soldiers called \u2018no man\u2019s land.\u2019\u201D
-\u2022 What do you think the author wants us to know? [Joey has ended up in the most dangerous place on the entire battlefield \u2014 the strip of land between the two opposing armies]
-\u2022 Ask: Why is it called \u201Cno man\u2019s land\u201D? [Because no person can survive there \u2014 it belongs to nobody. It\u2019s the killing ground between the trenches]
-\u2022 Ask: What\u2019s ironic about Joey being in no man\u2019s land? [He\u2019s not a man \u2014 he\u2019s a horse. But he\u2019s trapped in a place defined by human war. The name \u201Cno man\u2019s land\u201D excludes him by definition, yet he\u2019s the one suffering there]
+- Final pause. "This was what the soldiers called 'no man's land.'"
+- What do you think the author wants us to know? [Joey has ended up in the most dangerous place on the entire battlefield -- the strip of land between the two opposing armies]
+- Ask: What is ironic about Joey being in no man's land? [He is not a man -- he is a horse. But he is trapped in a place defined by human war]
 
 DO:
-\u2022 Display quote, let the weight of the moment settle
-\u2022 Use Cold Call for initial responses
-\u2022 Draw attention to the irony \u2014 this is a central theme of the book: animals caught in human conflicts
-\u2022 This is the chapter\u2019s climax \u2014 give it the space it deserves
+- Display quote, let the weight of the moment settle
+- Use Cold Call for initial responses
+- Draw attention to the irony -- this is a central theme of the book
 
 TEACHER NOTES:
-This is the pivotal moment of the chapter and one of the most significant in the entire novel. Joey\u2019s presence in no man\u2019s land crystallises the book\u2019s central theme: the absurdity and cruelty of war, especially for the animals who had no choice in it. The term itself carries enormous historical weight \u2014 students studying WWI will encounter it in History. The irony (a horse in \u201Cno man\u2019s\u201D land) is both linguistic and thematic. This connects powerfully to LI2 (questioning authorial assertions) and LI4 (perspective). VTLM 2.0: Deep Comprehension / Critical Literacy.
+Joey's presence in no man's land crystallises the book's central theme: the absurdity of war for animals who had no choice. The irony is both linguistic and thematic.
 
 WATCH FOR:
-\u2022 Students who don\u2019t know what no man\u2019s land is \u2014 brief explanation: the strip between opposing trenches, constantly shelled, covered in barbed wire and craters
-\u2022 Students who are moved by the moment \u2014 this is appropriate. Acknowledge it: \u201CThis is meant to make you feel something. That\u2019s the power of Morpurgo\u2019s writing\u201D
+- Students who don't know what no man's land is -- brief explanation: the strip between opposing trenches
+- Students moved by the moment -- acknowledge: "That is the power of Morpurgo's writing"
 
 [General: Pause Point 3 | VTLM 2.0: Deep Comprehension / Critical Literacy]`;
 
 const NOTES_PAUSE3_REVEAL = `SAY:
-\u2022 Morpurgo wants us to understand that Joey has stumbled into the most dangerous place on the battlefield
-\u2022 No man\u2019s land is the space between the British and German trenches \u2014 it\u2019s constantly being shelled by both sides
-\u2022 The author is also making a larger point about the war itself: horses like Joey are caught in a conflict that isn\u2019t theirs. The very name \u2014 \u201Cno MAN\u2019s land\u201D \u2014 reminds us that Joey isn\u2019t a man. He doesn\u2019t understand sides or enemies
-\u2022 This moment sets up what happens next in the novel \u2014 and it\u2019s one of the most famous scenes in the story
+- Morpurgo wants us to understand Joey has stumbled into the most dangerous place on the battlefield
+- No man's land is the space between the British and German trenches -- constantly shelled by both sides
+- The name -- "no MAN's land" -- reminds us that Joey is not a man. He does not understand sides or enemies. Animals suffer in wars they did not choose
 
 DO:
-\u2022 Reveal the answer card
-\u2022 Let this land \u2014 don\u2019t rush past it
-\u2022 Transition to literary devices analysis: \u201CNow let\u2019s go back through the chapter and look at HOW Morpurgo created all that tension and emotion\u201D
+- Reveal the answer card
+- Let this moment land -- don't rush
+- Transition to literary devices analysis: "Now let's go back through the chapter and look at HOW Morpurgo created all that tension"
 
 [General: Pause Point 3 Reveal | VTLM 2.0: Deep Comprehension]`;
 
 const NOTES_DEVICES_1 = `SAY:
-\u2022 Now we\u2019re going to look at the specific literary devices Morpurgo uses in this chapter. There are SO many \u2014 this is one of the richest chapters in the book for literary techniques
-\u2022 First: simile. A simile compares two things using \u201Clike\u201D or \u201Cas.\u201D Look at this example: \u201C\u2026leaving behind great craters that smoked as if the earth itself was on fire.\u201D
-\u2022 What two things are being compared? [The smoking craters and the earth being on fire]
-\u2022 What effect does this create? [It makes the destruction feel enormous \u2014 like the earth itself is being destroyed, not just the surface]
-\u2022 Second: onomatopoeia. Words that sound like what they describe. Listen: \u201C\u2026the crump and whistle of the shells the whining sound of motors accompanied by a terrifying rattle of steel\u201D
-\u2022 Can you hear the sounds? Crump, whistle, whining, rattle \u2014 Morpurgo is making us HEAR the battlefield
-\u2022 This is why this chapter is so powerful. The devices don\u2019t just describe \u2014 they put us INSIDE the experience
+- Now we are looking at the specific literary devices Morpurgo uses. This chapter is one of the richest for literary techniques
+- First: simile. A simile compares two things using "like" or "as." The craters "smoked as if the earth itself was on fire" -- what effect does this create? [The destruction feels enormous -- like the earth is being destroyed]
+- Second: onomatopoeia. Words that sound like what they describe. Listen: "crump and whistle... whining... rattle" -- Morpurgo makes us HEAR the battlefield
 
 DO:
-\u2022 Display both examples clearly
-\u2022 Read the onomatopoeia example aloud with emphasis on the sound words
-\u2022 Have students identify the sound words by underlining in their books
-\u2022 Ask: \u201CWhich is more effective at putting you in Joey\u2019s position \u2014 the simile or the onomatopoeia? Why?\u201D
+- Display both examples clearly
+- Read the onomatopoeia example aloud with emphasis on the sound words
+- Ask: "Which is more effective at putting you in Joey's position -- the simile or the onomatopoeia? Why?"
 
 TEACHER NOTES:
-Pairing simile and onomatopoeia on one slide allows comparison of two different sensory strategies: simile creates visual imagery through comparison, while onomatopoeia creates auditory imagery through phonetic mimicry. Both are accessible devices for students to identify and use in their own writing. The examples chosen are particularly strong because they work together \u2014 the visual devastation (earth on fire) combined with the auditory assault (crump, whistle, rattle) creates a multisensory experience of the battlefield. This connects directly to narrative writing craft: strong writers engage multiple senses. VTLM 2.0: Explicit Teaching of Literary Devices.
+Pairing simile and onomatopoeia allows comparison of two sensory strategies: simile creates visual imagery through comparison, onomatopoeia creates auditory imagery through phonetic mimicry. Both are accessible for students to use in their own writing.
 
 MISCONCEPTIONS:
-\u2022 Misconception: Any comparison is a simile
+- Misconception: Any comparison is a simile
   Why: Students confuse simile with metaphor because both involve comparison
-  Impact: Reduces precision in literary analysis and weakens their ability to discuss technique
-  Quick correction: \u201CSimile always uses \u2018like\u2019 or \u2018as\u2019 to compare. If there\u2019s no \u2018like\u2019 or \u2018as,\u2019 it\u2019s a metaphor\u201D
-\u2022 Misconception: Onomatopoeia is only words like \u201Cbang\u201D and \u201Cpop\u201D
+  Impact: Reduces precision in literary analysis
+  Quick correction: "Simile always uses 'like' or 'as' to compare. No 'like' or 'as' means it is a metaphor"
+- Misconception: Onomatopoeia is only words like "bang" and "pop"
   Why: Students learn onomatopoeia with obvious comic-book examples
-  Impact: They miss subtler sound words like \u201Cwhining,\u201D \u201Crattle,\u201D \u201Ccrump\u201D
-  Quick correction: \u201COnomatopoeia includes any word where the sound of the word suggests its meaning. \u2018Rattle\u2019 sounds rattly. \u2018Whistle\u2019 sounds like a whistle\u201D
+  Impact: They miss subtler sound words like "whining," "rattle," "crump"
+  Quick correction: "Onomatopoeia includes any word where the sound suggests its meaning. 'Rattle' sounds rattly"
 
 WATCH FOR:
-\u2022 Students who can identify the device but can\u2019t explain the EFFECT \u2014 push beyond identification: \u201CYes, it\u2019s a simile. Now: what does it make you feel or picture?\u201D
-\u2022 Students who are strong at onomatopoeia but weak at simile (or vice versa) \u2014 note for differentiation
+- Students who can identify the device but can't explain the EFFECT -- push: "What does it make you feel or picture?"
+- Students strong at one device but weak at the other -- note for differentiation
 
-[General: I Do \u2014 Literary Devices | VTLM 2.0: Explicit Teaching]`;
+[General: I Do -- Literary Devices | VTLM 2.0: Explicit Teaching]`;
 
 const NOTES_DEVICES_COMBINED = `SAY:
-\u2022 Start with the metaphor card: \u201CJoey calls the tank a monster because, from his point of view, that is what it feels like.\u201D
-\u2022 Move to personification: \u201CExhaustion is treated like an attacker that overtakes Joey and forces him down.\u201D
-\u2022 Finish with repetition: \u201CHe would know ... He would know.\u201D Ask: What does the repeated phrase show about Joey's trust in Albert?
-\u2022 Point to the note at the bottom: perspective shapes metaphor. A human soldier would say tank; Joey says monster.
+- Start with metaphor: Joey calls the tank a "monster" because, from his point of view, that is what it is
+- Personification: exhaustion is treated like an attacker that overtakes Joey and forces him down
+- Repetition: "He would know... He would know." Ask: What does the repeated phrase show about Joey's trust in Albert? [It is absolute -- unshakeable even in his darkest moment]
 
 DO:
-\u2022 Read the three examples aloud in order: metaphor, personification, repetition.
-\u2022 Keep pushing for effect, not just naming the device.
-\u2022 Connect SC1 to accurate device naming and SC3 to perspective: Joey's point of view changes how the battlefield is described.
-\u2022 Cold call 2-3 students for which device feels most powerful and why.
+- Read the three examples aloud in order: metaphor, personification, repetition
+- Keep pushing for effect, not just naming the device
+- Cold call 2-3 students: which device feels most powerful and why?
 
 TEACHER NOTES:
-This combined slide intentionally condenses the final three devices so the lesson stays lean without losing analytical depth. The visible slide now uses one metaphor example as the anchor, then pairs it with personification and repetition so students can compare three different ways Morpurgo intensifies Joey's experience. SC1 is addressed through accurate device naming and effect; SC3 is reinforced through the perspective note, which explains why the tank is presented as a monster. VTLM 2.0: Explicit Teaching / Deep Analysis.
+This combined slide condenses three devices so the lesson stays lean. SC1 is addressed through accurate device naming and effect; SC3 is reinforced through the perspective note about why the tank is a "monster."
 
 WATCH FOR:
-\u2022 Students who label the metaphor as a simile - remind them there is no \u201Clike\u201D or \u201Cas\u201D.
-\u2022 Students who can name the device but not its effect - prompt: \u201CWhat does it make you picture, feel, or understand about Joey?\u201D
-\u2022 Students who miss the perspective link - ask: \u201CWould a human narrator choose the word monster here?\u201D
+- Students who label the metaphor as a simile -- remind them there is no "like" or "as"
+- Students who miss the perspective link -- ask: "Would a human narrator choose the word 'monster' here?"
 
-[General: I Do \u2014 Literary Devices Part 2 | VTLM 2.0: Explicit Teaching / Deep Analysis]`;
+[General: I Do -- Literary Devices Part 2 | VTLM 2.0: Explicit Teaching / Deep Analysis]`;
 
 const NOTES_CFU_DEVICES = `SAY:
-\u2022 Time to check your understanding. I\u2019m going to show you a quote from Chapter 15 and I want you to identify which literary device it uses
-\u2022 Write your answer on your whiteboard. Don\u2019t hold it up until I say
-\u2022 Here\u2019s the quote: \u201C\u2026a great grey lumbering monster that belched out smoke\u2026\u201D Which device is this?
-\u2022 Three, two, one \u2014 show me! [Scan boards]
+- Time to check your understanding. I am going to show you a quote from Chapter 15 and I want you to identify which literary device it uses
+- Write your answer on your whiteboard. Don't hold it up until I say
+- "...a great grey lumbering monster that belched out smoke..." Which device is this?
+- Three, two, one -- show me! [Scan boards]
 
 DO:
-\u2022 Use Show Me Boards (mini whiteboards)
-\u2022 Students write the device name, hold boards face-down until the count
-\u2022 Scan for: correct identification of METAPHOR
-\u2022 If students write \u201Csimile\u201D \u2014 ask: \u201CIs there a \u2018like\u2019 or \u2018as\u2019?\u201D
-\u2022 If students write \u201Cpersonification\u201D \u2014 ask: \u201CIs the tank being given human qualities, or is it being called something else entirely?\u201D
+- Use Show Me Boards (mini whiteboards)
+- Students write the device name, hold boards face-down until the count
+- Scan for: correct identification of METAPHOR
+- If students write "simile" -- ask: "Is there a 'like' or 'as'?"
 
 CFU CHECKPOINT:
 Technique: Show Me Boards
+
 Script:
-\u2022 \u201CWrite the name of the literary device on your board. Don\u2019t show me yet.\u201D
-\u2022 \u201CThree, two, one \u2014 boards up!\u201D
-\u2022 Scan all boards simultaneously
-PROCEED (\u226580%): Most students correctly identify METAPHOR. Move to conjunction teaching.
-PIVOT (<80%): Common errors: simile (no \u201Clike/as\u201D), personification (not giving human qualities, calling it a different thing). Reteach: revisit the metaphor vs simile distinction. \u201CA metaphor says something IS something else. This sentence says the tank IS a monster. No \u2018like\u2019 or \u2018as.\u2019 That\u2019s metaphor.\u201D Re-check with a second example: \u201Ccraters that smoked as if the earth was on fire\u201D [simile \u2014 \u201Cas if\u201D].
+- "Write the name of the literary device on your board. Don't show me yet."
+- "Three, two, one -- boards up!"
+- Scan all boards simultaneously
+- Look for: METAPHOR as the answer
+
+PROCEED (>=80%): Most students correctly identify METAPHOR. Move to conjunction teaching.
+PIVOT (<80%): Most likely misconception: students confuse metaphor with simile because both involve comparison. Reteach: "A metaphor says something IS something else. This sentence says the tank IS a monster. No 'like' or 'as.' That is metaphor." Re-check with: "craters that smoked as if the earth was on fire" -- what device? [Simile -- "as if"]
 
 TEACHER NOTES:
-Show Me Boards provide simultaneous, whole-class assessment data. The chosen example (tank as monster) is the most important metaphor in the chapter and directly tests the metaphor-simile distinction, which is the most common confusion point. Using a single, well-chosen example rather than multiple questions keeps the CFU focused and time-efficient. The PIVOT strategy uses a contrastive pair (metaphor vs simile) to sharpen the distinction if needed. VTLM 2.0: Formative Assessment / Checking for Understanding.
+The chosen example (tank as monster) tests the metaphor-simile distinction, which is the most common confusion. Using a single well-chosen example keeps the CFU focused and time-efficient.
 
 MISCONCEPTIONS:
-\u2022 Misconception: If it describes something as another thing, it must be personification
-  Why: Students overapply personification because they learned it first and it\u2019s the most memorable device
-  Impact: Conflates two distinct devices; weakens analytical precision
-  Quick correction: \u201CPersonification is specifically about giving HUMAN qualities to non-human things. A tank being called a monster isn\u2019t personification \u2014 a monster isn\u2019t human. It\u2019s metaphor: saying one thing IS another\u201D
+- Misconception: If it describes something as another thing, it must be personification
+  Why: Students overapply personification because they learned it first
+  Impact: Conflates two distinct devices
+  Quick correction: "Personification gives HUMAN qualities to non-human things. A tank called a monster is not personification -- a monster is not human. It is metaphor: saying one thing IS another"
 
 WATCH FOR:
-\u2022 Students who write nothing \u2014 they may be unsure. After the reveal, check if they now understand
-\u2022 Students who write the correct answer but can\u2019t explain why \u2014 push for reasoning in the debrief
-\u2022 Speed of response: students who answer quickly and correctly are ready for the extension work in the conjunction section
+- Students who write nothing -- check after the reveal whether they now understand
+- Students who answer correctly but can't explain why -- push for reasoning in the debrief
 
 [General: CFU | VTLM 2.0: Formative Assessment]`;
 
 const NOTES_CFU_DEVICES_REVEAL = `SAY:
-\u2022 The answer is METAPHOR. The tank is described as a monster \u2014 not \u201Clike a monster\u201D (that would be a simile), but AS a monster
-\u2022 Remember: metaphor says something IS something else. Simile says something is LIKE something else
-\u2022 If you got it right, well done. If you wrote simile or personification, you were close \u2014 now you know the distinction
-\u2022 Let\u2019s move on to our sentence-level writing focus
+- The answer is METAPHOR. The tank is described as a monster -- not "like a monster" (that would be a simile), but AS a monster
+- Remember: metaphor says something IS something else. Simile says something is LIKE something else
+- If you got it right, well done. If you wrote simile or personification, you were close -- now you know the distinction
 
 DO:
-\u2022 Reveal the answer
-\u2022 Brief whole-class acknowledgement
-\u2022 Transition to conjunction teaching
+- Reveal the answer
+- Brief whole-class acknowledgement
+- Transition to conjunction teaching
 
 [General: CFU Reveal | VTLM 2.0: Formative Assessment]`;
 
 const NOTES_CONJ_IDO = `SAY:
-\u2022 We\u2019re shifting gears now to sentence-level writing. Today we\u2019re revising three important conjunctions: \u201Cbecause,\u201D \u201Cbut,\u201D and \u201Cso\u201D
-\u2022 These aren\u2019t new to you, but using them WELL is what makes the difference between simple and sophisticated writing
-\u2022 Look at the left side: each conjunction does a different job
-\u2022 \u201CBecause\u201D tells us WHY something is true \u2014 it gives a reason
-\u2022 \u201CBut\u201D shows a CHANGE IN DIRECTION \u2014 something unexpected or contrasting
-\u2022 \u201CSo\u201D shows a RESULT \u2014 what happens because of something else
-\u2022 Now watch me. I\u2019m going to take the sentence stem \u201CJoey ran as far away as he could\u201D and complete it three different ways
-\u2022 BECAUSE: \u201CJoey ran as far away as he could BECAUSE he was terrified of the tank and wanted to find a place that was calm and safe.\u201D See how \u201Cbecause\u201D explains WHY he ran?
-\u2022 BUT: \u201CJoey ran as far away as he could BUT he still couldn\u2019t escape the war altogether.\u201D See how \u201Cbut\u201D changes direction? We expect running away to solve the problem, but it doesn\u2019t
-\u2022 SO: \u201CJoey ran as far away as he could SO he found himself alone and injured in the dark.\u201D See how \u201Cso\u201D shows the result? The running led to this outcome
+- We are working with three conjunctions: "because," "but," and "so." Each does a different job -- WHY, CHANGE, or RESULT
+- Watch me. I am taking the stem "Joey ran as far away as he could" and completing it three ways
+- Read from slide: each model sentence. After each, name the function: "See how 'because' explains WHY? 'But' changes direction? 'So' shows the result?"
+- Think aloud: "I chose 'because' to explain motivation, 'but' to show it didn't solve the problem, 'so' to show the consequence"
 
 DO:
-\u2022 Display the three conjunction types on the left, teacher models on the right
-\u2022 Read each model sentence aloud with emphasis on the conjunction
-\u2022 After each model, pause and explicitly name what the conjunction does: \u201CThat\u2019s \u2018because\u2019 giving a reason. That\u2019s \u2018but\u2019 showing a contrast. That\u2019s \u2018so\u2019 showing a result.\u201D
-\u2022 Think aloud: verbalise your decision-making process. \u201CI chose \u2018because\u2019 first because I want to explain Joey\u2019s motivation. I chose \u2018but\u2019 next because I want to show that running away didn\u2019t fully solve the problem. I chose \u2018so\u2019 last because I want to show the consequence.\u201D
+- Display the three conjunction types on the left, teacher models on the right
+- Read each model sentence with emphasis on the conjunction
+- Think aloud after each: name the function of the conjunction explicitly
 
 TEACHER NOTES:
-This I Do follows the Gradual Release of Responsibility model. The think-aloud is critical \u2014 students need to see not just the finished product but the THINKING behind each choice. By modelling all three conjunctions with the same sentence stem, students can directly compare how each conjunction changes the sentence\u2019s meaning and direction. This connects naturally to narrative writing: skilled writers choose conjunctions deliberately to control the reader\u2019s understanding. \u201CBecause\u201D deepens, \u201Cbut\u201D surprises, \u201Cso\u201D propels. VTLM 2.0: Explicit Teaching / Modelling / Think-Aloud.
+The think-aloud is critical -- students need to see the THINKING behind each choice. Modelling all three with the same stem lets students directly compare how each conjunction changes meaning.
 
 WATCH FOR:
-\u2022 Students who tune out during modelling \u2014 re-engage: \u201CWhich conjunction would YOU have chosen first? Why?\u201D
-\u2022 Students who don\u2019t see the difference between the three completions \u2014 ask: \u201CDoes each sentence take you in the same direction? Which one surprises you?\u201D
-\u2022 Students who are already confident with conjunctions \u2014 pre-load the challenge: \u201CIn the You Do, I\u2019m going to ask you to write your OWN sentence stem too\u201D
+- Students who tune out -- re-engage: "Which conjunction would YOU have chosen first?"
+- Students who don't see the difference between completions -- ask: "Does each sentence take you in the same direction?"
 
-[General: I Do \u2014 Modelling | VTLM 2.0: Explicit Teaching / Modelling]`;
+[General: I Do -- Modelling | VTLM 2.0: Explicit Teaching / Modelling]`;
 
 const NOTES_CONJ_WEDO = `SAY:
-\u2022 Your turn to try with me. Same sentence stem: \u201CJoey ran as far away as he could\u2026\u201D
-\u2022 This time I want YOU to complete it with \u201Cbecause.\u201D Remember: \u201Cbecause\u201D tells us WHY
-\u2022 Turn to your partner. You have 30 seconds. Complete the sentence with \u201Cbecause\u201D
-\u2022 [After 30 seconds] Let\u2019s hear some. [Cold Call 2\u20133 pairs]
-\u2022 Now try \u201Cbut\u201D \u2014 remember, \u201Cbut\u201D changes direction. 30 seconds with your partner
-\u2022 [Cold Call 2\u20133 pairs]
-\u2022 Now \u201Cso\u201D \u2014 \u201Cso\u201D shows a result. 30 seconds
-\u2022 [Cold Call 2\u20133 pairs]
+- Your turn. Same stem: "Joey ran as far away as he could..." Complete it with "because" first -- 30 seconds with your partner
+- [Cold Call 2-3 pairs] Now "but" -- change direction. 30 seconds. [Cold Call 2-3 pairs]
+- Now "so" -- show a result. 30 seconds. [Cold Call 2-3 pairs]
 
 DO:
-\u2022 Display the sentence stem with the conjunction
-\u2022 Time each round strictly \u2014 30 seconds is enough for oral composition
-\u2022 Cold Call 2\u20133 pairs for each conjunction
-\u2022 Provide specific praise: \u201CI like how you used a detail from the chapter in your reason\u201D or \u201CThat\u2019s a great contrast \u2014 your \u2018but\u2019 really changed direction\u201D
-\u2022 Correct misconceptions in real time: \u201CThat sounds more like a \u2018because\u2019 sentence than a \u2018but\u2019 sentence. Can you revise?\u201D
+- Time each round strictly -- 30 seconds per conjunction
+- Cold Call 2-3 pairs after each round
+- Correct in real time: "That sounds more like a 'because' sentence than a 'but' sentence"
+
+CFU CHECKPOINT:
+Technique: Cold Call (paired oral response)
+
+Script:
+- After each 30-second pair talk, cold call 2-3 pairs
+- Listen for: correct function of the conjunction (reason, contrast, result)
+- "Read me your 'but' sentence. Does it change direction from the stem?"
+
+PROCEED (>=80%): Most pairs produce sentences that match the correct function. Move to You Do.
+PIVOT (<80%): Most likely issue -- students writing "because" sentences for all three (all give reasons, no contrast or result). Reteach with physical gesture: "'Because' points backwards to the reason. 'But' turns a corner. 'So' points forward to the result." Re-check: "Give me a 'but' sentence that turns a corner."
 
 ENABLING & EXTENDING:
-\u2022 Enabling: Provide sentence starters after the conjunction: \u201CJoey ran as far away as he could because he was scared of\u2026\u201D
-\u2022 Extending: Challenge students to use a literary device in their completion: \u201CJoey ran as far away as he could but exhaustion overtook him like a shadow\u201D (combining conjunction with simile)
+ENABLING PROMPT:
+- Task: Provide sentence starters after the conjunction -- "Joey ran as far away as he could because he was scared of..."
+- Extra Notes: Students who struggle can refer to the teacher models displayed on the previous slide
+
+EXTENDING PROMPT:
+- Task: Challenge students to add a literary device to their completion -- "Joey ran as far away as he could but exhaustion overtook him like a shadow" (combining conjunction with simile)
 
 TEACHER NOTES:
-The We Do uses pair work with Cold Call to maintain accountability. Doing all three conjunctions in quick succession (30 seconds each) maintains pace and allows direct comparison. Cold Call ensures representative sampling \u2014 not just the confident volunteers. This bridges the gap between the I Do model and independent writing. The key pedagogical move is providing real-time corrective feedback: if a student\u2019s \u201Cbut\u201D sentence doesn\u2019t actually change direction, naming that explicitly builds metalinguistic awareness. VTLM 2.0: Guided Practice / We Do / Formative Feedback.
+Pair work with Cold Call maintains accountability. Doing all three in quick succession allows direct comparison.
 
 WATCH FOR:
-\u2022 Students who write \u201Cbecause\u201D sentences for all three conjunctions (all give reasons) \u2014 they don\u2019t understand the functional difference
-\u2022 Students who can do \u201Cbecause\u201D and \u201Cso\u201D but struggle with \u201Cbut\u201D \u2014 \u201Cbut\u201D requires thinking against the expected direction, which is cognitively harder
-\u2022 Pairs where one partner dominates \u2014 require both partners to contribute: \u201CPartner A says the \u2018because\u2019 sentence, Partner B says the \u2018but\u2019 sentence\u201D
+- Students who write "because" sentences for all three -- they don't understand the functional difference
+- Students who struggle with "but" specifically -- "but" requires thinking against the expected direction, which is cognitively harder
 
 [General: We Do | VTLM 2.0: Guided Practice]`;
 
 const NOTES_CONJ_WEDO_REVEAL = `SAY:
-\u2022 Great work. Here are some strong examples. Notice how each conjunction takes the sentence in a completely different direction
-\u2022 \u201CBecause\u201D gives us the reason \u2014 the WHY behind Joey\u2019s action
-\u2022 \u201CBut\u201D introduces a twist or complication \u2014 something that works against the action
-\u2022 \u201CSo\u201D shows the consequence \u2014 what happened AS A RESULT
-\u2022 This is exactly the kind of sentence variety that makes narrative writing powerful. In your own stories, choosing the right conjunction controls how the reader experiences the story
+- Great work. Notice how each conjunction takes the sentence in a completely different direction
+- "Because" gives the reason -- the WHY
+- "But" introduces a twist or complication
+- "So" shows the consequence -- what happened AS A RESULT
+- This is the kind of sentence variety that makes narrative writing powerful
 
 DO:
-\u2022 Display strong student examples (or teacher alternatives if needed)
-\u2022 Reinforce the function of each conjunction one final time before You Do
+- Display strong student examples (or teacher alternatives if needed)
+- Reinforce the function of each conjunction one final time before You Do
 
 [General: We Do Reveal | VTLM 2.0: Guided Practice]`;
 
 const NOTES_CONJ_YOUDO = `SAY:
-\u2022 Now it\u2019s your turn to write independently. You\u2019re going to write THREE sentences in your book
-\u2022 First: write the sentence stem \u201CJoey ran as far away as he could\u201D and complete it with \u201Cbecause\u201D
-\u2022 Next: write the same stem and complete it with \u201Cbut\u201D
-\u2022 Then: write the same stem and complete it with \u201Cso\u201D
-\u2022 Remember: each conjunction does a different job. Make sure your completions are DIFFERENT from each other, not just the same idea with a different conjunction
-\u2022 You have 5 minutes. If you finish early, there\u2019s a challenge on the worksheet: write your OWN sentence stem from Chapter 15 and complete it with all three conjunctions
+- Now write independently. Three sentences on the worksheet: First with "because," Next with "but," Then with "so"
+- Make sure your completions are DIFFERENT from each other -- each conjunction takes the sentence in a new direction
+- You have 5 minutes. If you finish early, there is a challenge on the worksheet
 
 DO:
-\u2022 Distribute the Because-But-So Worksheet
-\u2022 Set a 5-minute timer visible on the board
-\u2022 Circulate and monitor \u2014 spend time with students who struggled during the We Do
-\u2022 Provide targeted feedback: check that \u201Cbut\u201D sentences actually change direction and \u201Cso\u201D sentences show results
-\u2022 For early finishers, direct them to the challenge section on the worksheet
-\u2022 At the 4-minute mark, give a time warning
+- Distribute the Because-But-So Worksheet and set a 5-minute timer
+- Circulate -- spend time with students who struggled during the We Do
+- Provide targeted feedback: check that "but" sentences actually change direction
 
 ENABLING & EXTENDING:
-\u2022 Enabling: Students who are stuck can refer to the teacher models on the previous slide (keep it visible or have it printed). Sentence frames available: \u201CJoey ran as far away as he could because he felt\u2026\u201D
-\u2022 Extending: Write your own sentence stem from Chapter 15 (e.g., \u201CTopthorn lay still on the ground\u2026\u201D or \u201CThe tanks rolled towards Joey\u2026\u201D) and complete it with all three conjunctions. Then: can you add a literary device to any of your sentences?
+ENABLING PROMPT:
+- Task: Students who are stuck use sentence frames -- "Joey ran as far away as he could because he felt..." / "...but something stopped him when..." / "...so he ended up..."
+- Extra Notes: Keep the I Do model visible or have it printed for reference
+
+EXTENDING PROMPT:
+- Task: Write your own sentence stem from Chapter 15 (e.g., "The tanks rolled towards Joey..." or "Topthorn lay still on the ground...") and complete it with all three conjunctions. Then add a literary device to at least one sentence
+- Extra Notes: Check that their self-selected stem genuinely comes from Chapter 15
 
 TEACHER NOTES:
-The You Do is the independent practice phase of the GRR model. Students write in their books AND on the worksheet, creating a record they can reference in future writing lessons. The 5-minute time limit maintains urgency and prevents overthinking. Circulating during this phase is the most valuable assessment opportunity in the lesson \u2014 you can see exactly which students understand the functional difference between conjunctions and which are still treating them as interchangeable. The challenge extension (writing their own stem) elevates the task from application to creation on Bloom\u2019s taxonomy. VTLM 2.0: Independent Practice / You Do.
+The 5-minute limit maintains urgency. Circulating here is the most valuable assessment opportunity for conjunction understanding.
 
 WATCH FOR:
-\u2022 Students who write the same completion for all three (just changing the conjunction) \u2014 they don\u2019t understand that each conjunction changes the meaning. Intervention: \u201CRead your three sentences aloud. Do they take you in three different directions?\u201D
-\u2022 Students who rush and write incomplete sentences \u2014 quality over speed: \u201CYour completion should be at least 8\u201310 words\u201D
-\u2022 Students who struggle to start \u2014 scaffold: \u201CTell me out loud: why did Joey run? Now write that after \u2018because.\u2019\u201D
-\u2022 Strong writers who attempt the challenge \u2014 check that their self-selected stem is genuinely from Chapter 15 and that their completions demonstrate the three different functions
+- Students who write the same completion for all three -- intervention: "Read your three sentences aloud. Do they take you in three different directions?"
+- Students who struggle to start -- scaffold: "Tell me out loud: why did Joey run? Now write that after 'because'"
 
 [General: You Do | VTLM 2.0: Independent Practice]`;
 
 const NOTES_CLOSING = `SAY:
-\u2022 Let\u2019s review our success criteria before we finish
-\u2022 SC1: Can you identify at least one literary device from Chapter 15 and name its effect? Thumbs up, sideways, or down [scan]
-\u2022 SC2: Can you write three different sentences using \u201Cbecause,\u201D \u201Cbut,\u201D and \u201Cso\u201D? Thumbs? [scan]
-\u2022 SC3: Can you explain how Joey\u2019s perspective shapes the way we understand the battlefield? Think about the tank as a monster \u2014 that only works because we see through Joey\u2019s eyes. Thumbs? [scan]
-\u2022 Turn and talk: What is one thing from today\u2019s lesson that you could use to make your own narrative writing stronger?
-\u2022 [30 seconds pair talk, then 2\u20133 Cold Call responses]
-\u2022 What a chapter. Joey is alone in no man\u2019s land \u2014 and we\u2019ll find out what happens next time
+- Let's review our success criteria. SC1: literary devices -- thumbs up, sideways, or down? [scan] SC2: three conjunction sentences -- thumbs? [scan] SC3: Joey's perspective -- thumbs? [scan]
+- Turn and talk: What is one thing from today you could use in your own narrative writing?
+- Preview: "Next time, we find out what happens to Joey in no man's land"
 
 DO:
-\u2022 Run through each SC with the self-assessment thumbs check
-\u2022 Record any students who are \u201Cdown\u201D on any SC for follow-up
-\u2022 Use the turn-and-talk to end on a positive, forward-looking note
-\u2022 Preview next lesson: \u201CNext time, we find out what happens to Joey in no man\u2019s land. It\u2019s one of the most famous scenes in the entire book.\u201D
-\u2022 Collect worksheets if needed, or have students store in their writing folders
+- Run through each SC with thumbs check, record any "down" for follow-up
+- Use the turn-and-talk to end on a positive, forward-looking note
 
 TEACHER NOTES:
-The closing slide creates a formative feedback loop by returning to the success criteria. Thumbs up/sideways/down gives you a quick read on class confidence. The turn-and-talk reflection question is deliberately focused on TRANSFER: \u201Cwhat could you use in your own writing?\u201D This bridges comprehension and composition, reinforcing that reading and writing are reciprocal processes. The chapter cliffhanger (Joey in no man\u2019s land) creates narrative anticipation for the next lesson. VTLM 2.0: Review and Reflect / Formative Feedback Loop.
+The closing returns to the success criteria for a formative feedback loop. Students "down" on SC1 may need the Literary Devices Reference Sheet.
 
 WATCH FOR:
-\u2022 Students who are \u201Cthumbs down\u201D on SC1 (literary devices) \u2014 these students may need a small-group reteach or the Literary Devices Reference Sheet
-\u2022 Students who can\u2019t articulate a writing transfer \u2014 prompt: \u201CWhich device did you find most interesting? Could you use it in a story?\u201D
-\u2022 Students who are emotionally engaged with the cliffhanger \u2014 encourage this: \u201CHold that curiosity. We\u2019ll need it next lesson.\u201D
+- Students "thumbs down" on SC1 -- may need a small-group reteach or the reference sheet
+- Students who can't articulate a writing transfer -- prompt: "Which device could you use in a story?"
 
 [General: Closing | VTLM 2.0: Review and Reflect]`;
 
 const NOTES_RESOURCES = `SAY:
 - Three printable resources for today's lesson
 - The ${WORKSHEET_RESOURCE.name} is for the You Do activity
-- The ${ANSWER_KEY_RESOURCE.name} is for your reference - multiple valid answers are included
-- The ${REFERENCE_RESOURCE.name} is a student keepsake - they can use it when writing their own narratives
+- The ${ANSWER_KEY_RESOURCE.name} is for your reference -- multiple valid answers are included
+- The ${REFERENCE_RESOURCE.name} is a student keepsake for when they write their own narratives
 
 DO:
 - Print the worksheet before the lesson (one per student)
 - Print the answer key (teacher copy only)
-- Print the reference sheet (one per student) - consider printing on card stock if available
+- Print the reference sheet (one per student)
 - Click any resource card to open the PDF
 
 TEACHER NOTES:
-The reference sheet serves a dual purpose: it reinforces today's learning and provides a lasting writing tool. Students who struggle with literary devices in their own writing can refer back to the Chapter 15 examples as models. The worksheet design deliberately separates the three conjunctions into distinct sections to reinforce their different functions. The challenge section extends capable students without requiring additional teacher input.
+The reference sheet reinforces today's learning and provides a lasting writing tool. The worksheet separates the three conjunctions to reinforce their different functions.
 
 [General: Resources | VTLM 2.0: Student Resources]`;
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
 // Build
-// ─────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------
 
 async function build() {
   const pres = new pptxgen();
   pres.layout = "LAYOUT_16x9";
   pres.author = "Claude";
-  pres.title = "War Horse - Lesson 18 - Chapter 15: No Man\u2019s Land";
+  pres.title = "War Horse - Lesson 18 - Chapter 15: No Man's Land";
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 1 — Title
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDE 1 -- Title
+  // =========================================================================
   titleSlide(
     pres,
     "War Horse",
-    "Chapter 15 \u2014 No Man\u2019s Land",
+    "Chapter 15 -- No Man's Land",
     "Lesson 18  |  Week 4  |  Year 5/6 Literacy",
     NOTES_TITLE
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 2 — Learning Intention & Success Criteria
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDE 2 -- Learning Intention & Success Criteria
+  // =========================================================================
   liSlide(
     pres,
     [
       "We are learning to analyse how Morpurgo uses literary devices and perspective in Chapter 15, and to extend sentences clearly using because, but and so",
     ],
     [
-      "I can identify at least one literary device used in Chapter 15 and name its effect",
-      "I can write three different sentences using \u201Cbecause\u201D, \u201Cbut\u201D and \u201Cso\u201D to extend a sentence stem",
-      "I can explain how Joey\u2019s perspective shapes the way we understand the battlefield",
+      "I can identify a literary device from Chapter 15 and explain its effect",
+      "I can write three sentences using because, but and so to extend a sentence stem in different directions",
+      "I can explain how Joey's perspective shapes the way the battlefield is described",
     ],
     NOTES_LI_SC,
     FOOTER
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 3 — Vocabulary: murky
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDE 3 -- Vocabulary: murky
+  // =========================================================================
   vocabSlide(
     pres,
     "murky",
@@ -603,9 +560,9 @@ async function build() {
     FOOTER
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 4 — Vocabulary: vague
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDE 4 -- Vocabulary: vague
+  // =========================================================================
   vocabSlide(
     pres,
     "vague",
@@ -616,39 +573,37 @@ async function build() {
     FOOTER
   );
 
-  // Incidental vocabulary slide omitted — lean profile default (OFF).
+  // Incidental vocabulary slide omitted -- lean profile default (OFF).
   // Teacher can surface words during reading as needed.
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 6 — Reading Introduction
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDE 5 -- Reading Introduction
+  // =========================================================================
   contentSlide(
     pres,
     "Read Aloud",
     C.PRIMARY,
-    "Chapter 15 \u2014 Pages 118\u2013126",
+    "Chapter 15 -- Pages 118-126",
     [
       "Reading Mode: Student Read Aloud",
-      "Previously: Topthorn died. Friedrich was injured. Joey is now alone for the first time",
-      "Chapter 15: Joey is startled by tanks \u2014 machines he has never seen before",
+      "Joey is startled by tanks -- machines he has never seen before",
       "He runs in terror through the darkness, injuring his leg on barbed wire",
-      "Joey searches desperately for somewhere peaceful, away from the shelling",
-      "As dawn approaches, he realises he is in no man\u2019s land \u2014 the most dangerous place on the battlefield",
-      "Focus: Notice the literary devices Morpurgo uses to put us inside Joey\u2019s experience",
+      "As dawn approaches, he realises he is in no man's land",
+      "Focus: Notice the literary devices Morpurgo uses to put us inside Joey's experience",
     ],
     NOTES_READING_INTRO,
     FOOTER
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDES 7-8 — Pause Point 1 (withReveal)
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDES 6-7 -- Pause Point 1 (withReveal)
+  // =========================================================================
   withReveal(
     () => quoteSlide(
-      pres, "Pause Point 1", "Chapter 15 \u2014 p. 120",
+      pres, "Pause Point 1", "Chapter 15 -- p. 120",
       "And then exhaustion finally overtook me, sapped the strength from my legs and forced me to lie down and sleep.",
       "p. 120",
-      "What\u2019s happening? Look at how exhaustion is described \u2014 what is unusual about this sentence?",
+      "What's happening? Look at how exhaustion is described -- what is unusual about this sentence?",
       NOTES_PAUSE1, FOOTER
     ),
     (slide) => {
@@ -661,7 +616,7 @@ async function build() {
         x: 0.75, y: ansY + 0.08, w: 3, h: 0.30,
         fontSize: 12, fontFace: FONT_B, color: C.WHITE, bold: true, margin: 0,
       });
-      slide.addText("Exhaustion is personified \u2014 given human actions: it \u201Covertook\u201D Joey, \u201Csapped\u201D his strength, and \u201Cforced\u201D him to sleep. Exhaustion becomes a character that physically defeats him. This makes the abstract feeling of tiredness concrete and dramatic.", {
+      slide.addText("Exhaustion is personified -- given human actions: it \"overtook\" Joey, \"sapped\" his strength, and \"forced\" him to sleep. Exhaustion becomes a character that physically defeats him. This makes the abstract feeling of tiredness concrete and dramatic.", {
         x: 0.75, y: ansY + 0.40, w: 8.5, h: 0.88,
         fontSize: 13, fontFace: FONT_B, color: C.WHITE, valign: "top", margin: 0,
       });
@@ -669,15 +624,15 @@ async function build() {
     }
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDES 9-10 — Pause Point 2 (withReveal)
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDES 8-9 -- Pause Point 2 (withReveal)
+  // =========================================================================
   withReveal(
     () => quoteSlide(
-      pres, "Pause Point 2", "Chapter 15 \u2014 p. 123",
-      "\u2026and moving towards the darker more silent world ahead of me.",
+      pres, "Pause Point 2", "Chapter 15 -- p. 123",
+      "...and moving towards the darker more silent world ahead of me.",
       "p. 123",
-      "What\u2019s going on? What does \u201Cdarker more silent world\u201D suggest about where Joey is heading?",
+      "What's going on? What does \"darker more silent world\" suggest about where Joey is heading?",
       NOTES_PAUSE2, FOOTER
     ),
     (slide) => {
@@ -690,7 +645,7 @@ async function build() {
         x: 0.75, y: ansY + 0.08, w: 3, h: 0.30,
         fontSize: 12, fontFace: FONT_B, color: C.WHITE, bold: true, margin: 0,
       });
-      slide.addText("Literal: Joey is moving away from the explosions towards a quieter part of the battlefield. Symbolic: \u201Cdarker more silent world\u201D echoes death, isolation, and the unknown. Morpurgo\u2019s language works on two levels \u2014 describing the physical landscape AND Joey\u2019s emotional journey into uncertainty.", {
+      slide.addText("Literal: Joey is moving away from the explosions towards a quieter part of the battlefield. Symbolic: \"darker more silent world\" echoes death, isolation, and the unknown. Morpurgo's language works on two levels -- describing the physical landscape AND Joey's emotional journey into uncertainty.", {
         x: 0.75, y: ansY + 0.40, w: 8.5, h: 0.88,
         fontSize: 13, fontFace: FONT_B, color: C.WHITE, valign: "top", margin: 0,
       });
@@ -698,15 +653,15 @@ async function build() {
     }
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDES 11-12 — Pause Point 3 (withReveal)
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDES 10-11 -- Pause Point 3 (withReveal)
+  // =========================================================================
   withReveal(
     () => quoteSlide(
-      pres, "Pause Point 3", "Chapter 15 \u2014 p. 126",
-      "This was what the soldiers called \u2018no man\u2019s land.\u2019",
+      pres, "Pause Point 3", "Chapter 15 -- p. 126",
+      "This was what the soldiers called 'no man's land.'",
       "p. 126",
-      "What do you think the author wants us to know? What is \u201Cno man\u2019s land\u201D and why is it significant that Joey is there?",
+      "What do you think the author wants us to know? What is \"no man's land\" and why is it significant that Joey is there?",
       NOTES_PAUSE3, FOOTER
     ),
     (slide) => {
@@ -715,11 +670,11 @@ async function build() {
         x: 0.5, y: ansY, w: 9, h: 1.38, rectRadius: 0.10,
         fill: { color: C.SUCCESS },
       });
-      slide.addText("Theme \u2014 Animals in Human Wars", {
+      slide.addText("Theme -- Animals in Human Wars", {
         x: 0.75, y: ansY + 0.08, w: 5, h: 0.30,
         fontSize: 12, fontFace: FONT_B, color: C.WHITE, bold: true, margin: 0,
       });
-      slide.addText("No man\u2019s land is the strip between opposing trenches \u2014 the most dangerous place on the battlefield. The irony: it\u2019s called \u201Cno MAN\u2019s land\u201D but Joey, a horse, is the one trapped there. Morpurgo crystallises the novel\u2019s central theme: animals suffer in wars they did not choose and cannot understand.", {
+      slide.addText("No man's land is the strip between opposing trenches -- the most dangerous place on the battlefield. The irony: it is called \"no MAN's land\" but Joey, a horse, is the one trapped there. Morpurgo crystallises the novel's central theme: animals suffer in wars they did not choose and cannot understand.", {
         x: 0.75, y: ansY + 0.40, w: 8.5, h: 0.88,
         fontSize: 13, fontFace: FONT_B, color: C.WHITE, valign: "top", margin: 0,
       });
@@ -727,9 +682,9 @@ async function build() {
     }
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 13 — Literary Devices Part 1: Simile + Onomatopoeia
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDE 12 -- Literary Devices Part 1: Simile + Onomatopoeia
+  // =========================================================================
   {
     const s = pres.addSlide();
     addTopBar(s, C.ACCENT);
@@ -747,11 +702,11 @@ async function build() {
       fontSize: 11, fontFace: FONT_B, color: C.WHITE, bold: true,
       align: "center", valign: "middle", margin: 0,
     });
-    s.addText("A comparison using \u201Clike\u201D or \u201Cas\u201D", {
+    s.addText("A comparison using \"like\" or \"as\"", {
       x: 1.95, y: CONTENT_TOP + 0.10, w: 4, h: 0.30,
       fontSize: 11, fontFace: FONT_B, color: C.MUTED, italic: true, margin: 0,
     });
-    s.addText("\u201C\u2026leaving behind great craters that smoked as if the earth itself was on fire.\u201D (p. 118)", {
+    s.addText("\"...leaving behind great craters that smoked as if the earth itself was on fire.\" (p. 118)", {
       x: 0.75, y: CONTENT_TOP + 0.55, w: 8.4, h: 1.0,
       fontSize: 15, fontFace: FONT_H, color: C.CHARCOAL, italic: true, margin: 0,
     });
@@ -772,7 +727,7 @@ async function build() {
       x: 2.65, y: onoY + 0.10, w: 5, h: 0.30,
       fontSize: 11, fontFace: FONT_B, color: C.MUTED, italic: true, margin: 0,
     });
-    s.addText("\u201C\u2026I heard through the crump and whistle of the shells the whining sound of motors accompanied by a terrifying rattle of steel that set my ears back against my head.\u201D (p. 119)", {
+    s.addText("\"...I heard through the crump and whistle of the shells the whining sound of motors accompanied by a terrifying rattle of steel that set my ears back against my head.\" (p. 119)", {
       x: 0.75, y: onoY + 0.55, w: 8.4, h: 1.0,
       fontSize: 15, fontFace: FONT_H, color: C.CHARCOAL, italic: true, margin: 0,
     });
@@ -781,9 +736,9 @@ async function build() {
     s.addNotes(NOTES_DEVICES_1);
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 14 — Literary Devices Part 2: Metaphor, Personification & Repetition
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDE 13 -- Literary Devices Part 2: Metaphor, Personification & Repetition
+  // =========================================================================
   {
     const s = pres.addSlide();
     addTopBar(s, C.ACCENT);
@@ -802,11 +757,11 @@ async function build() {
       fontSize: 10, fontFace: FONT_B, color: C.WHITE, bold: true,
       align: "center", valign: "middle", margin: 0,
     });
-    s.addText("Describing something AS something else (no \u201Clike\u201D or \u201Cas\u201D)", {
+    s.addText("Describing something AS something else (no \"like\" or \"as\")", {
       x: 2.25, y: CONTENT_TOP + 0.08, w: 5, h: 0.26,
       fontSize: 10, fontFace: FONT_B, color: C.MUTED, italic: true, margin: 0,
     });
-    s.addText("\u201C\u2026a great grey lumbering monster that belched out smoke from behind as it rocked down the hillside towards me.\u201D (p. 119)", {
+    s.addText("\"...a great grey lumbering monster that belched out smoke from behind as it rocked down the hillside towards me.\" (p. 119)", {
       x: 0.75, y: CONTENT_TOP + 0.42, w: 8.4, h: 0.60,
       fontSize: 13, fontFace: FONT_H, color: C.CHARCOAL, italic: true, margin: 0,
     });
@@ -827,7 +782,7 @@ async function build() {
       x: 2.65, y: persY + 0.08, w: 5, h: 0.26,
       fontSize: 10, fontFace: FONT_B, color: C.MUTED, italic: true, margin: 0,
     });
-    s.addText("\u201CAnd then exhaustion finally overtook me, sapped the strength from my legs and forced me to lie down and sleep.\u201D (p. 120)", {
+    s.addText("\"And then exhaustion finally overtook me, sapped the strength from my legs and forced me to lie down and sleep.\" (p. 120)", {
       x: 0.75, y: persY + 0.42, w: 8.4, h: 0.60,
       fontSize: 13, fontFace: FONT_H, color: C.CHARCOAL, italic: true, margin: 0,
     });
@@ -848,7 +803,7 @@ async function build() {
       x: 2.25, y: repY + 0.08, w: 5, h: 0.26,
       fontSize: 10, fontFace: FONT_B, color: C.MUTED, italic: true, margin: 0,
     });
-    s.addText("\u201C\u2026I shall never know. \u2026 He would know \u2026 He would know.\u201D (p. 121)", {
+    s.addText("\"...I shall never know. ... He would know ... He would know.\" (p. 121)", {
       x: 0.75, y: repY + 0.42, w: 8.4, h: 0.60,
       fontSize: 13, fontFace: FONT_H, color: C.CHARCOAL, italic: true, margin: 0,
     });
@@ -856,7 +811,7 @@ async function build() {
     // Perspective note at bottom
     const noteY = repY + cardH + 0.15;
     if (noteY + 0.26 <= SAFE_BOTTOM) {
-      s.addText("Joey doesn\u2019t know what tanks are \u2014 so to him, they ARE monsters. Perspective shapes metaphor.", {
+      s.addText("Joey doesn't know what tanks are -- so to him, they ARE monsters. Perspective shapes metaphor.", {
         x: 0.75, y: noteY, w: 8.5, h: 0.26,
         fontSize: 11, fontFace: FONT_B, color: C.ACCENT, bold: true, italic: true, margin: 0,
       });
@@ -866,21 +821,20 @@ async function build() {
     s.addNotes(NOTES_DEVICES_COMBINED);
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDES 16-17 — CFU: Literary Devices (withReveal)
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDES 14-15 -- CFU: Literary Devices (withReveal)
+  // =========================================================================
   withReveal(
     () => cfuSlide(
       pres,
       "CFU",
       "Name That Device",
       "Show Me Boards",
-      "\u201C\u2026a great grey lumbering monster that belched out smoke from behind as it rocked down the hillside towards me.\u201D\n\nWhich literary device is Morpurgo using here?\nWrite it on your whiteboard.",
+      "\"...a great grey lumbering monster that belched out smoke from behind as it rocked down the hillside towards me.\"\n\nWhich literary device is Morpurgo using here?\nWrite it on your whiteboard.",
       NOTES_CFU_DEVICES,
       FOOTER
     ),
     (slide) => {
-      // Answer overlay
       const ansY = 4.0;
       slide.addShape("roundRect", {
         x: 0.5, y: ansY, w: 9, h: 1.0, rectRadius: 0.10,
@@ -895,7 +849,7 @@ async function build() {
         fontSize: 12, fontFace: FONT_B, color: C.SUCCESS, bold: true,
         align: "center", valign: "middle", margin: 0,
       });
-      slide.addText("The tank IS a monster \u2014 not \u201Clike\u201D a monster (that would be a simile). Joey has never seen a tank, so to him it IS a monstrous creature.", {
+      slide.addText("The tank IS a monster -- not \"like\" a monster (that would be a simile). Joey has never seen a tank, so to him it IS a monstrous creature.", {
         x: 2.5, y: ansY + 0.08, w: 6.8, h: 0.84,
         fontSize: 13, fontFace: FONT_B, color: C.WHITE, valign: "middle", margin: 0,
       });
@@ -903,32 +857,32 @@ async function build() {
     }
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 18 — Conjunctions: I Do (Modelling)
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDE 16 -- Conjunctions: I Do (Modelling)
+  // =========================================================================
   modellingSlide(
     pres,
-    "I Do \u2014 Watch Me",
-    "Because, But, So \u2014 Conjunctions",
-    "Three conjunctions, three different jobs:\n\n\u201CBecause\u201D \u2014 tells us WHY\n(gives a reason)\n\n\u201CBut\u201D \u2014 shows a CHANGE\n(introduces a contrast)\n\n\u201CSo\u201D \u2014 shows a RESULT\n(what happens next)",
-    "Sentence stem:\n\u201CJoey ran as far away as he could\u2026\u201D\n\n\u2026because he was terrified of the tank and wanted to find a place that was calm and safe.\n\n\u2026but he still couldn\u2019t escape the war altogether.\n\n\u2026so he found himself alone and injured in the dark.",
+    "I Do -- Watch Me",
+    "Because, But, So -- Conjunctions",
+    "Three conjunctions, three different jobs:\n\n\"Because\" -- tells us WHY\n(gives a reason)\n\n\"But\" -- shows a CHANGE\n(introduces a contrast)\n\n\"So\" -- shows a RESULT\n(what happens next)",
+    "Sentence stem:\n\"Joey ran as far away as he could...\"\n\n...because he was terrified of the tank and wanted to find a place that was calm and safe.\n\n...but he still couldn't escape the war altogether.\n\n...so he found himself alone and injured in the dark.",
     NOTES_CONJ_IDO,
     FOOTER
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDES 19-20 — Conjunctions: We Do (withReveal)
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDES 17-18 -- Conjunctions: We Do (withReveal)
+  // =========================================================================
   withReveal(
     () => {
       const s = pres.addSlide();
       addTopBar(s, C.SECONDARY);
       addBadge(s, "We Do", { color: C.SECONDARY });
-      addTitle(s, "Your Turn \u2014 Complete the Stem");
+      addTitle(s, "Your Turn -- Complete the Stem");
 
       // Sentence stem card
       addCard(s, 0.5, CONTENT_TOP, 9, 0.9, { fill: C.PRIMARY });
-      s.addText("\u201CJoey ran as far away as he could\u2026\u201D", {
+      s.addText("\"Joey ran as far away as he could...\"", {
         x: 0.75, y: CONTENT_TOP + 0.15, w: 8.4, h: 0.55,
         fontSize: 22, fontFace: FONT_H, color: C.WHITE, italic: true, margin: 0,
         valign: "middle",
@@ -936,9 +890,9 @@ async function build() {
 
       // Three conjunction cards
       const conjunctions = [
-        { word: "BECAUSE", desc: "Give a reason \u2014 WHY did Joey run?", color: C.PRIMARY },
-        { word: "BUT", desc: "Change direction \u2014 what worked AGAINST him?", color: C.SECONDARY },
-        { word: "SO", desc: "Show the result \u2014 what HAPPENED because he ran?", color: C.ACCENT },
+        { word: "BECAUSE", desc: "Give a reason -- WHY did Joey run?", color: C.PRIMARY },
+        { word: "BUT", desc: "Change direction -- what worked AGAINST him?", color: C.SECONDARY },
+        { word: "SO", desc: "Show the result -- what HAPPENED because he ran?", color: C.ACCENT },
       ];
 
       conjunctions.forEach((conj, i) => {
@@ -964,11 +918,10 @@ async function build() {
       return s;
     },
     (slide) => {
-      // Overlay example answers on top of the instruction text
       const examples = [
-        { y: CONTENT_TOP + 1.06, text: "\u201C\u2026because the metal monsters were getting closer and he could feel the ground shaking beneath him.\u201D" },
-        { y: CONTENT_TOP + 1.96, text: "\u201C\u2026but the darkness and barbed wire made every step more dangerous than the last.\u201D" },
-        { y: CONTENT_TOP + 2.86, text: "\u201C\u2026so he ended up lost and limping through no man\u2019s land as dawn began to break.\u201D" },
+        { y: CONTENT_TOP + 1.06, text: "\"...because the metal monsters were getting closer and he could feel the ground shaking beneath him.\"" },
+        { y: CONTENT_TOP + 1.96, text: "\"...but the darkness and barbed wire made every step more dangerous than the last.\"" },
+        { y: CONTENT_TOP + 2.86, text: "\"...so he ended up lost and limping through no man's land as dawn began to break.\"" },
       ];
       examples.forEach((ex) => {
         slide.addShape("roundRect", {
@@ -984,40 +937,39 @@ async function build() {
     }
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 21 — Conjunctions: You Do
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDE 19 -- Conjunctions: You Do
+  // =========================================================================
   taskSlide(
     pres,
     "You Do",
     "Write Three Sentences",
     [
-      { label: "First", instruction: "Write the stem and complete it with \u201Cbecause\u201D \u2014 explain WHY Joey ran." },
-      { label: "Next", instruction: "Write the stem and complete it with \u201Cbut\u201D \u2014 show a contrast or complication." },
-      { label: "Then", instruction: "Write the stem and complete it with \u201Cso\u201D \u2014 show the result of his running." },
+      { label: "First", instruction: "Write the stem and complete it with \"because\" -- explain WHY Joey ran." },
+      { label: "Next", instruction: "Write the stem and complete it with \"but\" -- show a contrast or complication." },
+      { label: "Then", instruction: "Write the stem and complete it with \"so\" -- show the result of his running." },
     ],
     NOTES_CONJ_YOUDO,
     FOOTER
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 22 — Closing
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDE 20 -- Closing
+  // =========================================================================
   closingSlide(
     pres,
     "What is one literary device or writing technique from today that you could use to make your own narrative writing stronger? Tell your partner which device and HOW you would use it.",
     [
-      "Morpurgo uses simile, metaphor, onomatopoeia, personification, and repetition to create tension",
-      "Joey\u2019s perspective transforms tanks into monsters \u2014 point of view shapes meaning",
-      "\u201CBecause,\u201D \u201Cbut,\u201D and \u201Cso\u201D each take a sentence in a different direction",
-      "Strong narrative writing uses these tools deliberately, not accidentally",
+      "I can identify a literary device from Chapter 15 and explain its effect",
+      "I can write three sentences using because, but and so to extend a sentence stem",
+      "I can explain how Joey's perspective shapes the way the battlefield is described",
     ],
     NOTES_CLOSING
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SLIDE 23 — Resources
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
+  // SLIDE 21 -- Resources
+  // =========================================================================
   const theme = { C, FONT_H, FONT_B, addTopBar, addTitle, addFooter, addCard };
   addResourceSlide(
     pres,
@@ -1027,46 +979,46 @@ async function build() {
     NOTES_RESOURCES
   );
 
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
   // Generate companion PDFs
-  // ═══════════════════════════════════════════════════════════════════════════
+  // =========================================================================
 
-  // ─── PDF 1: Because-But-So Worksheet ──────────────────────────────────────
+  // --- PDF 1: Because-But-So Worksheet ------------------------------------
   const ws = createPdf({ title: WORKSHEET_RESOURCE.name });
-  let wsY = addPdfHeader(ws, "Because, But, So \u2014 Sentence Building", {
+  let wsY = addPdfHeader(ws, "Because, But, So -- Sentence Building", {
     color: C.PRIMARY,
-    subtitle: "Chapter 15: No Man\u2019s Land",
+    subtitle: "Chapter 15: No Man's Land",
     lessonInfo: "War Horse | Lesson 18 | Week 4 | Year 5/6 Literacy",
     showNameDate: true,
   });
 
-  wsY = addTipBox(ws, "Read the sentence stem, then complete it three different ways using the conjunctions below. Each conjunction does a different job \u2014 make sure your completions are genuinely different from each other!", wsY, { color: C.PRIMARY });
+  wsY = addTipBox(ws, "Read the sentence stem, then complete it three different ways using the conjunctions below. Each conjunction does a different job -- make sure your completions are genuinely different from each other!", wsY, { color: C.PRIMARY });
 
   wsY = addSectionHeading(ws, "Sentence Stem", wsY, { color: C.PRIMARY });
-  wsY = addBodyText(ws, "\u201CJoey ran as far away as he could\u2026\u201D", wsY, { fontSize: 14, italic: true });
+  wsY = addBodyText(ws, "\"Joey ran as far away as he could...\"", wsY, { fontSize: 14, italic: true });
   wsY += 8;
 
   // Because section
-  wsY = addSectionHeading(ws, "1. BECAUSE \u2014 Give a reason (WHY did Joey run?)", wsY, { color: C.PRIMARY });
+  wsY = addSectionHeading(ws, "1. BECAUSE -- Give a reason (WHY did Joey run?)", wsY, { color: C.PRIMARY });
   wsY = addBodyText(ws, "Joey ran as far away as he could because", wsY, { fontSize: 12 });
   wsY = addLinedArea(ws, wsY, 3, { lineSpacing: 26 });
   wsY += 8;
 
   // But section
-  wsY = addSectionHeading(ws, "2. BUT \u2014 Show a contrast (what worked AGAINST him?)", wsY, { color: C.SECONDARY });
+  wsY = addSectionHeading(ws, "2. BUT -- Show a contrast (what worked AGAINST him?)", wsY, { color: C.SECONDARY });
   wsY = addBodyText(ws, "Joey ran as far away as he could but", wsY, { fontSize: 12 });
   wsY = addLinedArea(ws, wsY, 3, { lineSpacing: 26 });
   wsY += 8;
 
   // So section
-  wsY = addSectionHeading(ws, "3. SO \u2014 Show the result (what HAPPENED because he ran?)", wsY, { color: C.ACCENT });
+  wsY = addSectionHeading(ws, "3. SO -- Show the result (what HAPPENED because he ran?)", wsY, { color: C.ACCENT });
   wsY = addBodyText(ws, "Joey ran as far away as he could so", wsY, { fontSize: 12 });
   wsY = addLinedArea(ws, wsY, 3, { lineSpacing: 26 });
   wsY += 12;
 
   // Challenge section
   wsY = addSectionHeading(ws, "CHALLENGE: Write Your Own!", wsY, { color: C.ALERT, fontSize: 14 });
-  wsY = addTipBox(ws, "Choose your OWN sentence stem from Chapter 15 (e.g., \u201CThe tanks rolled towards Joey\u2026\u201D or \u201CTopthorn lay still on the ground\u2026\u201D). Write it below, then complete it with all three conjunctions.", wsY, { color: C.ALERT });
+  wsY = addTipBox(ws, "Choose your OWN sentence stem from Chapter 15 (e.g., \"The tanks rolled towards Joey...\" or \"Topthorn lay still on the ground...\"). Write it below, then complete it with all three conjunctions.", wsY, { color: C.ALERT });
 
   wsY = addBodyText(ws, "My sentence stem:", wsY, { fontSize: 11 });
   wsY = addLinedArea(ws, wsY, 1, { lineSpacing: 26 });
@@ -1080,49 +1032,49 @@ async function build() {
 
   addPdfFooter(ws, "War Horse | Lesson 18 | Because-But-So Worksheet");
 
-  // ─── PDF 2: Because-But-So Answer Key ─────────────────────────────────────
+  // --- PDF 2: Because-But-So Answer Key -----------------------------------
   const ak = createPdf({ title: ANSWER_KEY_RESOURCE.name });
-  let akY = addPdfHeader(ak, "Because, But, So \u2014 Answer Key", {
+  let akY = addPdfHeader(ak, "Because, But, So -- Answer Key", {
     color: C.ALERT,
-    subtitle: "Teacher Reference \u2014 Chapter 15: No Man\u2019s Land",
+    subtitle: "Teacher Reference -- Chapter 15: No Man's Land",
     lessonInfo: "War Horse | Lesson 18 | Week 4 | Year 5/6 Literacy",
     showNameDate: false,
   });
 
-  akY = addTipBox(ak, "These are model answers. Accept any response that demonstrates correct use of the conjunction\u2019s function: \u201Cbecause\u201D gives a reason, \u201Cbut\u201D introduces a contrast, \u201Cso\u201D shows a result.", akY, { color: C.ALERT });
+  akY = addTipBox(ak, "These are model answers. Accept any response that demonstrates correct use of the conjunction's function: \"because\" gives a reason, \"but\" introduces a contrast, \"so\" shows a result.", akY, { color: C.ALERT });
 
-  akY = addSectionHeading(ak, "Sentence Stem: \u201CJoey ran as far away as he could\u2026\u201D", akY, { color: C.PRIMARY });
+  akY = addSectionHeading(ak, "Sentence Stem: \"Joey ran as far away as he could...\"", akY, { color: C.PRIMARY });
   akY += 6;
 
   akY = addSectionHeading(ak, "1. BECAUSE", akY, { color: C.PRIMARY });
-  akY = addBodyText(ak, "Model: \u201C\u2026because he was terrified of the tank and wanted to find a place that was calm and safe.\u201D", akY);
-  akY = addBodyText(ak, "Alternative: \u201C\u2026because the ground was shaking and the monstrous machines were getting closer.\u201D", akY, { italic: true });
-  akY = addBodyText(ak, "Alternative: \u201C\u2026because every instinct told him to escape from the noise and the smoke.\u201D", akY, { italic: true });
+  akY = addBodyText(ak, "Model: \"...because he was terrified of the tank and wanted to find a place that was calm and safe.\"", akY);
+  akY = addBodyText(ak, "Alternative: \"...because the ground was shaking and the monstrous machines were getting closer.\"", akY, { italic: true });
+  akY = addBodyText(ak, "Alternative: \"...because every instinct told him to escape from the noise and the smoke.\"", akY, { italic: true });
   akY += 8;
 
   akY = addSectionHeading(ak, "2. BUT", akY, { color: C.SECONDARY });
-  akY = addBodyText(ak, "Model: \u201C\u2026but he still couldn\u2019t escape the war altogether.\u201D", akY);
-  akY = addBodyText(ak, "Alternative: \u201C\u2026but his leg caught on barbed wire and pain shot through his body.\u201D", akY, { italic: true });
-  akY = addBodyText(ak, "Alternative: \u201C\u2026but the explosions followed him no matter which direction he turned.\u201D", akY, { italic: true });
+  akY = addBodyText(ak, "Model: \"...but he still couldn't escape the war altogether.\"", akY);
+  akY = addBodyText(ak, "Alternative: \"...but his leg caught on barbed wire and pain shot through his body.\"", akY, { italic: true });
+  akY = addBodyText(ak, "Alternative: \"...but the explosions followed him no matter which direction he turned.\"", akY, { italic: true });
   akY += 8;
 
   akY = addSectionHeading(ak, "3. SO", akY, { color: C.ACCENT });
-  akY = addBodyText(ak, "Model: \u201C\u2026so he found himself alone and injured in the dark.\u201D", akY);
-  akY = addBodyText(ak, "Alternative: \u201C\u2026so he ended up in no man\u2019s land, the most dangerous place on the battlefield.\u201D", akY, { italic: true });
-  akY = addBodyText(ak, "Alternative: \u201C\u2026so by the time dawn broke, he was standing in the open between the two armies.\u201D", akY, { italic: true });
+  akY = addBodyText(ak, "Model: \"...so he found himself alone and injured in the dark.\"", akY);
+  akY = addBodyText(ak, "Alternative: \"...so he ended up in no man's land, the most dangerous place on the battlefield.\"", akY, { italic: true });
+  akY = addBodyText(ak, "Alternative: \"...so by the time dawn broke, he was standing in the open between the two armies.\"", akY, { italic: true });
   akY += 12;
 
   akY = addSectionHeading(ak, "Common Errors to Watch For", akY, { color: C.ALERT });
-  akY = addBodyText(ak, "\u2022 \u201CBut\u201D sentences that don\u2019t actually change direction (e.g., \u201C\u2026but he was very scared\u201D \u2014 this is a reason, not a contrast)", akY);
-  akY = addBodyText(ak, "\u2022 \u201CSo\u201D sentences that give a reason instead of a result (e.g., \u201C\u2026so he was frightened\u201D \u2014 this explains why, not what happened)", akY);
-  akY = addBodyText(ak, "\u2022 All three sentences saying essentially the same thing with different conjunctions", akY);
-  akY = addBodyText(ak, "\u2022 Incomplete sentences or sentences that don\u2019t connect logically to the stem", akY);
+  akY = addBodyText(ak, "- \"But\" sentences that don't actually change direction (e.g., \"...but he was very scared\" -- this is a reason, not a contrast)", akY);
+  akY = addBodyText(ak, "- \"So\" sentences that give a reason instead of a result (e.g., \"...so he was frightened\" -- this explains why, not what happened)", akY);
+  akY = addBodyText(ak, "- All three sentences saying essentially the same thing with different conjunctions", akY);
+  akY = addBodyText(ak, "- Incomplete sentences or sentences that don't connect logically to the stem", akY);
 
-  addPdfFooter(ak, "War Horse | Lesson 18 | Answer Key \u2014 TEACHER COPY");
+  addPdfFooter(ak, "War Horse | Lesson 18 | Answer Key -- TEACHER COPY");
 
-  // ─── PDF 3: Literary Devices Reference Sheet ─────────────────────────────
+  // --- PDF 3: Literary Devices Reference Sheet ----------------------------
   const ld = createPdf({ title: REFERENCE_RESOURCE.name });
-  let ldY = addPdfHeader(ld, "Literary Devices \u2014 Reference Sheet", {
+  let ldY = addPdfHeader(ld, "Literary Devices -- Reference Sheet", {
     color: C.ACCENT,
     subtitle: "Five devices from Chapter 15 of War Horse",
     lessonInfo: "War Horse | Lesson 18 | Year 5/6 Literacy",
@@ -1133,26 +1085,26 @@ async function build() {
 
   // Simile
   ldY = addSectionHeading(ld, "1. Simile", ldY, { color: C.PRIMARY });
-  ldY = addBodyText(ld, "Definition: A comparison between two things using \u201Clike\u201D or \u201Cas.\u201D Similes help the reader picture something unfamiliar by comparing it to something familiar.", ldY);
+  ldY = addBodyText(ld, "Definition: A comparison between two things using \"like\" or \"as.\" Similes help the reader picture something unfamiliar by comparing it to something familiar.", ldY);
   ldY = addBodyText(ld, "Example from Chapter 15:", ldY, { fontSize: 10, color: "6B7B8B" });
-  ldY = addBodyText(ld, "\u201C\u2026leaving behind great craters that smoked as if the earth itself was on fire.\u201D (p. 118)", ldY, { italic: true });
-  ldY = addBodyText(ld, "Effect: Makes the destruction feel enormous \u2014 the whole earth seems to be burning, not just the ground.", ldY, { fontSize: 10 });
+  ldY = addBodyText(ld, "\"...leaving behind great craters that smoked as if the earth itself was on fire.\" (p. 118)", ldY, { italic: true });
+  ldY = addBodyText(ld, "Effect: Makes the destruction feel enormous -- the whole earth seems to be burning, not just the ground.", ldY, { fontSize: 10 });
   ldY += 6;
 
   // Onomatopoeia
   ldY = addSectionHeading(ld, "2. Onomatopoeia", ldY, { color: C.SECONDARY });
-  ldY = addBodyText(ld, "Definition: Words that imitate the sound they describe. Onomatopoeia makes the reader \u201Chear\u201D the scene.", ldY);
+  ldY = addBodyText(ld, "Definition: Words that imitate the sound they describe. Onomatopoeia makes the reader \"hear\" the scene.", ldY);
   ldY = addBodyText(ld, "Example from Chapter 15:", ldY, { fontSize: 10, color: "6B7B8B" });
-  ldY = addBodyText(ld, "\u201C\u2026the crump and whistle of the shells the whining sound of motors accompanied by a terrifying rattle of steel\u2026\u201D (p. 119)", ldY, { italic: true });
-  ldY = addBodyText(ld, "Effect: Puts us inside the battlefield \u2014 we can hear the sounds Joey hears.", ldY, { fontSize: 10 });
+  ldY = addBodyText(ld, "\"...the crump and whistle of the shells the whining sound of motors accompanied by a terrifying rattle of steel...\" (p. 119)", ldY, { italic: true });
+  ldY = addBodyText(ld, "Effect: Puts us inside the battlefield -- we can hear the sounds Joey hears.", ldY, { fontSize: 10 });
   ldY += 6;
 
   // Metaphor
   ldY = addSectionHeading(ld, "3. Metaphor", ldY, { color: C.ACCENT });
-  ldY = addBodyText(ld, "Definition: Saying something IS something else (without using \u201Clike\u201D or \u201Cas\u201D). Metaphors transform one thing into another in the reader\u2019s mind.", ldY);
+  ldY = addBodyText(ld, "Definition: Saying something IS something else (without using \"like\" or \"as\"). Metaphors transform one thing into another in the reader's mind.", ldY);
   ldY = addBodyText(ld, "Example from Chapter 15:", ldY, { fontSize: 10, color: "6B7B8B" });
-  ldY = addBodyText(ld, "\u201C\u2026a great grey lumbering monster that belched out smoke from behind as it rocked down the hillside towards me.\u201D (p. 119)", ldY, { italic: true });
-  ldY = addBodyText(ld, "Effect: The tank becomes a monster. Because Joey doesn\u2019t know what a tank is, the metaphor shows us the world through his innocent, terrified eyes.", ldY, { fontSize: 10 });
+  ldY = addBodyText(ld, "\"...a great grey lumbering monster that belched out smoke from behind as it rocked down the hillside towards me.\" (p. 119)", ldY, { italic: true });
+  ldY = addBodyText(ld, "Effect: The tank becomes a monster. Because Joey doesn't know what a tank is, the metaphor shows us the world through his innocent, terrified eyes.", ldY, { fontSize: 10 });
   ldY += 6;
 
   // Check if we need a new page
@@ -1165,27 +1117,27 @@ async function build() {
   ldY = addSectionHeading(ld, "4. Personification", ldY, { color: C.SUCCESS });
   ldY = addBodyText(ld, "Definition: Giving human qualities, actions, or emotions to something that is not human. Personification makes abstract ideas feel alive and physical.", ldY);
   ldY = addBodyText(ld, "Example from Chapter 15:", ldY, { fontSize: 10, color: "6B7B8B" });
-  ldY = addBodyText(ld, "\u201CAnd then exhaustion finally overtook me, sapped the strength from my legs and forced me to lie down and sleep.\u201D (p. 120)", ldY, { italic: true });
-  ldY = addBodyText(ld, "Effect: Exhaustion becomes a character that defeats Joey \u2014 it \u201Covertook,\u201D \u201Csapped,\u201D and \u201Cforced\u201D him. This makes tiredness feel like a physical enemy.", ldY, { fontSize: 10 });
+  ldY = addBodyText(ld, "\"And then exhaustion finally overtook me, sapped the strength from my legs and forced me to lie down and sleep.\" (p. 120)", ldY, { italic: true });
+  ldY = addBodyText(ld, "Effect: Exhaustion becomes a character that defeats Joey -- it \"overtook,\" \"sapped,\" and \"forced\" him. This makes tiredness feel like a physical enemy.", ldY, { fontSize: 10 });
   ldY += 6;
 
   // Repetition
   ldY = addSectionHeading(ld, "5. Repetition", ldY, { color: C.ASSESS });
   ldY = addBodyText(ld, "Definition: Deliberately repeating a word or phrase to emphasise an idea, create rhythm, or build emotion.", ldY);
   ldY = addBodyText(ld, "Example from Chapter 15:", ldY, { fontSize: 10, color: "6B7B8B" });
-  ldY = addBodyText(ld, "\u201C\u2026I shall never know. \u2026 He would know \u2026 He would know.\u201D (p. 121)", ldY, { italic: true });
-  ldY = addBodyText(ld, "Effect: The repeated \u201CHe would know\u201D shows how deeply Joey trusts Albert, even in his darkest moment. The repetition makes Joey\u2019s faith feel absolute and unshakeable.", ldY, { fontSize: 10 });
+  ldY = addBodyText(ld, "\"...I shall never know. ... He would know ... He would know.\" (p. 121)", ldY, { italic: true });
+  ldY = addBodyText(ld, "Effect: The repeated \"He would know\" shows how deeply Joey trusts Albert, even in his darkest moment. The repetition makes Joey's faith feel absolute and unshakeable.", ldY, { fontSize: 10 });
   ldY += 14;
 
   // Quick reference table
   ldY = addSectionHeading(ld, "Quick Reference", ldY, { color: C.PRIMARY, fontSize: 12 });
-  ldY = addBodyText(ld, "Simile = comparison using \u201Clike\u201D / \u201Cas\u201D   |   Metaphor = IS something else (no like/as)", ldY, { fontSize: 10 });
+  ldY = addBodyText(ld, "Simile = comparison using \"like\" / \"as\"   |   Metaphor = IS something else (no like/as)", ldY, { fontSize: 10 });
   ldY = addBodyText(ld, "Onomatopoeia = sounds like what it means   |   Personification = human qualities for non-human things", ldY, { fontSize: 10 });
   ldY = addBodyText(ld, "Repetition = same words/phrases repeated for effect", ldY, { fontSize: 10 });
 
   addPdfFooter(ld, "War Horse | Lesson 18 | Literary Devices Reference Sheet");
 
-  // ─── Write all files ──────────────────────────────────────────────────────
+  // --- Write all files ----------------------------------------------------
   await Promise.all([
     pres.writeFile({ fileName: `${OUT_DIR}/WH4_Lesson18.pptx` }),
     writePdf(ws, WORKSHEET_PDF_PATH),
