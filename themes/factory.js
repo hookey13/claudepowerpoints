@@ -6,10 +6,12 @@ const PptxGenJS = require("pptxgenjs");
 const { SLIDE_W, SLIDE_H, SAFE_RIGHT, SAFE_BOTTOM, CONTENT_TOP, validateBounds } = require("./core/layout");
 const { hexToRgb, luminance, contrastRatio, getContrastColor, validateContrast } = require("./core/contrast");
 const { iconToBase64Png }          = require("./core/icons");
-const { normalizeLessonTargets, sanitizeTeacherNotes, installNotesPatch } = require("./core/notes");
+const { normalizeLessonTargets, sanitizeTeacherNotes, appendSourcesToNotes, installNotesPatch } = require("./core/notes");
 const { makeShadow, makeCardShadow } = require("./core/shadows");
 const { createElements }           = require("./core/elements");
 const { withReveal }               = require("./core/withReveal");
+const { createImageHelpers }       = require("./core/images");
+const { warnIfSlideHasOverlaps, warnIfSlideElementsOutOfBounds, runSlideDiagnostics } = require("./core/diagnostics");
 
 // ── Builder factories ──
 const { createBaseBuilders }       = require("./builders/base");
@@ -106,6 +108,7 @@ function createTheme(subject, yearLevel, variant) {
 
   // Build bound element helpers
   const el = createElements(C, FONT_H, FONT_B, cardShadowFn);
+  const img = createImageHelpers(C, FONT_H, FONT_B, el, cardShadowFn);
 
   // Build bound getContrastColor (needs palette's WHITE/CHARCOAL)
   const boundGetContrastColor = (bgHex) => getContrastColor(bgHex, C.WHITE, C.CHARCOAL);
@@ -142,15 +145,22 @@ function createTheme(subject, yearLevel, variant) {
     // Content normalization
     normalizeLessonTargets,
     sanitizeTeacherNotes,
+    appendSourcesToNotes,
 
     // Icon rendering
     iconToBase64Png,
 
     // Element helpers
     ...el,
+    ...img,
 
     // Click-to-reveal
     withReveal,
+
+    // Diagnostics
+    warnIfSlideHasOverlaps,
+    warnIfSlideElementsOutOfBounds,
+    runSlideDiagnostics,
 
     // Base slide builders (all subjects)
     ...base,
@@ -183,4 +193,5 @@ module.exports = {
   VARIANTS_PER_LEVEL,
   normalizeLessonTargets,
   sanitizeTeacherNotes,
+  appendSourcesToNotes,
 };

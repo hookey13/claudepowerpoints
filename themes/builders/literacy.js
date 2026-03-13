@@ -240,6 +240,14 @@ function createLiteracyBuilders(C, FONT_H, FONT_B, el) {
     return s;
   }
 
+  // NOTE: annotatedModelSlide is intentionally NOT overridden here.
+  // The base builder's version (from base.js) supports both previewBlocks
+  // and structured previewSpec (poster specs via drawMockupPreview/drawPosterSpec).
+  // A stale literacy fork that only supported previewBlocks was removed in
+  // March 2026. If literacy needs genuinely different annotatedModelSlide
+  // behaviour in the future, add it here with a comment explaining why
+  // the base version is insufficient.
+
   /* ------------------------------------------------------------------ */
   /*  Return all builders                                                */
   /* ------------------------------------------------------------------ */

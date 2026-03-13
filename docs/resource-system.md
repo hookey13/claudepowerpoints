@@ -56,6 +56,8 @@ Page elements:
 | `addPdfFooter(doc, text, opts)` | Footer on each page. |
 | `addLinedArea(doc, y, lineCount, opts)` | Blank lined writing area. Returns `y`. |
 | `addTwoColumnOrganiser(doc, leftHeader, rightHeader, y, opts)` | Two-column organiser. Returns `y`. |
+| `addPosterMockupPdf(doc, x, y, w, h, spec, opts)` | Draw a schematic poster/layout mockup using PDF primitives. |
+| `addPosterPairPdf(doc, y, leftPoster, rightPoster, opts)` | Draw two side-by-side poster/layout mockups for comparison tasks. Returns `y`. |
 
 PPTX integration:
 
@@ -170,11 +172,21 @@ An enabling scaffold is not just "the same worksheet but easier". A genuine scaf
 3. Provide a structural framework such as a table, flowchart, or labelled organiser.
 4. Reduce the problem space by constraining choices.
 
+For visual-analysis scaffolds, this rule is literal. If the task is to analyse a poster, advertisement, map, diagram, or page layout, the scaffold must show that visual object on paper as a schematic mockup or a real image. Text that merely describes the visual does not count as a visual scaffold.
+
+For structure/layout scaffolds, prefer clean wireframe mockups over pseudo-real scenes. The printed visual should foreground hierarchy, labels, and writable analysis space rather than decorative imitation.
+
 Self-check:
 
 - Put the main worksheet and the scaffold side by side.
 - Ask: "What cognitive work does the scaffold remove?"
 - If the answer is "not much", rewrite it.
+
+For poster/layout comparison tasks, a good scaffold usually includes:
+
+- the two poster or layout mockups on the page
+- feature labels, tables, or sentence stems beside them
+- one worked example that models how to move from what is seen to what it does
 
 ## Hyperlinks
 

@@ -8,6 +8,7 @@ const ROOT = path.resolve(__dirname, "..");
 const SOURCE_FILES = [
   "CLAUDE.md",
   "megapromptlean.md",
+  "runtime_spine.md",
 ];
 
 function getRootPath(...parts) {
@@ -39,6 +40,7 @@ function buildPayload(nowIso) {
     sources: SOURCE_FILES.map(buildSourceMeta),
     claude: readSourceFile("CLAUDE.md"),
     megaprompt: readSourceFile("megapromptlean.md"),
+    runtimeSpine: readSourceFile("runtime_spine.md"),
   };
 }
 

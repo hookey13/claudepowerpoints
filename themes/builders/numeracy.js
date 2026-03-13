@@ -1,6 +1,7 @@
 "use strict";
 
 const { SAFE_BOTTOM, CONTENT_TOP, SLIDE_W, validateBounds } = require("../core/layout");
+const { runSlideDiagnostics } = require("../core/diagnostics");
 
 /**
  * Factory that returns numeracy-specific slide builders and maths visual
@@ -77,20 +78,36 @@ function createNumeracyBuilders(C, FONT_H, FONT_B, el) {
     el.addTitle(s, title, { y: 0.65, fontSize: 22, color: stageColor });
 
     const cardW = drawRight ? 4.5 : 9;
-    el.addCard(s, 0.5, CONTENT_TOP, cardW, SAFE_BOTTOM - CONTENT_TOP, { strip: stageColor });
+    const contentY = CONTENT_TOP;
+    const layoutGuide = {
+      titleY: 0.65,
+      titleH: 0.62,
+      panelTop: contentY,
+      panelTopPadded: contentY + 0.08,
+      leftCardX: 0.5,
+      leftCardY: contentY,
+      leftCardW: cardW,
+      leftCardH: SAFE_BOTTOM - contentY,
+      rightX: 5.3,
+      rightW: 4.2,
+      safeBottom: SAFE_BOTTOM,
+    };
+
+    el.addCard(s, 0.5, contentY, cardW, SAFE_BOTTOM - contentY, { strip: stageColor });
 
     const stepTexts = steps.map((step, i) => ({
       text: step,
       options: { bullet: true, breakLine: i < steps.length - 1, fontSize: 13, color: C.CHARCOAL },
     }));
     s.addText(stepTexts, {
-      x: 0.75, y: CONTENT_TOP + 0.12, w: cardW - 0.4, h: SAFE_BOTTOM - CONTENT_TOP - 0.2,
+      x: 0.75, y: contentY + 0.12, w: cardW - 0.4, h: SAFE_BOTTOM - contentY - 0.2,
       fontFace: FONT_B, margin: 0, valign: "top",
     });
 
-    if (drawRight) drawRight(s);
+    if (drawRight) drawRight(s, layoutGuide);
     if (footer) el.addFooter(s, footer);
     if (notes) s.addNotes(notes);
+    if (drawRight) runSlideDiagnostics(s, pres, { respectSafeBottom: false });
     return s;
   }
 

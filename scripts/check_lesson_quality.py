@@ -16,7 +16,7 @@ REL_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 NOTES_REL_SUFFIX = "/notesSlide"
 NOTE_HEADER_RE = re.compile(
     r"^(SAY|DO|PACING OVERVIEW|CFU CHECKPOINT|TEACHER NOTES|ENABLING & EXTENDING|"
-    r"MISCONCEPTIONS|SENSITIVITY ADVISORY|WATCH FOR):?$",
+    r"MISCONCEPTIONS|SENSITIVITY ADVISORY|WATCH FOR|SOURCES):?$",
     re.IGNORECASE,
 )
 MARKDOWN_PATTERNS = [
@@ -206,7 +206,7 @@ def split_note_sections(notes_lines: list[str]) -> dict[str, list[str]]:
 
 
 def bullet_count(lines: list[str]) -> int:
-    return sum(1 for line in lines if line.strip())
+    return sum(1 for line in lines if re.match(r"^\s*[-•]", line))
 
 
 def sentence_count(text: str) -> int:

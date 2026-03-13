@@ -11,6 +11,11 @@
 const PDFDocument = require("pdfkit");
 const fs = require("fs");
 const path = require("path");
+const {
+  isStructuredMockupSpec,
+  lightenHex,
+  normalizeStructuredMockup,
+} = require("./core/mockups");
 
 function normaliseSessionNumber(sessionNumber) {
   const value = Number.parseInt(sessionNumber, 10);
@@ -124,6 +129,8 @@ const PAGE = {
 
 const FOOTER_Y = PAGE.H - PAGE.MARGIN - 10;
 const CONTENT_BOTTOM = FOOTER_Y - 10;
+const STUDENT_RULE_COLOR = "#000000";
+const STUDENT_RULE_WIDTH = 0.9;
 
 // ── Colour helpers ──────────────────────────────────────────────────────────
 
@@ -292,12 +299,12 @@ function addPdfHeader(doc, title, opts) {
     // Underline for name
     const nameLineX = x + 42;
     doc.moveTo(nameLineX, y + 14).lineTo(nameLineX + 200, y + 14)
-      .strokeColor("#999999").lineWidth(0.5).stroke();
+      .strokeColor(STUDENT_RULE_COLOR).lineWidth(STUDENT_RULE_WIDTH).stroke();
     // Date field
     const dateX = x + 300;
     doc.text("Date: ", dateX, y);
     doc.moveTo(dateX + 38, y + 14).lineTo(dateX + w - 300, y + 14)
-      .strokeColor("#999999").lineWidth(0.5).stroke();
+      .strokeColor(STUDENT_RULE_COLOR).lineWidth(STUDENT_RULE_WIDTH).stroke();
     y += 28;
   }
 
@@ -385,7 +392,7 @@ function addPvChartPdf(doc, y, headers, opts) {
   headers.forEach((_, i) => {
     const cx = x + i * cellW;
     doc.rect(cx, y + hdrH, cellW, valH)
-      .lineWidth(1).strokeColor(hex(color)).stroke();
+      .lineWidth(STUDENT_RULE_WIDTH).strokeColor(STUDENT_RULE_COLOR).stroke();
     // Fill in values if provided (for answer keys)
     if (values[i] != null && values[i] !== "") {
       doc.fontSize(20).font("Sans-Bold").fillColor(hex("2D3142"));
@@ -419,7 +426,7 @@ function addWriteLine(doc, label, y, opts) {
 
   doc.save();
   doc.moveTo(lineX, lineY).lineTo(lineX + lineW, lineY)
-    .strokeColor("#CCCCCC").lineWidth(0.5).stroke();
+    .strokeColor(STUDENT_RULE_COLOR).lineWidth(STUDENT_RULE_WIDTH).stroke();
   doc.restore();
 
   // Write answer if provided (for answer keys)
@@ -599,7 +606,7 @@ function addLinedArea(doc, y, lineCount, opts) {
   }
 
   doc.save();
-  doc.strokeColor("#DDDDDD").lineWidth(0.5);
+  doc.strokeColor(STUDENT_RULE_COLOR).lineWidth(STUDENT_RULE_WIDTH);
   for (let i = 0; i < lineCount; i++) {
     const ly = y + i * spacing;
     doc.moveTo(x, ly).lineTo(x + w, ly).stroke();
@@ -645,7 +652,7 @@ function addTwoColumnOrganiser(doc, leftHeader, rightHeader, y, opts) {
     const ry = y + hdrH + r * rowH;
     [0, 1].forEach((i) => {
       const cx = x + i * colW;
-      doc.rect(cx, ry, colW, rowH).lineWidth(0.5).strokeColor(hex(color)).stroke();
+      doc.rect(cx, ry, colW, rowH).lineWidth(STUDENT_RULE_WIDTH).strokeColor(STUDENT_RULE_COLOR).stroke();
       const content = i === 0 ? leftContent : rightContent;
       if (content[r]) {
         doc.fontSize(10).font("Sans").fillColor("#000000");
@@ -656,6 +663,94 @@ function addTwoColumnOrganiser(doc, leftHeader, rightHeader, y, opts) {
   doc.restore();
 
   return y + hdrH + rows * rowH + 10;
+}
+
+/**
+ * Add a clear labelled cycle diagram for science worksheets and scaffolds.
+ * Supports 4-stage cycles cleanly.
+ *
+ * @param {PDFDocument} doc
+ * @param {number} y
+ * @param {{label:string, color?:string}[]} stages
+ * @param {object} opts
+ * @returns {number}
+ */
+function addCycleDiagramPdf(doc, y, stages, opts) {
+  const o = opts || {};
+  const x = PAGE.MARGIN;
+  const w = PAGE.CONTENT_W;
+  const h = o.height || 220;
+  const stageList = (stages || []).slice(0, 4);
+  const centerX = x + w / 2;
+  const centerY = y + h / 2 + 4;
+  const orbitX = 150;
+  const orbitY = 66;
+  const nodeW = 112;
+  const nodeH = 28;
+  const lineColor = hex(o.lineColor || "6B7280");
+  const centerLabel = o.centerLabel || "Cycle";
+
+  y = ensureBlockFits(doc, y, h + 12);
+
+  const positions = [
+    { x: centerX - nodeW / 2, y: centerY - orbitY - nodeH / 2 - 28, lineX: x + w - 120, lineY: centerY - orbitY - 8 },
+    { x: centerX + orbitX - nodeW / 2, y: centerY - nodeH / 2, lineX: x + w - 120, lineY: centerY + 8 },
+    { x: centerX - nodeW / 2, y: centerY + orbitY - nodeH / 2 + 28, lineX: x + w - 120, lineY: centerY + orbitY + 36 },
+    { x: centerX - orbitX - nodeW / 2, y: centerY - nodeH / 2, lineX: x + 18, lineY: centerY + 8 },
+  ];
+
+  function drawArrowWithHead(x1, y1, x2, y2) {
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+    const head = 7;
+    doc.save();
+    doc.moveTo(x1, y1).lineTo(x2, y2).lineWidth(1.4).strokeColor(lineColor).stroke();
+    doc.moveTo(x2, y2)
+      .lineTo(x2 - head * Math.cos(angle - Math.PI / 6), y2 - head * Math.sin(angle - Math.PI / 6))
+      .lineTo(x2 - head * Math.cos(angle + Math.PI / 6), y2 - head * Math.sin(angle + Math.PI / 6))
+      .lineTo(x2, y2)
+      .fill(lineColor);
+    doc.restore();
+  }
+
+  // Center label
+  doc.save();
+  doc.roundedRect(centerX - 48, centerY - 18, 96, 36, 10)
+    .lineWidth(1.2).strokeColor(hex(o.centerColor || "1B3A6B"))
+    .fillAndStroke(lighten(o.centerColor || "1B3A6B", 0.88), hex(o.centerColor || "1B3A6B"));
+  doc.fontSize(12).font("Sans-Bold").fillColor(hex(o.centerColor || "1B3A6B"));
+  doc.text(centerLabel, centerX - 42, centerY - 7, { width: 84, align: "center" });
+  doc.restore();
+
+  // Nodes
+  stageList.forEach((stage, index) => {
+    const pos = positions[index];
+    const color = hex((stage && stage.color) || ["1B3A6B", "0F7F8C", "C2742D", "2D8C4A"][index]);
+    const labelText = o.showStageNames === false ? `${index + 1}` : `${index + 1}. ${String((stage && stage.label) || "")}`;
+
+    doc.save();
+    doc.roundedRect(pos.x, pos.y, nodeW, nodeH, 12)
+      .lineWidth(1.2).strokeColor(color)
+      .fillAndStroke(lighten(color, 0.9), color);
+    doc.fontSize(9.5).font("Sans-Bold").fillColor(color);
+    doc.text(labelText, pos.x + 8, pos.y + 9, { width: nodeW - 16, align: "center" });
+    doc.restore();
+
+    if (o.numberedLines !== false) {
+      const lineStartX = pos.lineX + 22;
+      doc.fontSize(10.5).font("Sans-Bold").fillColor("#000000");
+      doc.text(`${index + 1}.`, pos.lineX, pos.lineY - 2, { width: 18, align: "right" });
+      doc.moveTo(lineStartX, pos.lineY + 8).lineTo(lineStartX + 105, pos.lineY + 8)
+        .strokeColor(STUDENT_RULE_COLOR).lineWidth(STUDENT_RULE_WIDTH).stroke();
+    }
+  });
+
+  // Arrow loop
+  drawArrowWithHead(centerX - 10, centerY - orbitY + 4, centerX + orbitX - 74, centerY - 16);
+  drawArrowWithHead(centerX + orbitX - 8, centerY + 22, centerX + 18, centerY + orbitY + 24);
+  drawArrowWithHead(centerX - 18, centerY + orbitY + 38, centerX - orbitX + 72, centerY + 22);
+  drawArrowWithHead(centerX - orbitX + 8, centerY - 18, centerX - 20, centerY - orbitY + 2);
+
+  return y + h + 10;
 }
 
 // ── Resource slide helper (for PPTX) ────────────────────────────────────────
@@ -671,6 +766,295 @@ function addTwoColumnOrganiser(doc, leftHeader, rightHeader, y, opts) {
  * @param {string} notes — teacher notes
  * @returns {object} the slide
  */
+function drawMockupTextPdf(doc, x, y, w, text, opts) {
+  const o = opts || {};
+  if (!text) return;
+  doc.fontSize(o.fontSize || 10.5)
+    .font(o.font || "Sans")
+    .fillColor(hex(o.color || "243142"))
+    .text(String(text), x, y, {
+      width: w,
+      align: o.align || "left",
+    });
+}
+
+function drawLineSetPdf(doc, x, y, w, h, component, spec) {
+  const count = Math.max(1, Number(component.count) || 3);
+  const lineGap = component.lineGap != null ? component.lineGap : 4;
+  const linePad = component.linePad != null ? component.linePad : 8;
+  const lineH = Math.max(3, (h - linePad * 2 - lineGap * (count - 1)) / count);
+  const widths = Array.isArray(component.widths) ? component.widths : [];
+  const lineColor = hex(component.lineColor || spec.mutedLine || "A0A0A0");
+  for (let index = 0; index < count; index += 1) {
+    const ratio = widths[index] || (index === count - 1 ? 0.62 : index % 2 === 0 ? 0.92 : 0.82);
+    doc.roundedRect(x + 6, y + linePad + index * (lineH + lineGap), Math.max(14, (w - 12) * ratio), lineH, 2).fill(lineColor);
+  }
+}
+
+function drawPhotoPlaceholderPdf(doc, x, y, w, h, component, spec) {
+  const bg = hex(component.fill || lightenHex(spec.accent, 0.9));
+  const border = hex(component.border || spec.softBorder || "A0A0A0");
+  doc.roundedRect(x, y, w, h, 6).lineWidth(0.8).strokeColor(border).fillAndStroke(bg, border);
+  doc.rect(x + 4, y + 4, w - 8, h - 8).lineWidth(0.6).strokeColor(border).fillAndStroke(hex(lightenHex(component.fill || lightenHex(spec.accent, 0.9), 0.05)), border);
+  doc.moveTo(x + w * 0.18, y + h * 0.72).lineTo(x + w * 0.4, y + h * 0.52).lineTo(x + w * 0.54, y + h * 0.72)
+    .lineWidth(1.1).strokeColor(hex(spec.mutedLine)).stroke();
+  doc.moveTo(x + w * 0.5, y + h * 0.72).lineTo(x + w * 0.66, y + h * 0.58).lineTo(x + w * 0.8, y + h * 0.72)
+    .lineWidth(1.1).strokeColor(hex(spec.mutedLine)).stroke();
+  doc.circle(x + w * 0.72, y + h * 0.2, Math.min(w, h) * 0.06).fill(hex(spec.accent));
+}
+
+function drawChartPlaceholderPdf(doc, x, y, w, h, component, spec) {
+  const bg = hex(component.fill || "FFFFFF");
+  const border = hex(component.border || spec.softBorder);
+  doc.roundedRect(x, y, w, h, 6).lineWidth(0.8).strokeColor(border).fillAndStroke(bg, border);
+  doc.moveTo(x + 8, y + h - 8).lineTo(x + w - 8, y + h - 8).lineWidth(0.8).strokeColor(hex(spec.mutedLine)).stroke();
+  doc.moveTo(x + 8, y + 8).lineTo(x + 8, y + h - 8).lineWidth(0.8).strokeColor(hex(spec.mutedLine)).stroke();
+  [0.28, 0.48, 0.68].forEach((pos, index) => {
+    const height = h * (0.22 + index * 0.12);
+    const fill = index === 1 ? hex(spec.accent) : hex(lightenHex(spec.accent, 0.38 + index * 0.12));
+    doc.roundedRect(x + w * pos, y + h - 8 - height, w * 0.1, height, 3).fill(fill);
+  });
+}
+
+function drawDiagramPlaceholderPdf(doc, x, y, w, h, component, spec) {
+  const bg = hex(component.fill || lightenHex(spec.accent, 0.92));
+  const border = hex(component.border || spec.softBorder);
+  doc.roundedRect(x, y, w, h, 6).lineWidth(0.8).strokeColor(border).fillAndStroke(bg, border);
+  const points = [
+    { cx: 0.24, cy: 0.58 },
+    { cx: 0.5, cy: 0.34 },
+    { cx: 0.76, cy: 0.58 },
+  ];
+  doc.moveTo(x + w * points[0].cx, y + h * points[0].cy).lineTo(x + w * points[1].cx, y + h * points[1].cy)
+    .lineWidth(0.9).strokeColor(hex(spec.mutedLine)).stroke();
+  doc.moveTo(x + w * points[1].cx, y + h * points[1].cy).lineTo(x + w * points[2].cx, y + h * points[2].cy)
+    .lineWidth(0.9).strokeColor(hex(spec.mutedLine)).stroke();
+  points.forEach((point, index) => {
+    const fill = index === 1 ? hex(spec.accent) : hex(lightenHex(spec.accent, 0.45));
+    doc.circle(x + w * point.cx, y + h * point.cy, Math.min(w, h) * 0.06).fill(fill);
+  });
+}
+
+function drawBrowserFramePlaceholderPdf(doc, x, y, w, h, component, spec) {
+  const border = hex(component.border || spec.softBorder);
+  doc.roundedRect(x, y, w, h, 6).lineWidth(0.8).strokeColor(border).fillAndStroke(hex(component.fill || "FFFFFF"), border);
+  doc.roundedRect(x + 4, y + 4, w - 8, 16, 4).fill(hex(lightenHex(spec.accent, 0.92)));
+  [0, 1, 2].forEach((index) => {
+    doc.circle(x + 14 + index * 12, y + 12, 3).fill(hex(lightenHex(spec.accent, 0.5)));
+  });
+  doc.roundedRect(x + 8, y + 28, w * 0.28, h - 36, 4).fill(hex(lightenHex(spec.accent, 0.94)));
+  doc.roundedRect(x + w * 0.4, y + 28, w * 0.5, h - 36, 4).lineWidth(0.8).strokeColor(border).fillAndStroke("#FFFFFF", border);
+  drawLineSetPdf(doc, x + w * 0.4, y + 28, w * 0.5, h - 36, { count: 4, lineColor: spec.mutedLine }, spec);
+}
+
+function drawCardGridPlaceholderPdf(doc, x, y, w, h, component, spec) {
+  const border = hex(component.border || spec.softBorder);
+  doc.roundedRect(x, y, w, h, 6).lineWidth(0.8).strokeColor(border).fillAndStroke(hex(component.fill || "FFFFFF"), border);
+  const rows = Math.max(1, Number(component.rows) || 2);
+  const cols = Math.max(1, Number(component.cols) || 2);
+  const gap = 4;
+  const cardW = (w - gap * (cols + 1)) / cols;
+  const cardH = (h - gap * (rows + 1)) / rows;
+  for (let row = 0; row < rows; row += 1) {
+    for (let col = 0; col < cols; col += 1) {
+      const cardX = x + gap + col * (cardW + gap);
+      const cardY = y + gap + row * (cardH + gap);
+      doc.roundedRect(cardX, cardY, cardW, cardH, 4).lineWidth(0.8).strokeColor(border).fillAndStroke(hex(lightenHex(spec.accent, 0.95)), border);
+      doc.roundedRect(cardX + 4, cardY + 4, cardW - 8, 8, 2).fill(hex(lightenHex(spec.accent, 0.25)));
+      drawLineSetPdf(doc, cardX, cardY + 12, cardW, cardH - 14, { count: 2, lineColor: spec.mutedLine }, spec);
+    }
+  }
+}
+
+function drawHeroMockupPdf(doc, x, y, w, h, component, spec) {
+  const mode = component.mode || "diagram";
+  if (mode === "chart") {
+    drawChartPlaceholderPdf(doc, x, y, w, h, component, spec);
+  } else if (mode === "browserFrame") {
+    drawBrowserFramePlaceholderPdf(doc, x, y, w, h, component, spec);
+  } else if (mode === "cardGrid") {
+    drawCardGridPlaceholderPdf(doc, x, y, w, h, component, spec);
+  } else if (mode === "photo") {
+    drawPhotoPlaceholderPdf(doc, x, y, w, h, component, spec);
+  } else {
+    drawDiagramPlaceholderPdf(doc, x, y, w, h, component, spec);
+  }
+
+  if (component.overlayText) {
+    const overlayFill = hex(component.overlayFill || spec.accent);
+    const overlayH = Math.min(18, h * 0.22);
+    doc.roundedRect(x + 6, y + 6, w - 12, overlayH, 4).fill(overlayFill);
+    drawMockupTextPdf(doc, x + 10, y + 8, w - 20, component.overlayText, {
+      fontSize: component.overlayFontSize || 9,
+      font: "Sans-Bold",
+      color: component.textColor || "FFFFFF",
+      align: component.align || "left",
+    });
+  }
+}
+
+function addPosterMockupPdf(doc, x, y, w, h, spec, opts) {
+  const o = opts || {};
+  if (!isStructuredMockupSpec(spec)) return y + h;
+
+  const normalized = normalizeStructuredMockup(spec);
+  const pageFill = hex(normalized.pageFill || o.pageFill || "FFFFFF");
+  const pageBorder = hex(normalized.pageBorder || o.pageBorder || "9CA3AF");
+  const innerPad = normalized.innerPad != null ? normalized.innerPad : 6;
+  const gap = normalized.gap != null ? normalized.gap : 4;
+
+  doc.save();
+  doc.roundedRect(x, y, w, h, 8).lineWidth(1).strokeColor(pageBorder).fillAndStroke(pageFill, pageBorder);
+  doc.restore();
+
+  const innerX = x + innerPad;
+  const innerY = y + innerPad;
+  const innerW = w - innerPad * 2;
+  const components = normalized.components || [];
+  const availableH = h - innerPad * 2 - gap * Math.max(components.length - 1, 0);
+  const totalScale = components.reduce((sum, component) => sum + component.scale, 0) || 1;
+  let cursorY = innerY;
+
+  components.forEach((component) => {
+    const blockH = Math.max(12, availableH * (component.scale / totalScale));
+    const textColor = hex(component.textColor || normalized.textColor || "243142");
+
+    if (component.kind === "masthead") {
+      const fill = hex(component.fill || normalized.accent);
+      doc.roundedRect(innerX, cursorY, innerW, blockH, 5).lineWidth(0.6).strokeColor(fill).fillAndStroke(fill, fill);
+      drawMockupTextPdf(doc, innerX + 6, cursorY + Math.max(2, blockH * 0.18), innerW - 12, component.text, {
+        fontSize: component.fontSize || (blockH > 22 ? 10.5 : 9),
+        font: "Sans-Bold",
+        color: component.textColor || "FFFFFF",
+        align: component.align || "center",
+      });
+    } else if (component.kind === "nav") {
+      const fill = hex(component.fill || normalized.softFill);
+      const border = hex(component.border || normalized.softBorder);
+      doc.roundedRect(innerX, cursorY, innerW, blockH, 5).lineWidth(0.8).strokeColor(border).fillAndStroke(fill, border);
+      drawMockupTextPdf(doc, innerX + 6, cursorY + Math.max(2, blockH * 0.18), innerW - 12, component.text, {
+        fontSize: component.fontSize || 8,
+        font: "Sans-Bold",
+        color: component.textColor || normalized.textColor,
+      });
+    } else if (component.kind === "heading" || component.kind === "subheading") {
+      const fill = hex(component.fill || "FFFFFF");
+      const border = hex(component.border || normalized.softBorder);
+      doc.roundedRect(innerX, cursorY, innerW, blockH, 5).lineWidth(0.8).strokeColor(border).fillAndStroke(fill, border);
+      drawMockupTextPdf(doc, innerX + 6, cursorY + Math.max(2, blockH * 0.18), innerW - 12, component.text, {
+        fontSize: component.fontSize || (component.kind === "heading" ? 10.5 : 9),
+        font: component.kind === "heading" ? "Sans-Bold" : "Sans",
+        color: component.textColor || (component.kind === "heading" ? normalized.accent : normalized.textColor),
+      });
+    } else if (component.kind === "hero") {
+      drawHeroMockupPdf(doc, innerX, cursorY, innerW, blockH, component, normalized);
+    } else if (component.kind === "chart") {
+      drawChartPlaceholderPdf(doc, innerX, cursorY, innerW, blockH, component, normalized);
+    } else if (component.kind === "stat") {
+      const fill = hex(component.fill || lightenHex(normalized.accent, 0.1));
+      doc.roundedRect(innerX, cursorY, innerW, blockH, 5).lineWidth(0.6).strokeColor(fill).fillAndStroke(fill, fill);
+      drawMockupTextPdf(doc, innerX + 6, cursorY + Math.max(2, blockH * 0.18), innerW - 12, component.text, {
+        fontSize: component.fontSize || 10,
+        font: "Sans-Bold",
+        color: component.textColor || "FFFFFF",
+        align: component.align || "center",
+      });
+    } else if (component.kind === "cta" || component.kind === "footerBand") {
+      const outerFill = hex(component.kind === "cta" ? "FFFFFF" : (component.fill || normalized.softFill));
+      const outerBorder = hex(component.border || normalized.softBorder);
+      doc.roundedRect(innerX, cursorY, innerW, blockH, 5).lineWidth(0.8).strokeColor(outerBorder).fillAndStroke(outerFill, outerBorder);
+      const buttonW = component.kind === "cta" ? innerW * 0.64 : innerW;
+      const buttonX = component.kind === "cta" ? innerX + (innerW - buttonW) / 2 : innerX;
+      const fill = hex(component.fill || normalized.accent);
+      doc.roundedRect(buttonX, cursorY + 4, buttonW, Math.max(8, blockH - 8), 4).fill(fill);
+      drawMockupTextPdf(doc, buttonX + 6, cursorY + Math.max(6, blockH * 0.24), buttonW - 12, component.text, {
+        fontSize: component.fontSize || 9,
+        font: "Sans-Bold",
+        color: component.textColor || "FFFFFF",
+        align: component.align || "center",
+      });
+    } else if (component.kind === "textBlock") {
+      const fill = hex(component.fill || "FFFFFF");
+      const border = hex(component.border || normalized.softBorder);
+      doc.roundedRect(innerX, cursorY, innerW, blockH, 5).lineWidth(0.8).strokeColor(border).fillAndStroke(fill, border);
+      drawLineSetPdf(doc, innerX, cursorY, innerW, blockH, component, normalized);
+    } else if (component.kind === "caption") {
+      const fill = hex(component.fill || normalized.softFill);
+      const border = hex(component.border || normalized.softBorder);
+      doc.roundedRect(innerX, cursorY, innerW, blockH, 5).lineWidth(0.8).strokeColor(border).fillAndStroke(fill, border);
+      drawMockupTextPdf(doc, innerX + 6, cursorY + Math.max(2, blockH * 0.18), innerW - 12, component.text, {
+        fontSize: component.fontSize || 8.2,
+        font: "Sans-Italic",
+        color: component.textColor || normalized.textColor,
+      });
+    } else if (component.kind === "quote") {
+      const fill = hex(component.fill || "FFFFFF");
+      const border = hex(component.border || normalized.softBorder);
+      doc.roundedRect(innerX, cursorY, innerW, blockH, 5).lineWidth(0.8).strokeColor(border).fillAndStroke(fill, border);
+      doc.rect(innerX + 4, cursorY + 4, 4, blockH - 8).fill(hex(component.accent || normalized.accent));
+      drawMockupTextPdf(doc, innerX + 12, cursorY + Math.max(2, blockH * 0.18), innerW - 18, component.text, {
+        fontSize: component.fontSize || 8.8,
+        font: "Sans-Italic",
+        color: component.textColor || normalized.textColor,
+      });
+    } else if (component.kind === "iconRow") {
+      const fill = hex(component.fill || "FFFFFF");
+      const border = hex(component.border || normalized.softBorder);
+      doc.roundedRect(innerX, cursorY, innerW, blockH, 5).lineWidth(0.8).strokeColor(border).fillAndStroke(fill, border);
+      const count = Math.max(3, Number(component.count) || 4);
+      const gapW = innerW / (count + 1);
+      for (let index = 0; index < count; index += 1) {
+        const fillColor = index === 0 ? hex(normalized.accent) : hex(lightenHex(normalized.accent, 0.45));
+        doc.circle(innerX + gapW * (index + 0.9), cursorY + blockH * 0.33, 5).fill(fillColor);
+        doc.roundedRect(innerX + gapW * (index + 0.62), cursorY + blockH * 0.63, 16, 3, 1).fill(hex(normalized.mutedLine));
+      }
+    } else if (component.kind === "sidebar") {
+      const fill = hex(component.fill || "FFFFFF");
+      const border = hex(component.border || normalized.softBorder);
+      doc.roundedRect(innerX, cursorY, innerW, blockH, 5).lineWidth(0.8).strokeColor(border).fillAndStroke(fill, border);
+      doc.rect(innerX, cursorY, innerW * 0.22, blockH).fill(hex(lightenHex(component.fill || normalized.accent, 0.86)));
+      drawLineSetPdf(doc, innerX + innerW * 0.24, cursorY, innerW * 0.72, blockH, { count: 3, lineColor: normalized.mutedLine }, normalized);
+    } else {
+      const fill = hex(component.fill || normalized.softFill);
+      const border = hex(component.border || normalized.softBorder);
+      doc.roundedRect(innerX, cursorY, innerW, blockH, 5).lineWidth(0.8).strokeColor(border).fillAndStroke(fill, border);
+      drawMockupTextPdf(doc, innerX + 6, cursorY + Math.max(2, blockH * 0.18), innerW - 12, component.text, {
+        fontSize: component.fontSize || 9,
+        font: "Sans-Bold",
+        color: textColor,
+      });
+    }
+
+    cursorY += blockH + gap;
+  });
+
+  return y + h;
+}
+
+function addPosterPairPdf(doc, y, leftPoster, rightPoster, opts) {
+  const o = opts || {};
+  const labelH = 14;
+  const posterH = o.posterH || 140;
+  const gap = o.gap != null ? o.gap : 18;
+  const totalH = labelH + 6 + posterH;
+  y = ensureBlockFits(doc, y, totalH + 8);
+
+  const x = PAGE.MARGIN;
+  const pairW = PAGE.CONTENT_W;
+  const posterW = (pairW - gap) / 2;
+  const leftTitle = o.leftTitle || "Poster A";
+  const rightTitle = o.rightTitle || "Poster B";
+  const color = hex(o.color || "1B3A6B");
+
+  doc.fontSize(11).font("Sans-Bold").fillColor(color);
+  doc.text(leftTitle, x, y, { width: posterW });
+  doc.text(rightTitle, x + posterW + gap, y, { width: posterW });
+
+  addPosterMockupPdf(doc, x, y + labelH + 6, posterW, posterH, leftPoster, o.leftOpts);
+  addPosterMockupPdf(doc, x + posterW + gap, y + labelH + 6, posterW, posterH, rightPoster, o.rightOpts);
+  return y + totalH + 10;
+}
+
 function addResourceSlide(pres, resources, theme, footer, notes) {
   const { C: TC, FONT_H: FH, FONT_B: FB } = theme;
   const s = pres.addSlide();
@@ -787,7 +1171,7 @@ module.exports = {
   addPdfHeader, addSectionHeading, addBodyText,
   addPvChartPdf, addWriteLine, addProblem,
   addStepInstructions, addTipBox, addPdfFooter,
-  addLinedArea, addTwoColumnOrganiser,
+  addLinedArea, addTwoColumnOrganiser, addCycleDiagramPdf, addPosterMockupPdf, addPosterPairPdf,
   // PPTX integration
   addResourceSlide,
 };

@@ -1,6 +1,6 @@
 © 2026 James Hooke. Confidential. Internal use only. Not for redistribution.
 
-# Explicit Teaching Mega-Prompt v7.0
+# Explicit Teaching Mega-Prompt v7.1
 ## With Integrated Lesson Planning QA & Slide Teacher Notes System
 
 ---

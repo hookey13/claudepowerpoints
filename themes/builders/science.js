@@ -10,9 +10,15 @@ const { SAFE_BOTTOM, CONTENT_TOP } = require("../core/layout");
  * @param {string} FONT_H  Heading font name
  * @param {string} FONT_B  Body font name
  * @param {object} el      Bound element helpers: addTopBar, addBadge, addTitle, addCard, addFooter, addIconCircle, addTextOnShape
- * @returns {object}        { experimentSlide, observationSlide, conclusionSlide }
+ * @returns {object}        { experimentSlide, observationSlide, conclusionSlide, processFlowSlide, cycleDiagramSlide }
  */
 function createScienceBuilders(C, FONT_H, FONT_B, el) {
+  function drawArrowSegment(slide, x1, y1, x2, y2, color) {
+    slide.addShape("line", {
+      x: x1, y: y1, w: x2 - x1, h: y2 - y1,
+      line: { color, width: 1.4, beginArrowType: "none", endArrowType: "triangle" },
+    });
+  }
 
   /* ------------------------------------------------------------------ */
   /*  experimentSlide                                                    */
@@ -254,10 +260,206 @@ function createScienceBuilders(C, FONT_H, FONT_B, el) {
   }
 
   /* ------------------------------------------------------------------ */
+  /*  processFlowSlide                                                   */
+  /* ------------------------------------------------------------------ */
+
+  /**
+   * Ordered process / system slide with an instruction card on the left
+   * and a numbered flow on the right. Designed for journeys, cycles,
+   * organs in order, life cycles, and other science sequences where a
+   * visual anchor should carry the concept.
+   *
+   * @param {object} pres
+   * @param {string} badgeText
+   * @param {string} title
+   * @param {string} promptTitle
+   * @param {string[]} promptLines
+   * @param {{label:string, detail:string, color?:string}[]} steps
+   * @param {string} notes
+   * @param {string} footer
+   * @returns {object}
+   */
+  function processFlowSlide(pres, badgeText, title, promptTitle, promptLines, steps, notes, footer) {
+    const s = pres.addSlide();
+    el.addTopBar(s, C.SECONDARY);
+    el.addBadge(s, badgeText || "Process", { color: C.SUCCESS });
+    el.addTitle(s, title);
+
+    const promptItems = [{ text: promptTitle || "Think together", role: "header" }];
+    (promptLines || []).forEach((line, index) => {
+      promptItems.push({ text: "", role: "spacer" });
+      promptItems.push({
+        text: line,
+        role: index === (promptLines || []).length - 1 && /seconds|minutes|now/i.test(String(line || "")) ? "emphasis" : "body",
+      });
+    });
+
+    el.addInstructionCard(s, promptItems, {
+      x: 0.5, y: CONTENT_TOP, w: 4.2, h: 2.55,
+      strip: C.SECONDARY, fill: C.WHITE,
+    });
+
+    const flowX = 5.0;
+    const flowY = CONTENT_TOP;
+    const flowW = 4.5;
+    const flowH = 3.55;
+    el.addCard(s, flowX, flowY, flowW, flowH, { strip: C.PRIMARY, fill: C.WHITE });
+    s.addText("Process flow", {
+      x: flowX + 0.22, y: flowY + 0.08, w: 2.4, h: 0.24,
+      fontSize: 12, fontFace: FONT_H, color: C.PRIMARY, bold: true, margin: 0,
+    });
+
+    const safeSteps = (steps || []).slice(0, 6);
+    const chipPalette = [C.PRIMARY, C.SECONDARY, C.ACCENT, C.ALERT, C.SUCCESS, C.PRIMARY];
+    const rowGap = 0.10;
+    const rowH = Math.min(0.50, (flowH - 0.62 - rowGap * Math.max(safeSteps.length - 1, 0)) / Math.max(safeSteps.length, 1));
+
+    safeSteps.forEach((step, index) => {
+      const rowY = flowY + 0.42 + index * (rowH + rowGap);
+      const chipColor = step && step.color ? step.color : chipPalette[index];
+      el.addTextOnShape(s, `${index + 1}. ${String((step && step.label) || "")}`, {
+        x: flowX + 0.20, y: rowY, w: 1.75, h: 0.34, rectRadius: 0.06,
+        fill: { color: chipColor },
+      }, {
+        fontSize: 10, fontFace: FONT_B, color: C.WHITE, bold: true,
+      });
+      s.addText(String((step && step.detail) || ""), {
+        x: flowX + 2.05, y: rowY - 0.01, w: 2.18, h: 0.38,
+        fontSize: 10.5, fontFace: FONT_B, color: C.CHARCOAL,
+        margin: 0, valign: "middle", fit: "shrink", shrinkText: true,
+      });
+      if (index < safeSteps.length - 1) {
+        s.addShape("line", {
+          x: flowX + 1.05, y: rowY + 0.36, w: 0, h: rowGap + 0.06,
+          line: { color: C.MUTED, width: 1.2, beginArrowType: "none", endArrowType: "triangle" },
+        });
+      }
+    });
+
+    if (footer) el.addFooter(s, footer);
+    if (notes) s.addNotes(notes);
+    return s;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  cycleDiagramSlide                                                  */
+  /* ------------------------------------------------------------------ */
+
+  /**
+   * Cycle diagram slide with a prompt card on the left and a proper
+   * labelled cycle on the right. Designed for water cycles, rock cycles,
+   * life cycles, seasons, and any science content where the return-loop
+   * matters conceptually.
+   *
+   * @param {object} pres
+   * @param {string} badgeText
+   * @param {string} title
+   * @param {string} promptTitle
+   * @param {string[]} promptLines
+   * @param {string} centerLabel
+   * @param {{label:string, detail:string, color?:string}[]} steps
+   * @param {string} notes
+   * @param {string} footer
+   * @returns {object}
+   */
+  function cycleDiagramSlide(pres, badgeText, title, promptTitle, promptLines, centerLabel, steps, notes, footer) {
+    const s = pres.addSlide();
+    el.addTopBar(s, C.SECONDARY);
+    el.addBadge(s, badgeText || "Cycle", { color: C.SUCCESS });
+    el.addTitle(s, title);
+
+    const promptItems = [{ text: promptTitle || "With your partner", role: "header" }];
+    (promptLines || []).forEach((line, index) => {
+      promptItems.push({ text: "", role: "spacer" });
+      promptItems.push({
+        text: line,
+        role: index === (promptLines || []).length - 1 && /seconds|minutes|now/i.test(String(line || "")) ? "emphasis" : "body",
+      });
+    });
+
+    el.addInstructionCard(s, promptItems, {
+      x: 0.5, y: CONTENT_TOP, w: 3.6, h: 2.65,
+      strip: C.SECONDARY, fill: C.WHITE,
+    });
+
+    const cardX = 4.35;
+    const cardY = CONTENT_TOP;
+    const cardW = 5.15;
+    const cardH = 3.65;
+    el.addCard(s, cardX, cardY, cardW, cardH, { strip: C.PRIMARY, fill: C.WHITE });
+
+    const cx = cardX + 2.58;
+    const cy = cardY + 1.48;
+    const orbitX = 1.45;
+    const orbitY = 0.76;
+    const safeSteps = (steps || []).slice(0, 4);
+    const palette = [C.PRIMARY, C.SECONDARY, C.ACCENT, C.SUCCESS];
+    const positions = [
+      { x: cx, y: cy - orbitY - 0.24 },
+      { x: cx + orbitX, y: cy },
+      { x: cx, y: cy + orbitY + 0.22 },
+      { x: cx - orbitX, y: cy },
+    ];
+
+    el.addTextOnShape(s, centerLabel || "Cycle", {
+      x: cx - 0.62, y: cy - 0.32, w: 1.24, h: 0.64, rectRadius: 0.12,
+      fill: { color: C.BG_LIGHT },
+      line: { color: C.PRIMARY, width: 1.2 },
+    }, {
+      fontSize: 13, fontFace: FONT_H, color: C.PRIMARY, bold: true,
+    });
+
+    safeSteps.forEach((step, index) => {
+      const pos = positions[index];
+      const color = step && step.color ? step.color : palette[index];
+      el.addTextOnShape(s, `${index + 1}. ${String((step && step.label) || "")}`, {
+        x: pos.x - 0.7, y: pos.y - 0.18, w: 1.4, h: 0.36, rectRadius: 0.08,
+        fill: { color },
+      }, {
+        fontSize: 10.2, fontFace: FONT_B, color: C.WHITE, bold: true,
+      });
+    });
+
+    if (safeSteps.length >= 4) {
+      drawArrowSegment(s, cx - 0.25, cy - orbitY + 0.1, cx + orbitX - 0.75, cy - 0.08, C.MUTED);
+      drawArrowSegment(s, cx + orbitX - 0.18, cy + 0.28, cx + 0.28, cy + orbitY + 0.18, C.MUTED);
+      drawArrowSegment(s, cx - 0.22, cy + orbitY + 0.25, cx - orbitX + 0.7, cy + 0.12, C.MUTED);
+      drawArrowSegment(s, cx - orbitX + 0.1, cy - 0.28, cx - 0.25, cy - orbitY + 0.02, C.MUTED);
+    }
+
+    const legendY = cardY + 2.72;
+    const legendW = 2.08;
+    const legendH = 0.42;
+    const legendGapX = 0.18;
+    const legendGapY = 0.12;
+    safeSteps.forEach((step, index) => {
+      const row = Math.floor(index / 2);
+      const col = index % 2;
+      const lx = cardX + 0.24 + col * (legendW + legendGapX);
+      const ly = legendY + row * (legendH + legendGapY);
+      const color = step && step.color ? step.color : palette[index];
+      s.addShape("roundRect", {
+        x: lx, y: ly, w: legendW, h: legendH, rectRadius: 0.06,
+        fill: { color: C.BG_LIGHT },
+        line: { color, width: 1.0 },
+      });
+      s.addText(String((step && step.detail) || ""), {
+        x: lx + 0.08, y: ly + 0.07, w: legendW - 0.16, h: legendH - 0.14,
+        fontSize: 9.4, fontFace: FONT_B, color: C.CHARCOAL,
+        margin: 0, align: "center", fit: "shrink", shrinkText: true,
+      });
+    });
+
+    if (footer) el.addFooter(s, footer);
+    if (notes) s.addNotes(notes);
+    return s;
+  }
+
+  /* ------------------------------------------------------------------ */
   /*  Return all builders                                                */
   /* ------------------------------------------------------------------ */
 
-  return { experimentSlide, observationSlide, conclusionSlide };
+  return { experimentSlide, observationSlide, conclusionSlide, processFlowSlide, cycleDiagramSlide };
 }
 
 module.exports = { createScienceBuilders };

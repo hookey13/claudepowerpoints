@@ -13,6 +13,7 @@ const NOTE_SECTION_HEADERS = [
   "MISCONCEPTIONS",
   "SENSITIVITY ADVISORY",
   "WATCH FOR",
+  "SOURCES",
 ];
 
 const ASCII_REPLACEMENTS = [
@@ -170,7 +171,7 @@ function getTeacherNotesSourceIssues(notes, opts) {
   const sections = parseNotesSections(raw);
 
   if (o.checkMarkdownHeaders !== false &&
-      /\*\*(?:SAY|DO|PACING OVERVIEW|CFU CHECKPOINT|TEACHER NOTES|ENABLING & EXTENDING|MISCONCEPTIONS|SENSITIVITY ADVISORY|WATCH FOR):\*\*/i.test(raw)) {
+      /\*\*(?:SAY|DO|PACING OVERVIEW|CFU CHECKPOINT|TEACHER NOTES|ENABLING & EXTENDING|MISCONCEPTIONS|SENSITIVITY ADVISORY|WATCH FOR|SOURCES):\*\*/i.test(raw)) {
     issues.push("markdown note headers are not allowed");
   }
 
@@ -323,6 +324,58 @@ function toArray(values) {
   return Array.isArray(values) ? values : [values];
 }
 
+function stripSourcesSection(notes) {
+  const sanitized = sanitizeTeacherNotes(notes || "");
+  if (!sanitized) return "";
+
+  const lines = sanitized.split("\n");
+  const nextLines = [];
+  let inSources = false;
+
+  lines.forEach((line) => {
+    const trimmed = line.trim();
+    if (trimmed === "SOURCES:") {
+      inSources = true;
+      return;
+    }
+
+    if (inSources && HEADER_PATTERN.test(trimmed.replace(/:$/, ""))) {
+      inSources = false;
+    }
+
+    if (!inSources) {
+      nextLines.push(line);
+    }
+  });
+
+  while (nextLines.length > 0 && nextLines[nextLines.length - 1] === "") {
+    nextLines.pop();
+  }
+
+  return nextLines.join("\n");
+}
+
+function appendSourcesToNotes(notes, sources) {
+  const cleanedNotes = stripSourcesSection(notes);
+  const existingSections = parseNotesSections(notes);
+  const existingSources = existingSections
+    .filter((section) => section.name === "SOURCES:")
+    .flatMap((section) => section.lines)
+    .map((line) => line.replace(/^\s*-\s*/, "").trim())
+    .filter(Boolean);
+  const nextSources = toArray(sources)
+    .map((source) => cleanTargetText(source))
+    .filter(Boolean);
+  const combined = [...new Set([...existingSources, ...nextSources])];
+  if (combined.length === 0) {
+    return sanitizeTeacherNotes(cleanedNotes);
+  }
+
+  const sourceBlock = ["SOURCES:", ...combined.map((source) => `- ${source}`)].join("\n");
+  const joined = cleanedNotes ? `${cleanedNotes}\n\n${sourceBlock}` : sourceBlock;
+  return sanitizeTeacherNotes(joined);
+}
+
 function normalizeLessonTargets(liItems, scItems) {
   const li = toArray(liItems).map(cleanTargetText).filter(Boolean);
   const sc = toArray(scItems).map(cleanTargetText).filter(Boolean);
@@ -388,5 +441,6 @@ module.exports = {
   rewriteNotesSlideXml,
   rewriteSpeakerNotesInFile,
   normalizeLessonTargets,
+  appendSourcesToNotes,
   installNotesPatch,
 };

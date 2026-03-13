@@ -645,11 +645,11 @@
 
                 <div class="card-actions">
                     <div class="action-group">
-                        <button type="button" id="copy-claude" class="btn btn-blue" title="Copies the complete megaprompt with your fields filled in">
+                        <button type="button" id="copy-claude" class="btn btn-blue" title="Copies the runtime spine and complete megaprompt with your fields filled in">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                             <span>Copy for Claude</span>
                         </button>
-                        <button type="button" id="copy-chatgpt" class="btn btn-purple" title="Copies CLAUDE.md first, then the complete megaprompt">
+                        <button type="button" id="copy-chatgpt" class="btn btn-purple" title="Copies CLAUDE.md, the runtime spine, then the complete megaprompt">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                             <span>Copy for ChatGPT</span>
                         </button>
@@ -686,9 +686,10 @@
 
     <script src="prompt_builder_data.js"></script>
     <script>
-        (function () {
+        (async function () {
             /* ── Data ── */
-            var data = window.PROMPT_BUILDER_DATA || null;
+            var data = null;
+            var dataMode = "unknown";
             var previewEl = document.getElementById("preview");
             var missingDataEl = document.getElementById("missing-data");
             var sourceStatusEl = document.getElementById("source-status");
@@ -735,6 +736,107 @@
             };
 
             var saveTimer = null;
+
+            function getBundledPromptData() {
+                return window.PROMPT_BUILDER_DATA || null;
+            }
+
+            function getNodeRequire() {
+                if (typeof window.require === "function") {
+                    return window.require;
+                }
+                return null;
+            }
+
+            function canReadLiveFilesWithNode() {
+                return Boolean(getNodeRequire()) && window.location.protocol === "file:";
+            }
+
+            function canReadLiveFilesWithFetch() {
+                return typeof window.fetch === "function";
+            }
+
+            function updateSourceStatus() {
+                if (!sourceStatusEl) return;
+                if (dataMode === "live-node" || dataMode === "live-fetch") {
+                    sourceStatusEl.textContent = "live from source files";
+                    return;
+                }
+                var generatedLabel = data ? formatGeneratedAt(data.generatedAt) : "";
+                sourceStatusEl.textContent = generatedLabel
+                    ? "snapshot synced " + generatedLabel
+                    : "snapshot loaded";
+            }
+
+            async function readLivePromptDataWithNode() {
+                var nodeRequire = getNodeRequire();
+                if (!nodeRequire) {
+                    throw new Error("Node file access is unavailable.");
+                }
+                var fs = nodeRequire("fs");
+                var path = nodeRequire("path");
+                var url = nodeRequire("url");
+                var htmlPath = url.fileURLToPath(window.location.href);
+                var rootDir = path.dirname(htmlPath);
+
+                function readText(fileName) {
+                    return fs.readFileSync(path.join(rootDir, fileName), "utf8").replace(/^\uFEFF/, "");
+                }
+
+                return {
+                    generatedAt: new Date().toISOString(),
+                    claude: readText("CLAUDE.md"),
+                    megaprompt: readText("megapromptlean.md"),
+                    runtimeSpine: readText("runtime_spine.md")
+                };
+            }
+
+            async function readLivePromptDataWithFetch() {
+                async function readText(fileName) {
+                    var response = await fetch(fileName + "?t=" + Date.now(), { cache: "no-store" });
+                    if (!response.ok) {
+                        throw new Error("Failed to load " + fileName + ".");
+                    }
+                    return response.text();
+                }
+
+                var parts = await Promise.all([
+                    readText("CLAUDE.md"),
+                    readText("megapromptlean.md"),
+                    readText("runtime_spine.md")
+                ]);
+
+                return {
+                    generatedAt: new Date().toISOString(),
+                    claude: parts[0].replace(/^\uFEFF/, ""),
+                    megaprompt: parts[1].replace(/^\uFEFF/, ""),
+                    runtimeSpine: parts[2].replace(/^\uFEFF/, "")
+                };
+            }
+
+            async function refreshPromptData() {
+                try {
+                    if (canReadLiveFilesWithNode()) {
+                        data = await readLivePromptDataWithNode();
+                        dataMode = "live-node";
+                        updateSourceStatus();
+                        return data;
+                    }
+                    if (canReadLiveFilesWithFetch()) {
+                        data = await readLivePromptDataWithFetch();
+                        dataMode = "live-fetch";
+                        updateSourceStatus();
+                        return data;
+                    }
+                } catch (error) {
+                    console.warn("Prompt Builder live source load failed:", error);
+                }
+
+                data = getBundledPromptData();
+                dataMode = data ? "snapshot" : "missing";
+                updateSourceStatus();
+                return data;
+            }
 
             /* ── Toast ── */
             function showToast(kind, message) {
@@ -861,9 +963,31 @@
                 return template;
             }
 
+            function buildRuntimeSpine() {
+                if (!data || !data.runtimeSpine) return "";
+                return String(data.runtimeSpine).trim();
+            }
+
+            function joinPromptSections(parts) {
+                return parts.filter(function (part) {
+                    return Boolean(part && String(part).trim());
+                }).join("\r\n\r\n");
+            }
+
+            function buildClaudePrompt() {
+                return joinPromptSections([
+                    buildRuntimeSpine(),
+                    buildMegaPrompt()
+                ]);
+            }
+
             function buildChatGptPrompt() {
                 if (!data || !data.claude) return "";
-                return data.claude + "\r\n\r\n" + buildMegaPrompt();
+                return joinPromptSections([
+                    data.claude,
+                    buildRuntimeSpine(),
+                    buildMegaPrompt()
+                ]);
             }
 
             function buildUserSectionPreview() {
@@ -1011,19 +1135,13 @@
 
             /* ══════════ Init ══════════ */
 
-            if (!data || !data.megaprompt || !data.claude) {
+            await refreshPromptData();
+
+            if (!data || !data.megaprompt || !data.claude || !data.runtimeSpine) {
                 missingDataEl.style.display = "block";
-                missingDataEl.textContent = "Missing prompt data. Run `node scripts/generate_prompt_builder_data.js` from the project root, then refresh this page.";
+                missingDataEl.textContent = "Missing prompt data. Keep `CLAUDE.md`, `megapromptlean.md`, and `runtime_spine.md` beside this HTML file, or regenerate `prompt_builder_data.js` from the project root.";
                 showToast("bad", "Prompt data not loaded.");
                 return;
-            }
-
-            /* Source status */
-            if (sourceStatusEl) {
-                var generatedLabel = formatGeneratedAt(data.generatedAt);
-                sourceStatusEl.textContent = generatedLabel
-                    ? "synced " + generatedLabel
-                    : "run sync script after edits";
             }
 
             /* Load saved values (before applying defaults) */
@@ -1075,22 +1193,24 @@
 
             /* Copy Claude */
             var claudeBtn = document.getElementById("copy-claude");
-            claudeBtn.addEventListener("click", function () {
+            claudeBtn.addEventListener("click", async function () {
                 if (!validateDeckCountField(true)) {
                     showToast("bad", "Enter a whole number for slide decks.");
                     return;
                 }
-                copyText(buildMegaPrompt(), "Claude prompt copied.", claudeBtn);
+                await refreshPromptData();
+                copyText(buildClaudePrompt(), "Claude prompt copied.", claudeBtn);
             });
 
             /* Copy ChatGPT */
             var chatgptBtn = document.getElementById("copy-chatgpt");
-            chatgptBtn.addEventListener("click", function () {
+            chatgptBtn.addEventListener("click", async function () {
                 if (!validateDeckCountField(true)) {
                     showToast("bad", "Enter a whole number for slide decks.");
                     return;
                 }
-                copyText(buildChatGptPrompt(), "ChatGPT prompt copied (with CLAUDE.md).", chatgptBtn);
+                await refreshPromptData();
+                copyText(buildChatGptPrompt(), "ChatGPT prompt copied (with CLAUDE.md and runtime spine).", chatgptBtn);
             });
 
             /* Copy preview */
@@ -1121,6 +1241,10 @@
 
             /* Initial render */
             refreshPreview();
+
+            window.addEventListener("focus", function () {
+                refreshPromptData();
+            });
 
             if (hadSaved) {
                 showToast("good", "Fields restored from last session.");
