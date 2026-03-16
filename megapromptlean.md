@@ -1030,6 +1030,18 @@ pairs when hiding the answer clearly improves thinking more than it slows pacing
 - **Hinge questions:** The answer and explanation are hidden until after
   the teacher has gathered student responses and made a proceed/pivot
   decision.
+- **Daily Review slides (Maths — mandatory):** Every Daily Review slide
+  MUST use `withReveal` for a tick-and-fix cycle. Slide 1 shows only the
+  questions/prompts — students attempt them on whiteboards or in books.
+  Slide 2 (the reveal) shows the same layout PLUS the correct answers,
+  so students can instantly tick correct responses and fix errors. This
+  gives students immediate feedback on prior-learning retrieval without
+  needing the teacher to read out every answer. The reveal slide's
+  teacher notes should include:
+  `DO: Click to next slide to show answers. Students tick correct
+  responses and fix any errors. Scan for common mistakes.`
+  `SAY: "Check your answers — tick if you got it right, fix it if you
+  didn't. Fixing it is the learning."`
 - **Vocabulary slides with definitions:** Do not default to reveal pairs.
   Use a reveal only if the teacher genuinely wants students to commit to a
   meaning before seeing the definition.
@@ -1042,8 +1054,9 @@ pairs when hiding the answer clearly improves thinking more than it slows pacing
 - **Exit ticket / You Do slides:** Students work independently; everything
   they need is visible from the start.
 - **Title, LI/SC, and closing slides:** No hidden content.
-- **Review / Daily Review slides:** Content is being recalled, not tested
-  — answers are discussed as they go.
+- **Review / Daily Review slides:** See below — Daily Review uses a
+  mandatory tick-and-fix reveal pattern (questions → answers). Do NOT
+  skip the reveal for DR slides.
 
 **I Do vs We Do — the key distinction:**
 
@@ -1854,7 +1867,8 @@ Follow this systematic approach when providing guidance:
 
     1. **Title Slide** — lesson title, subtitle, metadata
     2. **Daily Review** (Stage 1) — 1–2 slides, content from user-provided DR
-       topic. Reviews PRIOR learning only. See #TASK_CRITERIA item 10.
+       topic. Reviews PRIOR learning only. Each DR slide uses `withReveal`
+       for tick-and-fix (questions → answers). See #TASK_CRITERIA item 10.
     3. **Fluency** (Stage 1) — 1–2 slides. Number & Algebra skill-based
        activity building automaticity. NOT the Daily Review. Selected based
        on cohort needs. See #FLUENCY.
@@ -2127,6 +2141,8 @@ Preparation:
 ☐ If the I Can statement specifies a representation (table, array, number line, etc.),
    that representation appears on the DR slide — not a simplified substitute
 ☐ Students have multiple opportunities to respond (e.g. whiteboards, choral response)
+☐ Every DR slide uses `withReveal` for tick-and-fix: questions only on slide 1,
+   answers revealed on slide 2 so students self-check and correct errors immediately
 ☐ Teacher checks for understanding and addresses misconceptions from review content
 
 **FLUENCY** (separate phase — NOT part of Daily Review. See #FLUENCY)
