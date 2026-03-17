@@ -1070,6 +1070,34 @@ defeats this — students read instead of think. This is where `withReveal`
 is essential. If you are building a We Do slide where the teacher will ask
 students to produce answers, those answers must be hidden until revealed.
 
+**We Do vs You Do — the key distinction:**
+
+The We Do is guided practice: students attempt the skill with teacher support,
+shared discussion, and scaffolding still visible. The You Do is independent
+application: students apply the skill to NEW content without teacher narration.
+
+The critical design rule: the You Do MUST present different content from the
+We Do. If students combine the same five sentences with the same constraints
+in both We Do and You Do, the You Do is just a solo repeat — not independent
+application. Changing only the mode (partner → individual) is not sufficient
+differentiation.
+
+To differentiate You Do from We Do, change at least one of:
+- **Different source material** — new sentences, a different text extract, a
+  different problem set, a different character or scene
+- **Increased complexity** — more constraints, longer text, less scaffolding
+  visible on the slide
+- **Transfer to a new context** — same skill applied to a different topic,
+  scenario, or text type
+- **Different task format** — e.g., We Do is co-construction with the teacher,
+  You Do is independent transformation or application
+
+The strongest You Do tasks change the content AND slightly increase the
+challenge, so students must genuinely transfer the skill rather than recall
+the We Do answer. If the We Do and You Do look interchangeable — same text,
+same prompt, same constraints — the lesson has not released responsibility,
+it has just removed support.
+
 **Formatting the reveal content:**
 
 The revealed content should be visually distinct from the question content
@@ -2104,6 +2132,14 @@ Follow this systematic approach when providing guidance:
     routine. A closing slide that summarises lesson events without
     connecting to the SC is incomplete. See #CLOSING_SLIDE.
 
+27. **We Do and You Do must use different content — not the same task repeated:**
+    The You Do must present different source material, increased complexity, or
+    a new context compared to the We Do. If both stages use the same text, same
+    examples, and same constraints, the You Do is just a solo repeat of the
+    We Do — it has not released responsibility, it has just removed support.
+    See the "We Do vs You Do — the key distinction" section under
+    #CLICK_TO_REVEAL for the full differentiation framework.
+
 #LESSON_PLANNING_QUALITY_ASSURANCE:
 
 ==========================================================================
@@ -2196,6 +2232,8 @@ VTLM 2.0: Monitor Progress (Check for Understanding)
 **SUMMARISE — INDEPENDENT PRACTICE (You Do)**
 VTLM 2.0: Supported Application
 ☐ Students practise the skill independently
+☐ You Do content/examples are different from the We Do — not the same task
+  with the same material repeated in solo mode
 ☐ Clear instructions are provided in First, Next, Then language
 ☐ Tasks are accessible for all students via enabling prompts, task complexity or added steps
 ☐ Scaffolds and templates are available where needed
