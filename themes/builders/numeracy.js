@@ -20,11 +20,19 @@ function createNumeracyBuilders(C, FONT_H, FONT_B, el) {
   /* ------------------------------------------------------------------ */
 
   const STAGE_COLORS = {
-    "1": C.ACCENT,                   // Activate Prior Knowledge
-    "2": C.PRIMARY,                  // Explicit Instruction (I Do)
-    "3": C.SECONDARY,               // Guided Practice (We Do)
-    "4": C.ALERT,                   // Independent Practice (You Do)
+    "1": C.ACCENT,                   // Daily Review / Fluency
+    "2": C.PRIMARY,                  // I Do
+    "3": C.SECONDARY,               // We Do
+    "4": C.ALERT,                   // You Do
     "5": C.ASSESS || C.ALERT,       // Exit Ticket
+  };
+
+  const STAGE_LABELS = {
+    "1": "Daily Review",
+    "2": "I Do",
+    "3": "We Do",
+    "4": "You Do",
+    "5": "Exit Ticket",
   };
 
   /* ------------------------------------------------------------------ */
@@ -39,13 +47,14 @@ function createNumeracyBuilders(C, FONT_H, FONT_B, el) {
    * @param {string} label     Stage label text
    */
   function addStageBadge(slide, stageNum, label) {
+    const resolvedLabel = label || STAGE_LABELS[String(stageNum)] || "Stage " + stageNum;
     const color = STAGE_COLORS[String(stageNum)] || C.PRIMARY;
-    const w = label.length > 20 ? 3.2 : 2.4;
+    const w = resolvedLabel.length > 20 ? 3.2 : 2.4;
     slide.addShape("roundRect", {
       x: 0.5, y: 0.2, w, h: 0.36, rectRadius: 0.08,
       fill: { color },
     });
-    slide.addText("Stage " + stageNum + "  |  " + label, {
+    slide.addText("Stage " + stageNum + "  |  " + resolvedLabel, {
       x: 0.5, y: 0.2, w, h: 0.36,
       fontSize: 10, fontFace: FONT_B, color: C.WHITE,
       align: "center", valign: "middle", bold: true, margin: 0,
@@ -455,6 +464,7 @@ function createNumeracyBuilders(C, FONT_H, FONT_B, el) {
 
   return {
     STAGE_COLORS,
+    STAGE_LABELS,
     addStageBadge,
     workedExSlide,
     exitTicketSlide,
