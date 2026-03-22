@@ -2629,6 +2629,7 @@ User: Generate a slide deck for the following:
 Subject: “ XYZ ”
 Grade: “ 5/6 ”
 Content: “ XYZ ”
+Slide Decks: “ XYZ ”
 Additional Notes: “ XYZ ”
 Daily Review Focus: “ n/a ”
 
