@@ -29,6 +29,8 @@
 
 var SEARCH_SUBFOLDERS = true;  // Set to true to also search subfolders for PDFs
 var LINK_MODE = "view";        // "view" = read-only link, "edit" = editable link
+var SEARCH_PRESENTATION_SUBFOLDERS = false; // Set to true to also search subfolders for source decks
+var IMPORT_SLIDES_AS_LINKED = false;        // true = keep imported slides linked to the source deck
 
 // ── Main entry point ────────────────────────────────────────────────────────
 
@@ -173,6 +175,26 @@ function linkResources() {
   }
 
   ui.alert("Results", report, ui.ButtonSet.OK);
+}
+
+/**
+ * Merge all Google Slides presentations from a Drive folder into the current deck.
+ * Source files are imported in natural filename order.
+ */
+function mergeDecksIntoCurrentPresentation() {
+  var result = promptAndMergeDecks_();
+  if (!result) return;
+  showMergeReport_(result);
+}
+
+/**
+ * Merge source decks first, then run the existing resource-link updater.
+ */
+function mergeDecksAndLinkResources() {
+  var result = promptAndMergeDecks_();
+  if (!result) return;
+  showMergeReport_(result);
+  linkResources();
 }
 
 // ── Helper functions ────────────────────────────────────────────────────────
@@ -329,6 +351,201 @@ function truncate(str, maxLen) {
   return str.substring(0, maxLen - 3) + "...";
 }
 
+/**
+ * Prompt for a Drive folder and merge all Google Slides presentations found there.
+ * Returns a summary object or null if the user cancels.
+ */
+function promptAndMergeDecks_() {
+  var ui = SlidesApp.getUi();
+  var response = ui.prompt(
+    "Merge Lesson Decks",
+    "Paste the Google Drive folder URL or folder ID that contains the source Google Slides decks:\n\n" +
+    "(Files are imported in natural filename order, for example Session 1, Session 2, ... Session 10.)",
+    ui.ButtonSet.OK_CANCEL
+  );
+
+  if (response.getSelectedButton() !== ui.Button.OK) {
+    return null;
+  }
+
+  var input = response.getResponseText().trim();
+  var folderId = extractFolderId(input);
+  if (!folderId) {
+    ui.alert("Error", "Could not extract a folder ID from your input. Please provide a valid Google Drive folder URL or ID.", ui.ButtonSet.OK);
+    return null;
+  }
+
+  var folder;
+  try {
+    folder = DriveApp.getFolderById(folderId);
+  } catch (e) {
+    ui.alert("Error", "Could not access folder: " + e.message + "\n\nMake sure you have access to the folder and the ID is correct.", ui.ButtonSet.OK);
+    return null;
+  }
+
+  var sourceFiles = collectPresentationFiles_(folder);
+  if (sourceFiles.length === 0) {
+    ui.alert(
+      "No Google Slides Decks Found",
+      "No Google Slides presentations were found in folder: " + folder.getName() + "\n\n" +
+      "Upload or convert the source PPTX files to Google Slides first, then run the merge again.",
+      ui.ButtonSet.OK
+    );
+    return null;
+  }
+
+  sourceFiles.sort(compareDriveFilesByName_);
+
+  var presentation = SlidesApp.getActivePresentation();
+  var existingSlides = presentation.getSlides().slice();
+  var replaceCurrentSlides = false;
+
+  if (existingSlides.length > 0) {
+    var replaceResponse = ui.alert(
+      "Replace Current Slides?",
+      "Yes: import the source decks, then remove the slides currently in this presentation.\n" +
+      "No: keep the current slides and append the imported decks after them.",
+      ui.ButtonSet.YES_NO_CANCEL
+    );
+
+    if (replaceResponse === ui.Button.CANCEL) {
+      return null;
+    }
+
+    replaceCurrentSlides = replaceResponse === ui.Button.YES;
+  }
+
+  var importedDeckNames = [];
+  var skippedDeckNames = [];
+  var importedDeckCount = 0;
+  var importedSlideCount = 0;
+
+  for (var i = 0; i < sourceFiles.length; i++) {
+    var file = sourceFiles[i];
+
+    if (file.id === presentation.getId()) {
+      skippedDeckNames.push(file.name + " (current target presentation)");
+      continue;
+    }
+
+    var sourcePresentation;
+    try {
+      sourcePresentation = SlidesApp.openById(file.id);
+    } catch (e) {
+      skippedDeckNames.push(file.name + " (could not open: " + e.message + ")");
+      continue;
+    }
+
+    var sourceSlides = sourcePresentation.getSlides();
+    if (sourceSlides.length === 0) {
+      skippedDeckNames.push(file.name + " (no slides)");
+      continue;
+    }
+
+    for (var s = 0; s < sourceSlides.length; s++) {
+      if (IMPORT_SLIDES_AS_LINKED) {
+        presentation.appendSlide(sourceSlides[s], SlidesApp.SlideLinkingMode.LINKED);
+      } else {
+        presentation.appendSlide(sourceSlides[s]);
+      }
+      importedSlideCount++;
+    }
+
+    importedDeckCount++;
+    importedDeckNames.push(file.name + " (" + sourceSlides.length + " slides)");
+  }
+
+  if (replaceCurrentSlides && importedSlideCount > 0) {
+    removeSlides_(existingSlides);
+  }
+
+  return {
+    folderName: folder.getName(),
+    importedDeckCount: importedDeckCount,
+    importedSlideCount: importedSlideCount,
+    importedDeckNames: importedDeckNames,
+    skippedDeckNames: skippedDeckNames,
+    replaceCurrentSlides: replaceCurrentSlides,
+    importSlidesAsLinked: IMPORT_SLIDES_AS_LINKED
+  };
+}
+
+/**
+ * Collect Google Slides files from a folder, optionally including subfolders.
+ */
+function collectPresentationFiles_(folder) {
+  var files = [];
+  collectPresentationFilesInto_(folder, files);
+  return files;
+}
+
+function collectPresentationFilesInto_(folder, files) {
+  var iter = folder.getFiles();
+  while (iter.hasNext()) {
+    var file = iter.next();
+    if (file.getMimeType() === MimeType.GOOGLE_SLIDES) {
+      files.push({
+        id: file.getId(),
+        name: file.getName()
+      });
+    }
+  }
+
+  if (!SEARCH_PRESENTATION_SUBFOLDERS) {
+    return;
+  }
+
+  var subfolders = folder.getFolders();
+  while (subfolders.hasNext()) {
+    collectPresentationFilesInto_(subfolders.next(), files);
+  }
+}
+
+/**
+ * Natural sort for Drive filenames so Session 2 appears before Session 10.
+ */
+function compareDriveFilesByName_(a, b) {
+  return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" });
+}
+
+/**
+ * Remove slides from a presentation after imports succeed.
+ */
+function removeSlides_(slides) {
+  for (var i = 0; i < slides.length; i++) {
+    slides[i].remove();
+  }
+}
+
+/**
+ * Display a merge summary.
+ */
+function showMergeReport_(result) {
+  var ui = SlidesApp.getUi();
+  var report = "Deck Merge Complete\n\n";
+  report += "Source folder: " + result.folderName + "\n";
+  report += "Decks imported: " + result.importedDeckCount + "\n";
+  report += "Slides imported: " + result.importedSlideCount + "\n";
+  report += "Current slides replaced: " + (result.replaceCurrentSlides ? "yes" : "no") + "\n";
+  report += "Import mode: " + (result.importSlidesAsLinked ? "linked" : "standard copy") + "\n\n";
+
+  if (result.importedDeckNames.length > 0) {
+    report += "Imported decks:\n";
+    for (var i = 0; i < result.importedDeckNames.length; i++) {
+      report += "  " + result.importedDeckNames[i] + "\n";
+    }
+  }
+
+  if (result.skippedDeckNames.length > 0) {
+    report += "\nSkipped:\n";
+    for (var j = 0; j < result.skippedDeckNames.length; j++) {
+      report += "  " + result.skippedDeckNames[j] + "\n";
+    }
+  }
+
+  ui.alert("Results", report, ui.ButtonSet.OK);
+}
+
 // ── Menu integration ────────────────────────────────────────────────────────
 
 /**
@@ -337,6 +554,9 @@ function truncate(str, maxLen) {
 function onOpen() {
   SlidesApp.getUi()
     .createMenu("Resource Tools")
+    .addItem("Merge Decks Into This Presentation", "mergeDecksIntoCurrentPresentation")
+    .addItem("Merge Decks + Link Resources", "mergeDecksAndLinkResources")
+    .addSeparator()
     .addItem("Link Resources to Google Drive", "linkResources")
     .addToUi();
 }
