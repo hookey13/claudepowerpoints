@@ -191,6 +191,16 @@ The slide should present the activity clearly with:
 - Visual elements appropriate to the activity (number grids, flash card
   displays, computation chains, etc.)
 
+If the fluency activity has a finite answer set that students will
+self-check against on screen, those answers MUST appear on a separate
+consecutive slide, not on the live task slide. Use `withReveal` or an
+equivalent question → answer pair: slide 1 shows the prompts only, slide 2
+shows the same layout PLUS the answers for tick-and-fix. Do NOT place the
+answer key on the same Fluency slide students are still attempting. A
+single Fluency slide is fine only when the routine is oral/discussion-based
+and does not require an on-screen answer reveal (e.g. counting chant,
+oral number talk).
+
 Teacher notes should include:
 - SAY: Brief launch of the activity ("Let's get our fluency on...")
 - DO: How the activity runs (timing, student response mode, pacing)
@@ -996,6 +1006,9 @@ to a click-to-reveal animation.
 For a lean 60-minute literacy lesson, default to 0-2 reveal pairs total. More
 than that usually means the deck is becoming click-heavy. Only exceed 2 reveal
 pairs when hiding the answer clearly improves thinking more than it slows pacing.
+This literacy default does NOT override mandatory maths reveal patterns:
+Daily Review always uses a reveal pair, and Fluency does too whenever
+students will self-check against displayed answers.
 
 **When to use click-to-reveal (agentic decision — apply your judgement):**
 
@@ -1042,6 +1055,14 @@ pairs when hiding the answer clearly improves thinking more than it slows pacing
   responses and fix any errors. Scan for common mistakes.`
   `SAY: "Check your answers — tick if you got it right, fix it if you
   didn't. Fixing it is the learning."`
+- **Fluency slides with written answers (Maths — mandatory when answers are
+  shown):** If a Fluency routine includes written problems/prompts and the
+  deck will later display correct answers for self-check, those answers
+  MUST be moved to a second consecutive reveal slide. Slide 1 shows only
+  the task. Slide 2 shows the same layout PLUS the answers for
+  tick-and-fix. Do NOT place the answers on the same slide as the active
+  Fluency task. If the Fluency routine is purely oral and no answer set
+  needs to be shown, no reveal slide is required.
 - **Vocabulary slides with definitions:** Do not default to reveal pairs.
   Use a reveal only if the teacher genuinely wants students to commit to a
   meaning before seeing the definition.
@@ -1661,8 +1682,13 @@ criteria or the lesson's core concept — not be a tangential discussion questio
 
 Every lesson that references student resources (worksheets, graphic organisers,
 scaffold cards, answer keys, exit tickets) MUST generate those resources as
-companion PDF files alongside the PPTX slide deck. Teachers should not be
+companion PDF files in a `resources/` subfolder inside the lesson folder that
+also contains the PPTX slide deck. Teachers should not be
 directed to distribute materials that do not exist.
+
+Every slide deck also ends with a "Teacher Resources" slide. This is
+non-negotiable. It is the end-of-deck index for anything the teacher may need
+to print, open in a browser, or project on screen during the session.
 
 **When to generate resources — proactive design, not just reactive triggers:**
 
@@ -1703,7 +1729,8 @@ agentically.
 This is not optional. After ALL slides and teacher notes are written — but
 BEFORE visual QA — run a dedicated resource audit. The audit scans every
 teacher notes section across the entire lesson for references to physical
-materials that have not been generated as PDFs.
+materials that have not been generated as PDFs, plus any digital/web resources
+the teacher needs to open or show on screen.
 
 **What to scan (every section of every slide's teacher notes):**
 
@@ -1723,6 +1750,8 @@ materials that have not been generated as PDFs.
 - "Answer key" / "Worked reference" / "Example answer"
 - "Exit ticket on paper" (not in workbooks)
 - "Session 1 Worksheet" / "Session 2 Answer Key"
+- "Go to the article..." / "Open the website..." / "Use the link..."
+- "Show on screen..." / "Project..." / "Display the resource..."
 
 **EXTENDING-specific triggers (scan every EXTENDING note separately):**
 - "Investigate..." / "Explore..." / "Research..." / "Discover..."
@@ -1734,6 +1763,10 @@ materials that have not been generated as PDFs.
   generating one. The teacher is not available to explain new concepts.
 
 **If a trigger is found and no corresponding PDF exists, generate it.**
+
+If the trigger refers to a website, article, video, or other digital resource,
+do not invent a PDF. Instead, add that item to the "Teacher Resources" slide
+and name it clearly so the teacher can find and use it immediately.
 
 Do not rationalise it away ("the teacher can make their own table"). If you
 wrote the ENABLING note, you created the obligation. The teacher reading that
@@ -1753,6 +1786,7 @@ Mode 2 ensures nothing slips through.
 | "Exit ticket on paper" | Printable exit ticket PDF |
 | Vocabulary cards / flashcards | Vocabulary card sheet PDF |
 | "Printed copy of [text/passage]" | Source text handout PDF (if not copyrighted) |
+| "Go to the article" / "Open the website" / "Project the source" | Teacher Resources slide entry with a clear title, usage note, and the exact URL if one was supplied by the user |
 | **EXTENDING note introduces a new concept** | **Self-contained investigation PDF** — must TEACH the concept (explanation + worked examples), then set the task. The student has no teacher support. This is a mini-lesson-on-paper, not a worksheet. See #ENABLING_AND_EXTENDING. |
 
 **How to generate:**
@@ -1764,8 +1798,10 @@ and generates PDFs at the end of the build function, after writing the PPTX.
 Key pattern:
 1. Define resource content alongside slide content in the build script
 2. After `pres.writeFile()`, call resource generation functions
-3. Write PDFs to the same output folder as the PPTX
-4. Add a "Resources" slide to the PPTX with clickable hyperlinks to each PDF
+3. Write PDFs to a single `resources/` subfolder inside the same lesson output
+   folder as the PPTX
+4. Add a "Resources" slide to the PPTX with clickable hyperlinks to each PDF in
+   `resources/`
 
 **Resource quality standards:**
 
@@ -1796,14 +1832,17 @@ student has no teacher available to explain the concept. The PDF must stand alon
 
 **Resource slide:**
 
-Every lesson with companion PDFs includes a "Teacher Resources" slide (typically
-the last or second-to-last slide) listing all PDF files with:
-- Clickable hyperlinks (relative filename paths)
+Every slide deck includes a "Teacher Resources" slide (typically the last or
+second-to-last slide) listing all companion PDFs and any required digital/web
+resources with:
+- Clickable hyperlinks (relative paths into `resources/` for PDFs; direct URLs for websites)
 - Brief description of each resource
 - Teacher notes explaining when/how to use each resource
+- Clear use labels when relevant, such as `Print for students`, `Open in browser`,
+  or `Project on screen`
 
-Resource naming on that slide is non-negotiable:
-- Start every teacher-facing resource name with `Session N`
+Generated resource naming on that slide is non-negotiable:
+- Start every teacher-facing generated file/resource name with `Session N`
 - Match the resource slide card title to the PDF filename stem
 - Use human-readable labels like `Session 1 Worksheet`, `Session 1 Answer Key`,
   `Session 2 Enabling Scaffold`, `Session 3 Extension`
@@ -1811,15 +1850,37 @@ Resource naming on that slide is non-negotiable:
 - Do NOT use code-heavy names such as `WH4_L16`, `SR1`, `GO1`, `EXT1`, `ET_Lesson5`
 - Do NOT use underscores in teacher-facing PDF filenames
 
+**Reference consistency rule — non-negotiable:**
+
+Once a generated resource has a teacher-facing name, every reference to it
+across the slide deck MUST use that exact name. Do not shorten or vary it.
+If the resource is called `Session 5 Worksheet`, then teacher notes, the
+Resources slide, slide instructions, and any related prompts must keep saying
+`Session 5 Worksheet` — not `worksheet`, `the sheet`, or `Session 5 work`.
+
+**Web link rule — non-negotiable:**
+
+If the user provides a website URL anywhere in the prompt, and the lesson tells
+the teacher to use that website, show the exact URL in the output rather than
+writing only vague wording like `go to the article`. At minimum, include the
+title/reference plus the visible URL on the "Teacher Resources" slide and in
+the first teacher-note reference, for example:
+
+- `Open the article (https://example.com/article-title)`
+- `Project this source on screen: https://example.com/source`
+
+Do not invent or guess URLs. If the user supplied a URL, preserve it exactly.
+
 **The non-negotiable rule:**
 
 If a slide's teacher notes say "Distribute X," "Hand out Y," "Provide Z,"
 or "Give [enabling/extending] students [a scaffold/template/table/chart],"
-then that resource MUST exist as a PDF in the lesson folder. This includes
+then that resource MUST exist as a PDF in the lesson folder's `resources/`
+subfolder. This includes
 ENABLING & EXTENDING sections — when you write "Provide a structured factor
 pair table with the first pair pre-filled," you are creating an obligation
 to generate that table as a printable PDF. The teacher reading that note
-expects to find it in the lesson folder. A lesson that references
+expects to find it in that `resources/` subfolder. A lesson that references
 non-existent resources is incomplete. Flag this in the Lesson Health Check
 as a critical gap.
 
@@ -1899,7 +1960,9 @@ Follow this systematic approach when providing guidance:
        for tick-and-fix (questions → answers). See #TASK_CRITERIA item 10.
     3. **Fluency** (Stage 1) — 1–2 slides. Number & Algebra skill-based
        activity building automaticity. NOT the Daily Review. Selected based
-       on cohort needs. See #FLUENCY.
+       on cohort needs. If Fluency answers will be shown on screen for
+       self-check, use a consecutive question slide → answer reveal slide
+       pair rather than placing answers on the same slide. See #FLUENCY.
     4. **LI / SC** — Learning Intention and Success Criteria
     5. **I Do** (Stage 2) — Explicit instruction with worked examples
     6. **CFU checks** — embedded throughout, driving the non-linear GRR
@@ -1914,19 +1977,25 @@ Follow this systematic approach when providing guidance:
     must not be merged into a single slide or section.
 
 9. **Output File Organisation:**
-   Each lesson gets its own subfolder in `output/` containing the PPTX and all
-   companion PDF resources (e.g., `output/Lesson_PV1_Proportional_Materials/`).
+   Each lesson gets its own subfolder in `output/` containing the PPTX, plus a
+   single nested `resources/` subfolder containing all companion PDF resources
+   for all sessions in that lesson output (e.g.,
+   `output/Lesson_PV1_Proportional_Materials/` and
+   `output/Lesson_PV1_Proportional_Materials/resources/`). In total, this
+   creates two folders: the lesson folder and its `resources/` subfolder.
    See CLAUDE.md "Output Convention" and "Resource System" for the full pattern.
 
 9a. **Generate Companion PDF Resources (Resource Audit — mandatory phase):**
     After all slides and teacher notes are written, run the Resource Audit:
     scan every ENABLING & EXTENDING, DO, SAY, and TEACHER NOTES section for
     references to physical materials (scaffolds, templates, worksheets, answer
-    keys). If a trigger phrase is found and no PDF exists, generate it using
-    `themes/pdf_helpers.js`. Add a "Resources" slide to the PPTX with clickable
-    hyperlinks to each PDF. This phase runs BEFORE visual QA — resources are
-    part of the lesson, not a follow-up. See #RESOURCE_GENERATION for the
-    full trigger list, quality standards, and the non-negotiable rule.
+    keys) and digital/web resources the teacher must open or project. If a
+    physical-resource trigger phrase is found and no PDF exists, generate it
+    using `themes/pdf_helpers.js`. Add a "Resources" slide to the PPTX with
+    clickable hyperlinks to each PDF and any required website links. This phase
+    runs BEFORE visual QA — resources are part of the lesson, not a follow-up.
+    See #RESOURCE_GENERATION for the full trigger list, quality standards, and
+    the non-negotiable rule.
 
 10. **Run the Quality Assurance Checklist:**
     When helping design or review a lesson, systematically walk through the relevant
@@ -2022,13 +2091,18 @@ Follow this systematic approach when providing guidance:
     vocabulary slide, or We Do task. In a lean 60-minute literacy lesson,
     default to 0-2 reveal pairs total. Use them where visible answers would
     genuinely short-circuit recall, reasoning, or co-construction. I Do
-    slides (teacher narrating) do NOT need reveals. See #CLICK_TO_REVEAL
-    for the full decision framework.
+    slides (teacher narrating) do NOT need reveals. This selective rule does
+    NOT override mandatory maths reveal patterns for Daily Review or Fluency
+    self-check answer slides. See #CLICK_TO_REVEAL for the full decision
+    framework.
 17. **Resource generation is a mandatory phase, not an afterthought:**
     Companion PDF resources (worksheets, scaffolds, graphic organisers, answer
     keys, exit tickets) are part of the lesson — not a follow-up task to do
     later. They are generated in the SAME build pass as the slides, written
-    to the SAME output folder, and linked from a Resources slide in the PPTX.
+    to a single `resources/` subfolder inside the SAME lesson output folder,
+    and linked from a Resources slide in the PPTX. Every slide deck ends with
+    that Resources slide, and it must also list any required digital/web
+    resources used during the session.
 
     **The Resource Audit is a named, mandatory phase in the generation
     workflow.** It runs AFTER all slides and teacher notes are written but
@@ -2044,6 +2118,8 @@ Follow this systematic approach when providing guidance:
     - "Answer key" / "Worked reference" / "Example answer"
     - "Exit ticket on paper" (not in workbooks)
     - "Session 1 Worksheet" / "Session 2 Answer Key"
+    - "Go to the article..." / "Open the website..." / "Use the link..."
+    - "Show on screen..." / "Project..." / "Display..."
 
     **ENABLING & EXTENDING notes are the #1 source of missed resources.**
     When the ENABLING section says "Provide a structured factor pair table
@@ -2054,13 +2130,16 @@ Follow this systematic approach when providing guidance:
     template, or additional problems.
 
     If ANY trigger is found and no corresponding PDF exists, generate it
-    before proceeding to QA. A lesson that tells teachers to distribute
+    before proceeding to QA. If the trigger is for a website or other digital
+    resource, add it to the Resources slide with the exact user-supplied URL
+    when one is available. A lesson that tells teachers to distribute or open
     materials that do not exist is incomplete. See #RESOURCE_GENERATION.
 
     Teacher-facing PDF naming must stay human-readable and session-first:
     - start the filename stem with `Session N`
     - match the resource slide card title to the PDF filename stem
     - avoid day names, underscores, and code-heavy labels like `WH4_L16`, `SR1`, `GO1`, or `EXT1`
+    - once named, use that exact resource title consistently everywhere in the deck
 18. **Design worked examples with intentional grain size:** The grain size of
     a worked example (how fine each step is decomposed) must be calibrated to
     the students' prior knowledge, not fixed by the content alone. Finer grain
@@ -2119,7 +2198,9 @@ Follow this systematic approach when providing guidance:
     Four Process Drills, Mental Maths, Repeated Practice, Flash Cards,
     Number Talks, Counting Games. The activity is selected based on cohort
     needs. Generate 1–2 Fluency slides with appropriate visual elements
-    and full teacher notes. A maths lesson without Fluency slides is
+    and full teacher notes. If the deck shows Fluency answers for self-check,
+    those answers must appear on a separate consecutive reveal slide, not on
+    the same slide as the live task. A maths lesson without Fluency slides is
     incomplete. See #FLUENCY.
 
 26. **The closing slide reviews success criteria — not just content:**
@@ -2192,6 +2273,9 @@ Preparation:
 ☐ Students are actively engaged with multiple opportunities to respond
 ☐ Fluency is about building automaticity, not teaching new content — the slide
    presents the activity and stimulus, not an explanation or worked example
+☐ If Fluency answers are shown on screen for self-check, they appear on a
+   separate consecutive reveal slide (`withReveal` or equivalent), not on the
+   same slide as the live task
 
 **LAUNCH — EXPLICIT INSTRUCTION (I Do)**
 VTLM 2.0: Explicit Explanation and Modelling
@@ -2627,10 +2711,11 @@ WATCH FOR:
 
 User: Generate a slide deck for the following:
 Subject: “ XYZ ”
-Grade: “ 5/6 ”
+Grade: “ XYZ ”
 Content: “ XYZ ”
 Slide Decks: “ XYZ ”
 Additional Notes: “ XYZ ”
-Daily Review Focus: “ n/a ”
+Number Fluency Focus: “ XYZ “
+Daily Review Focus: “ XYZ ”
 
 Do not enter plan mode, proceed with the lesson creation in bypass permissions. Ensure you remain active while the lessons are being created and continue to be until they are fully complete, please. 
